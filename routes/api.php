@@ -2,18 +2,69 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::middleware('auth:api')->group(function () {
+    Route::get('user', 'Auth\LoginController@check');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::resources([
+        'detail' => 'DetailController',
+    ]);
+
+    Route::middleware('only.admin')->group(function () {
+        Route::resources([
+            'administrators' => 'AdministratorController',
+        ]);
+
+        Route::resource('faculties', 'FacultyController')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
+    });
+
+    Route::middleware('only.faculty')->group(function () {
+        Route::resources([
+            'classrooms' => 'ClassroomController',
+        ]);
+    });
+
+    Route::middleware('forbid.student')->group(function () {
+        Route::resource('occupations', 'OccupationController')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
+
+        Route::resource('departments', 'DepartmentController')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
+
+        Route::resource('students', 'StudentController')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
+    });
+
+    Route::resource('occupations', 'OccupationController')->only([
+        'index',
+        'show',
+    ]);
+
+    Route::resource('departments', 'DepartmentController')->only([
+        'index',
+        'show',
+    ]);
+
+    Route::resource('faculties', 'FacultyController')->only(['index', 'show']);
+
+    Route::resource('students', 'StudentController')->only(['index', 'show']);
+});
+
+Route::prefix('/auth')->group(function () {
+    Route::post('/register', 'Auth\RegisterController@store');
+    Route::post('/login', 'Auth\LoginController@attempt');
 });

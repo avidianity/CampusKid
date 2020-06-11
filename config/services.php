@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -30,4 +29,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => env('OAUTH_CLIENT_ID_GOOGLE'),
+        'client_secret' => env('OAUTH_CLIENT_SECRET_GOOGLE'),
+        'redirect' => env('OAUTH_REDIRECT_GOOGLE'),
+    ],
 ];

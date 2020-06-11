@@ -27,6 +27,7 @@ class ValidateClassroom extends FormRequest
         return [
             'name' => ['required'],
             'department_id' => ['required', 'exists:App\Department,id'],
+            'subject_id' => ['required', 'exists:App\Subject,id'],
         ];
     }
 
@@ -36,6 +37,8 @@ class ValidateClassroom extends FormRequest
             'name.required' => 'Please provide a name.',
             'department_id.required' => 'Please provide a Department.',
             'department_id.exists' => 'Department provided is not available.',
+            'subject_id.required' => 'Please provide a subject.',
+            'subject_id.exists' => 'Subject provided is not available.',
         ];
     }
 }

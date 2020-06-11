@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Task;
+use App\Http\Requests\ValidateTask;
 
 class TaskController extends Controller
 {
@@ -11,9 +13,12 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Task::where('classroom_id', $request->input('classroom_id'))
+            ->with('files')
+            ->with('comments.user')
+            ->paginate(5);
     }
 
     /**
@@ -22,9 +27,12 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateTask $request)
     {
-        //
+        $data = $request->validated();
+        $task = new Task($data);
+        $task->save();
+        return $task;
     }
 
     /**
@@ -33,9 +41,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Task $task)
     {
-        //
+        return $task;
     }
 
     /**
@@ -45,9 +53,13 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
-        //
+        if (!$request->user()->ownsClassroom($task->classroom_id)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $task->update($request->all());
+        return $task;
     }
 
     /**
@@ -56,8 +68,18 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Task $task)
     {
-        //
+        if (!$request->user()->ownsClassroom($task->classroom_id)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $task->comments->each(function ($comment) {
+            $comment->delete();
+        });
+        $task->files->each(function ($file) {
+            $file->delete();
+        });
+        $task->delete();
+        return ['status' => true];
     }
 }

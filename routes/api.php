@@ -9,7 +9,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::resources([
         'detail' => 'DetailController',
+        'posts' => 'PostController',
     ]);
+
+    Route::prefix('/post')->group(function () {
+        Route::resources([
+            'comments' => 'PostCommentController',
+        ]);
+    });
 
     Route::middleware('only.admin')->group(function () {
         Route::resources([
@@ -27,6 +34,12 @@ Route::middleware('auth:api')->group(function () {
         Route::resources([
             'classrooms' => 'ClassroomController',
         ]);
+
+        Route::prefix('/classroom')->group(function () {
+            Route::resources([
+                'tasks' => 'TaskController',
+            ]);
+        });
     });
 
     Route::middleware('forbid.student')->group(function () {
@@ -47,6 +60,12 @@ Route::middleware('auth:api')->group(function () {
             'update',
             'destroy',
         ]);
+
+        Route::resource('subjects', 'SubjectController')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
     });
 
     Route::resource('occupations', 'OccupationController')->only([
@@ -62,6 +81,8 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('faculties', 'FacultyController')->only(['index', 'show']);
 
     Route::resource('students', 'StudentController')->only(['index', 'show']);
+
+    Route::resource('subjects', 'SubjectController')->only(['index', 'show']);
 });
 
 Route::prefix('/auth')->group(function () {

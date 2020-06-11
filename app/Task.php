@@ -14,9 +14,18 @@ class Task extends Model
         'classroom_id',
     ];
 
+    protected $dates = ['deadline'];
+
+    protected $casts = ['done' => 'boolean'];
+
     public function classroom()
     {
         return $this->belongsTo(Classroom::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(TaskComment::class);
     }
 
     public function files()

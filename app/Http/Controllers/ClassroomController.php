@@ -16,7 +16,6 @@ class ClassroomController extends Controller
     public function index(Request $request)
     {
         return Classroom::where('faculty_id', $request->user()->role->id)
-            ->with('faculty.user.detail')
             ->with('department')
             ->with('students')
             ->paginate(10);
@@ -31,6 +30,11 @@ class ClassroomController extends Controller
     public function store(ValidateClassroom $request)
     {
         $data = $request->validated();
+        $classroom = new Classroom($data);
+        $classroom->faculty_id = $request->user()->role->id;
+        $classroom->generateToken();
+        $classroom->save();
+        return $classroom;
     }
 
     /**
@@ -41,7 +45,10 @@ class ClassroomController extends Controller
      */
     public function show($id)
     {
-        //
+        return Classroom::where('faculty_id', $request->user()->role->id)
+            ->with('department')
+            ->with('students')
+            ->find($id);
     }
 
     /**
@@ -51,9 +58,10 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Classroom $classroom)
     {
-        //
+        $classroom->update($request->all());
+        return $classroom;
     }
 
     /**
@@ -62,8 +70,8 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Classroom $classroom)
     {
-        //
+        return response('', 405);
     }
 }

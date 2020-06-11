@@ -18,6 +18,12 @@ class RegisterController extends Controller
         $user->password = $data['password'];
         $user->role_type = 'App\\' . $user->access_level;
         $user->setProviderAsSelf()->save();
+        $role_class = 'App\\' . $user->access_level;
+        $data['user_id'] = $user->id;
+        $role = new $role_class($data);
+        $role->save();
+        $user->role_id = $role->id;
+        $user->save();
         return ['status' => true, 'data' => $user];
     }
 }

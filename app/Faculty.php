@@ -22,4 +22,9 @@ class Faculty extends Model
     {
         return $this->belongsTo(Occupation::class);
     }
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class);
+    }
 }

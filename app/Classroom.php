@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Classroom extends Model
 {
-    protected $fillable = ['name', 'department_id'];
+    protected $fillable = ['name', 'department_id', 'subject_id'];
 
     public function posts()
     {

@@ -29,13 +29,13 @@ class AsAPIOnly
         }
         $request->headers->set('Accept', 'application/json');
         $response = $next($request);
-        if (!$response instanceof JsonResponse) {
-            $response = $this->factory->json(
-                $response->content(),
-                $response->status(),
-                $response->headers->all()
-            );
-        }
+        // if (!$response instanceof JsonResponse) {
+        //     $response = $this->factory->json(
+        //         $response->content(),
+        //         $response->status(),
+        //         $response->headers->all()
+        //     );
+        // }
         return $response;
     }
 }

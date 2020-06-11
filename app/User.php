@@ -14,7 +14,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = ['username', 'email', 'access_level'];
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'api_token'];
     protected $casts = [
         'access_level' => AccessLevel::class,
     ];
@@ -60,12 +60,46 @@ class User extends Authenticatable
             $token = Str::random(80);
             $user->api_token = $token;
             $user->save();
-            return $user;
+            $data = $user->toArray();
+            $data['api_token'] = $token;
+            return $data;
         }
         return response(
             ['errors' => ['Credentials do not match our records.']],
             401
         );
+    }
+
+    public function canPostToClassroom($class_id)
+    {
+        if ($this->isStudent()) {
+            return $this->role->subscriptions
+                ->where('classroom_id', $class_id)
+                ->first()
+                ? true
+                : false;
+        } elseif ($this->isFaculty()) {
+            return $this->role->classrooms->find($class_id) ? true : false;
+        } else {
+            // Admin
+            return true;
+        }
+    }
+
+    public function canCommentToPost($post_id)
+    {
+        $post = $this->posts->find($post_id);
+        return $this->canPostToClassroom($post->classroom_id);
+    }
+
+    public function ownsComment(SelfComment $comment)
+    {
+        return $this->id === $comment->user_id;
+    }
+
+    public function ownsClassroom($class_id)
+    {
+        return $this->isFaculty() && $this->canPostToClassroom($class_id);
     }
 
     public function setProviderAsSelf()
@@ -78,6 +112,11 @@ class User extends Authenticatable
     public function setPasswordAttribute(string $value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 
     public function detail()

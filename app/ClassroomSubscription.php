@@ -17,4 +17,9 @@ class ClassroomSubscription extends Model
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public function grade()
+    {
+        return $this->hasOne(Grade::class, 'classroom_id', 'classroom_id');
+    }
 }

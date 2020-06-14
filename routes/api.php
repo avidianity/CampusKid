@@ -7,23 +7,23 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth:api')->group(function () {
     Route::get('user', 'Auth\LoginController@check');
 
-    Route::resources([
+    Route::apiResources([
         'detail' => 'DetailController',
         'posts' => 'PostController',
     ]);
 
     Route::prefix('/post')->group(function () {
-        Route::resources([
+        Route::apiResources([
             'comments' => 'PostCommentController',
         ]);
     });
 
     Route::middleware('only.admin')->group(function () {
-        Route::resources([
+        Route::apiResources([
             'administrators' => 'AdministratorController',
         ]);
 
-        Route::resource('faculties', 'FacultyController')->only([
+        Route::apiResource('faculties', 'FacultyController')->only([
             'store',
             'update',
             'destroy',
@@ -31,58 +31,86 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware('only.faculty')->group(function () {
-        Route::resources([
+        Route::apiResources([
             'classrooms' => 'ClassroomController',
         ]);
 
         Route::prefix('/classroom')->group(function () {
-            Route::resources([
-                'tasks' => 'TaskController',
-            ]);
+            Route::apiResource('tasks', 'TaskController');
+            Route::apiResource('grades', 'GradeController')->except('index');
         });
     });
 
+    Route::apiResource('classroom/task/comments', 'TaskCommentController');
+
+    Route::middleware('only.student')->group(function () {
+        Route::get('classroom/grades', 'GradeController@index');
+        Route::apiResource(
+            'student/classes',
+            'ClassroomSubscriptionController'
+        );
+
+        Route::apiResource(
+            '/classroom/task/submissions',
+            'TaskSubmissionController'
+        )->except(['index', 'show']);
+    });
+
+    Route::apiResource(
+        '/classroom/task/submissions',
+        'TaskSubmissionController'
+    )->only(['index', 'show']);
+
     Route::middleware('forbid.student')->group(function () {
-        Route::resource('occupations', 'OccupationController')->only([
+        Route::apiResource('occupations', 'OccupationController')->only([
             'store',
             'update',
             'destroy',
         ]);
 
-        Route::resource('departments', 'DepartmentController')->only([
+        Route::apiResource('departments', 'DepartmentController')->only([
             'store',
             'update',
             'destroy',
         ]);
 
-        Route::resource('students', 'StudentController')->only([
+        Route::apiResource('students', 'StudentController')->only([
             'store',
             'update',
             'destroy',
         ]);
 
-        Route::resource('subjects', 'SubjectController')->only([
+        Route::apiResource('subjects', 'SubjectController')->only([
             'store',
             'update',
             'destroy',
         ]);
     });
 
-    Route::resource('occupations', 'OccupationController')->only([
+    Route::apiResource('occupations', 'OccupationController')->only([
         'index',
         'show',
     ]);
 
-    Route::resource('departments', 'DepartmentController')->only([
+    Route::apiResource('departments', 'DepartmentController')->only([
         'index',
         'show',
     ]);
 
-    Route::resource('faculties', 'FacultyController')->only(['index', 'show']);
+    Route::apiResource('faculties', 'FacultyController')->only([
+        'index',
+        'show',
+    ]);
 
-    Route::resource('students', 'StudentController')->only(['index', 'show']);
+    Route::apiResource('students', 'StudentController')->only([
+        'index',
+        'show',
+    ]);
 
-    Route::resource('subjects', 'SubjectController')->only(['index', 'show']);
+    Route::apiResource('subjects', 'SubjectController')->only([
+        'index',
+        'show',
+    ]);
 });
 
 Route::prefix('/auth')->group(function () {

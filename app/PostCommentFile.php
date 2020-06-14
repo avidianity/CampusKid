@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostCommentFile extends Model
 {
-    public function postComment()
+    protected $fillable = ['post_comment_id', 'file_id'];
+
+    public function comment()
     {
         return $this->belongsTo(PostComment::class);
     }

@@ -86,20 +86,47 @@ class User extends Authenticatable
         }
     }
 
-    public function canCommentToPost($post_id)
+    public function canCommentToPost($post_id): bool
     {
-        $post = $this->posts->find($post_id);
+        $post = Post::find($post_id);
         return $this->canPostToClassroom($post->classroom_id);
     }
 
-    public function ownsComment(SelfComment $comment)
+    public function canCommentToTask($task_id): bool
+    {
+        $task = Task::find($task_id);
+        return $this->canPostToClassroom($task->classroom_id);
+    }
+
+    public function canSubmitToTask($task_id): bool
+    {
+        return $this->isStudent() && $this->canCommentToTask($task_id);
+    }
+
+    /**
+     * @param App\TaskComment $comment
+     * or
+     * @param App\Postcomment $comment
+     */
+    public function ownsComment($comment): bool
     {
         return $this->id === $comment->user_id;
     }
 
-    public function ownsClassroom($class_id)
+    public function ownsClassroom($class_id): bool
     {
         return $this->isFaculty() && $this->canPostToClassroom($class_id);
+    }
+
+    public function ownsTask(Task $task): bool
+    {
+        return $this->isFaculty() &&
+            $this->canPostToClassroom($task->classroom_id);
+    }
+
+    public function ownsGrade(Grade $grade): bool
+    {
+        return $this->ownsClassroom($grade->classroom_id);
     }
 
     public function setProviderAsSelf()
@@ -112,6 +139,26 @@ class User extends Authenticatable
     public function setPasswordAttribute(string $value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function grades()
+    {
+        return $this->hasManyThrough(
+            Grade::class,
+            Student::class,
+            'user_id',
+            'student_id'
+        );
+    }
+
+    public function classroomSubscriptions()
+    {
+        return $this->hasManyThrough(
+            ClassroomSubscription::class,
+            Student::class,
+            'user_id',
+            'student_id'
+        );
     }
 
     public function posts()

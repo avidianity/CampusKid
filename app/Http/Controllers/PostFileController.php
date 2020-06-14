@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\PostFile;
 
 class PostFileController extends Controller
 {
@@ -11,9 +12,11 @@ class PostFileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return PostFile::where('post_id', $request->input('post_id'))
+            ->with('file')
+            ->get();
     }
 
     /**
@@ -24,7 +27,7 @@ class PostFileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 
     /**
@@ -35,7 +38,7 @@ class PostFileController extends Controller
      */
     public function show($id)
     {
-        //
+        return PostFile::with('file')->findOrFail($id);
     }
 
     /**
@@ -47,7 +50,7 @@ class PostFileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 
     /**
@@ -58,6 +61,6 @@ class PostFileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 }

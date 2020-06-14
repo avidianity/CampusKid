@@ -18,6 +18,7 @@ class TaskController extends Controller
         return Task::where('classroom_id', $request->input('classroom_id'))
             ->with('files')
             ->with('comments.user')
+            ->with('submissions')
             ->paginate(5);
     }
 
@@ -55,7 +56,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        if (!$request->user()->ownsClassroom($task->classroom_id)) {
+        if (!$request->user()->ownsTask($task)) {
             return response(['errors' => ['Forbidden.']], 403);
         }
         $task->update($request->all());

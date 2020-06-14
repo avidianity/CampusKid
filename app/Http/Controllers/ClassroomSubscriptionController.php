@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Classroom;
+use App\ClassroomSubscription;
 
 class ClassroomSubscriptionController extends Controller
 {
@@ -11,9 +13,15 @@ class ClassroomSubscriptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $request
+            ->user()
+            ->classroomSubscriptions()
+            ->with('classroom.faculty')
+            ->with('classroom.department')
+            ->with('grade')
+            ->paginate(10);
     }
 
     /**
@@ -24,7 +32,21 @@ class ClassroomSubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $token = $request->input('token');
+        ($classroom = Classroom::where('token', $token)->first()) or
+            abort(404, 'Invalid Token');
+        if ($request->user()->role->isSubscribedToClassroom($classroom->id)) {
+            return response(
+                ['errors' => ['You are already subscribed to this classroom.']],
+                400
+            );
+        }
+        $subscription = new ClassroomSubscription([
+            'student_id' => $request->user()->role->id,
+            'classroom_id' => $classroom->id,
+        ]);
+        $subscription->save();
+        return $subscription;
     }
 
     /**
@@ -33,9 +55,15 @@ class ClassroomSubscriptionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        return $request
+            ->user()
+            ->classroomSubscriptions()
+            ->with('classroom.faculty')
+            ->with('classroom.department')
+            ->with('grade')
+            ->findOrFail($id);
     }
 
     /**
@@ -47,7 +75,7 @@ class ClassroomSubscriptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 
     /**
@@ -56,8 +84,13 @@ class ClassroomSubscriptionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $subscription = $request
+            ->user()
+            ->classroomSubscriptions()
+            ->findOrFail($id);
+        $subscription->delete();
+        return ['status' => true];
     }
 }

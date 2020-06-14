@@ -3,10 +3,27 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
     protected $fillable = ['body', 'classroom_id', 'user_id'];
+
+    public function saveFiles(Request $request)
+    {
+        $files = File::saveFrom($request);
+        $this->files = [];
+        foreach ($files as $file) {
+            $post_file = new PostFile([
+                'post_id' => $this->id,
+                'file_id' => $file->id,
+            ]);
+            $post_file->save();
+            $this->files[] = $post_file;
+        }
+        return $this;
+    }
 
     public function user()
     {

@@ -11,6 +11,7 @@ declare global {
 
 window.$ = $;
 
+Axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
 Axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 let token: HTMLMetaElement | null = document.head.querySelector(

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\PostCommentFile;
 
 class PostCommentFileController extends Controller
 {
@@ -11,9 +12,11 @@ class PostCommentFileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return PostCommentFile::with('file')
+            ->where('post_comment_id', $request->input('post_comment_id'))
+            ->get();
     }
 
     /**
@@ -24,7 +27,7 @@ class PostCommentFileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 
     /**
@@ -35,7 +38,7 @@ class PostCommentFileController extends Controller
      */
     public function show($id)
     {
-        //
+        return PostCommentFile::with('file')->findOrFail($id);
     }
 
     /**
@@ -47,7 +50,7 @@ class PostCommentFileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 
     /**
@@ -58,6 +61,6 @@ class PostCommentFileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return response(['errors' => ['Forbidden.']], 403);
     }
 }

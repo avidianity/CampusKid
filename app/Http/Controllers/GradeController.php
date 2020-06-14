@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ValidateGrade;
+use App\Grade;
+use App\Student;
 
 class GradeController extends Controller
 {
@@ -11,9 +14,14 @@ class GradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $request
+            ->user()
+            ->grades()
+            ->with('classroom.faculty')
+            ->with('classroom.department')
+            ->paginate(10);
     }
 
     /**
@@ -22,9 +30,41 @@ class GradeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateGrade $request)
     {
-        //
+        $data = $request->validated();
+        $user = $request->user();
+        if (!$request->user()->ownsClassroom($data['classroom_id'])) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        if (
+            !Student::belongsToClassroom(
+                $data['student_id'],
+                $data['classroom_id']
+            )
+        ) {
+            return response(
+                [
+                    'errors' => ['Student does not belong in this classroom.'],
+                ],
+                422
+            );
+        }
+        if (Grade::alreadyExists($data['student_id'], $data['classroom_id'])) {
+            return response(
+                [
+                    'errors' => [
+                        'You have already given grades to this student. Did you mean to update it?',
+                    ],
+                ],
+                422
+            );
+        }
+        $grade = new Grade($data);
+        $grade->classroom_id = $data['classroom_id'];
+        $grade->student_id = $data['student_id'];
+        $grade->save();
+        return $grade;
     }
 
     /**
@@ -33,9 +73,9 @@ class GradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Grade $grade)
     {
-        //
+        return $grade;
     }
 
     /**
@@ -45,9 +85,13 @@ class GradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Grade $grade)
     {
-        //
+        if (!$request->user()->ownsGrade($grade)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $grade->update($request->all());
+        return $grade;
     }
 
     /**
@@ -56,8 +100,12 @@ class GradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($request, Grade $grade)
     {
-        //
+        if (!$request->user()->ownsGrade($grade)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $grade->delete();
+        return ['status' => true];
     }
 }

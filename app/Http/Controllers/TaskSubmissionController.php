@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\TaskSubmission;
 
 class TaskSubmissionController extends Controller
 {
@@ -11,9 +12,12 @@ class TaskSubmissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return TaskSubmission::where('task_id', $request->input('task_id'))
+            ->with('task')
+            ->with('student.user.detail')
+            ->paginate(10);
     }
 
     /**
@@ -24,7 +28,29 @@ class TaskSubmissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $task_id = $request->input('task_id');
+        if (!$request->user()->canSubmitToTask($task_id)) {
+            return response(
+                ['errors' => ['You do not belong to this task\'s classroom.']],
+                403
+            );
+        }
+        if (
+            TaskSubmission::alreadySubmitted(
+                $task_id,
+                $request->user()->role->id
+            )
+        ) {
+            return response(
+                ['errors' => ['You have already submitted on this task.']],
+                400
+            );
+        }
+        $submission = new TaskSubmission($request->all());
+        $submission->task_id = $task_id;
+        $submission->student_id = $request->user()->role->id;
+        $submission->save();
+        return $submission;
     }
 
     /**
@@ -33,9 +59,9 @@ class TaskSubmissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        return TaskSubmission::findOrFail($id);
     }
 
     /**
@@ -47,7 +73,14 @@ class TaskSubmissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $submission = TaskSubmission::where(
+            'student_id',
+            $request->user()->role->id
+        )
+            ->where('task_id', $id)
+            ->first();
+        $submission->update($request->all());
+        return $submission;
     }
 
     /**
@@ -56,8 +89,14 @@ class TaskSubmissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $submission = $request
+            ->user()
+            ->role->subscriptions->classroom->tasks->submissions->findOrFail(
+                $id
+            );
+        $submission->delete();
+        return $submission;
     }
 }

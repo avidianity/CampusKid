@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\File;
 
 class FileController extends Controller
 {
@@ -58,6 +59,6 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return File::find($id);
     }
 }

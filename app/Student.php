@@ -8,6 +8,20 @@ class Student extends Model
 {
     protected $fillable = ['user_id', 'department_id'];
 
+    public function isSubscribedToClassroom($classroom_id): bool
+    {
+        return self::belongsToClassroom($this->id, $classroom_id);
+    }
+
+    public static function belongsToClassroom($student_id, $classroom_id): bool
+    {
+        return ClassroomSubscription::where('student_id', $student_id)
+            ->where('classroom_id', $classroom_id)
+            ->first()
+            ? true
+            : false;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

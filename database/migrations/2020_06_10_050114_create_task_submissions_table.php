@@ -15,6 +15,10 @@ class CreateTaskSubmissionsTable extends Migration
     {
         Schema::create('task_submissions', function (Blueprint $table) {
             $table->id();
+            $table
+                ->text('remarks')
+                ->nullable()
+                ->default(null);
             $table->foreignId('task_id');
             $table->foreignId('student_id');
             $table

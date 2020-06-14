@@ -41,6 +41,11 @@ class Classroom extends Model
         );
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
     public function generateToken()
     {
         $this->token = Str::random(7);

@@ -49,7 +49,9 @@ class PostController extends Controller
             );
         }
         $data['user_id'] = $request->user()->id;
-        return Post::create($data);
+        $post = Post::create($data);
+        $post->saveFiles($request);
+        return $post;
     }
 
     /**

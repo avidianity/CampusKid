@@ -39,4 +39,9 @@ class Task extends Model
             'file_id'
         );
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(TaskSubmission::class);
+    }
 }

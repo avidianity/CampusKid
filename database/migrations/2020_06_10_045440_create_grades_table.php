@@ -27,6 +27,10 @@ class CreateGradesTable extends Migration
                 ->string('finals')
                 ->nullable()
                 ->default(null);
+            $table
+                ->string('remarks')
+                ->nullable()
+                ->default(null);
             $table->foreignId('student_id');
             $table->foreignId('classroom_id');
             $table

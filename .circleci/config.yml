@@ -34,10 +34,3 @@ jobs:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
-
-      # prepare the database
-      - run:
-          name: "Generate app key"
-          command: \
-          touch .env
-          php artisan key:generate

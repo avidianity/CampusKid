@@ -38,4 +38,6 @@ jobs:
       # prepare the database
       - run:
           name: "Generate app key"
-          command: php artisan key:generate
+          command: \
+          touch .env
+          php artisan key:generate

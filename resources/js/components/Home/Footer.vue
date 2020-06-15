@@ -7,10 +7,10 @@
                         <h5 class="footer-title">CampusKid.com</h5>
                         <ul class="footer-links">
                             <li class="footer-item">
-                                <router-link to="/" class="footer-link">
+                                <a href="/" class="footer-link">
                                     Home
                                     <span class="footer-link-line"></span>
-                                </router-link>
+                                </a>
                             </li>
                             <li class="footer-item">
                                 <router-link to="/about" class="footer-link">
@@ -139,6 +139,10 @@
     font-family: "Lato-Regular";
     color: #fff;
     text-decoration: none;
+}
+
+.active .footer-link-line {
+    width: 100%;
 }
 
 .footer-link-line {

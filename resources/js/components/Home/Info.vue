@@ -48,15 +48,16 @@
 
 <style lang="scss" scoped>
 .card-padding {
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 
-@media (min-width: 576px) {
-    .card-text {
-        font-size: 1.2rem;
-    }
+.card-text {
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
     .card-padding {
-        padding: 0 4rem;
+        padding: 0 2rem;
     }
 }
 

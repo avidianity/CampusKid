@@ -9,6 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('APP_NAME', 'CampusKid') }}</title>
         <link rel="stylesheet" href="{{ elixir('webfonts/Lato.css') }}">
+        <link rel="stylesheet" href="{{ elixir('css/assets.css') }}">
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
         @yield('head')

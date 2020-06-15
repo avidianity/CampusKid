@@ -1,7 +1,7 @@
 <template>
     <div class="row my-5">
-        <div class="col-sm-12 col-md-4 text-center p-4">
-            <div class="card-padding">
+        <div class="col-sm-12 col-lg-4 text-center p-4">
+            <div class="card-padding text-center">
                 <div class="card card-custom">
                     <img
                         src="@assets/conference.png"
@@ -22,8 +22,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 text-center p-4">
-            <div class="card-padding">
+        <div class="col-sm-12 col-lg-4 text-center p-4">
+            <div class="card-padding text-center">
                 <div class="card card-custom">
                     <img
                         src="@assets/network.png"
@@ -47,8 +47,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 text-center p-4">
-            <div class="card-padding">
+        <div class="col-sm-12 col-lg-4 text-center p-4">
+            <div class="card-padding text-center">
                 <div class="card card-custom">
                     <img
                         src="@assets/list.png"
@@ -75,14 +75,11 @@
 </template>
 
 <style lang="scss">
-.card-padding {
-    padding: 0rem 4rem;
-}
-
-@media (min-width: 576px) {
-    .card-padding {
-        padding: 2rem;
-    }
+.card {
+    max-height: 300px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card-img-overlay-custom {
@@ -98,7 +95,7 @@
 
 .card-title-custom {
     color: #fff;
-    font-size: 30px;
+    font-size: 16px;
     font-family: "Lato-Regular";
     margin-bottom: 6px;
 }
@@ -110,5 +107,11 @@
     text-indent: 2em;
     padding-top: 6px;
     border-top: 1px solid #fff;
+}
+
+@media (min-width: 768px) {
+    .card-title {
+        font-size: 24px;
+    }
 }
 </style>

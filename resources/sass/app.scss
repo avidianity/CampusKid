@@ -1,9 +1,11 @@
-@import "~bootstrap/scss/bootstrap";
-@import "./AdminLTE/AdminLTE";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/regular";
-@import "~@fortawesome/fontawesome-free/scss/brands";
+// @import "~bootstrap/scss/bootstrap";
+// @import "./AdminLTE/AdminLTE";
+// @import "~@fortawesome/fontawesome-free/scss/fontawesome";
+// @import "~@fortawesome/fontawesome-free/scss/solid";
+// @import "~@fortawesome/fontawesome-free/scss/regular";
+// @import "~@fortawesome/fontawesome-free/scss/brands";
+// @import "~aos/src/sass/aos";
+
 @import "variables";
 
 body {
@@ -35,14 +37,19 @@ body {
     color: #fff;
 }
 
+.btn-emperor {
+    background-color: $emperor;
+    color: #fff;
+}
+
+.btn-emperor:hover {
+    background-color: rgb(235, 235, 235);
+    color: rgb(40, 40, 40);
+}
+
 .btn-tradewind {
     background-color: $tradewind;
     color: rgb(240, 240, 240);
-}
-
-.btn-tradewind:hover {
-    background-color: $keppel;
-    color: rgb(255, 255, 255) !important;
 }
 
 .btn-cutty-sark {
@@ -50,9 +57,14 @@ body {
     color: #fff;
 }
 
-.btn-cutty-sark:hover {
+.btn-tradewind:hover {
     background-color: $keppel;
     color: rgb(255, 255, 255) !important;
+}
+
+.btn-cutty-sark:hover {
+    background-color: $emperor;
+    color: #fff !important;
 }
 
 .hover-show {

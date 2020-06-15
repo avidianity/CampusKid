@@ -12,8 +12,10 @@
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.13.0",
         "@prettier/plugin-php": "^0.14.2",
+        "@types/aos": "^3.0.3",
         "@types/jquery": "^3.3.38",
         "@types/lodash": "^4.14.155",
+        "aos": "^2.3.4",
         "axios": "^0.19",
         "bootstrap": "^4.5.0",
         "cross-env": "^7.0",
@@ -25,6 +27,7 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0",
+        "ts-loader": "^7.0.5",
         "typescript": "^3.9.5",
         "vue": "^2.5.17",
         "vue-class-component": "^7.2.3",
@@ -32,8 +35,5 @@
         "vue-session": "^1.0.0",
         "vue-template-compiler": "^2.6.10",
         "vuex": "^3.4.0"
-    },
-    "dependencies": {
-        "ts-loader": "^7.0.5"
     }
 }

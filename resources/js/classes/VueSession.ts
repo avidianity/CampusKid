@@ -133,9 +133,10 @@ export class ExpiringSession implements ExpiringStateContract {
     }
     getAll(): any {
         try {
-            return this.parent.get(this.key) as ExpiryContract;
+            const data = this.parent.get(this.key);
+            return data !== null ? data : {};
         } catch (error) {
-            return {} as ExpiryContract;
+            return {};
         }
     }
     get(key: string): any {

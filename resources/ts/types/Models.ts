@@ -15,6 +15,10 @@ export interface UserContract extends TimestampContract {
     access_level: number | string;
     profile_picture_id: number | null;
     cover_photo_id: number | null;
+    isStudent(): boolean;
+    isFaculty(): boolean;
+    isAdministrator(): boolean;
+    homeRoute(): object;
 }
 
 export interface DepartmentContract extends TimestampContract {

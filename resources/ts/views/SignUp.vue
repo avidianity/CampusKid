@@ -105,7 +105,7 @@ import appDetail from "@components/SignUp/Detail.vue";
 
 import { SignUpFormContract } from "~types/store";
 import { DepartmentCollection, OccupationCollection } from "@collections/index";
-import { Department } from "../classes/Models";
+import { Department, User } from "@models/index";
 
 @Component({
     components: {
@@ -119,6 +119,7 @@ export default class SignUp extends Vue {
     @Action fillSignUpForm: any;
     @Action fetchDepartments: any;
     @Action fetchOccupations: any;
+    @Action login: any;
     loaded = false;
     constructor() {
         super();
@@ -128,6 +129,12 @@ export default class SignUp extends Vue {
         this.component = name;
     }
     created() {
+        if (Session.hasToken()) {
+            const user = Session.user() as User;
+            this.login(user);
+            this.$router.push(user.homeRoute());
+            return;
+        }
         Promise.all([this.fetchDepartments(), this.fetchOccupations()]).then(
             responses => {
                 const departments = responses[0] as DepartmentCollection;

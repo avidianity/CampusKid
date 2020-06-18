@@ -12,6 +12,7 @@ export interface RootState {
 
 export interface UserState {
     user?: UserContract;
+    logged: boolean;
     [key: string]: any;
 }
 

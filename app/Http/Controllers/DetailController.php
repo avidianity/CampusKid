@@ -15,7 +15,8 @@ class DetailController extends Controller
      */
     public function index(Request $request)
     {
-        return $request->user()->detail;
+        $detail = $request->user()->detail;
+        return ['data' => $detail];
     }
 
     /**

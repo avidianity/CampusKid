@@ -2,8 +2,10 @@ import SessionContract, {
     StateContract,
     ExpiringStateContract,
     ExpiryContract,
-    FlashStateContract
+    FlashStateContract,
+    NonPersistingStateContract
 } from "~types/Session";
+import { User } from "@models/index";
 
 export default class Session implements SessionContract {
     key: string;
@@ -12,6 +14,7 @@ export default class Session implements SessionContract {
     state: StateContract;
     temp: ExpiringSession;
     flash: FlashSession;
+    nonpersisting: NonPersistingSession;
     [key: string]: any;
     constructor() {
         this.key = "vue-session-key";
@@ -20,6 +23,7 @@ export default class Session implements SessionContract {
         this.state = {};
         this.temp = new ExpiringSession(this);
         this.flash = new FlashSession(this);
+        this.nonpersisting = new NonPersistingSession();
     }
     start() {
         const data = this.getAll() as StateContract;
@@ -91,23 +95,55 @@ export default class Session implements SessionContract {
         delete this[key];
         return this;
     }
-    token(token?: string): this | string {
+    token(token?: string, remember = true): this | string | null {
         if (token !== undefined) {
-            return this.set(this.token_key, token) as this;
+            if (remember) {
+                return this.set(this.token_key, token) as this;
+            } else {
+                this.nonpersisting.set(this.token_key, token);
+                return this;
+            }
         }
-        return this.get(this.token_key) as string;
+        if (this.has(this.token_key)) {
+            // persisting
+            return this.get(this.token_key) as string;
+        } else if (this.nonpersisting.has(this.token_key)) {
+            // non persisting
+            return this.nonpersisting.get(this.token_key) as string;
+        }
+        return null;
     }
     revokeToken(): this {
-        return this.remove(this.token_key);
+        if (this.has(this.token_key)) {
+            return this.remove(this.token_key);
+        } else if (this.nonpersisting.has(this.token_key)) {
+            this.nonpersisting.remove(this.token_key);
+            return this;
+        }
+        return this;
     }
     hasToken(): boolean {
-        return this.has(this.token_key);
+        return (
+            this.has(this.token_key) || this.nonpersisting.has(this.token_key)
+        );
     }
-    user(user?: any): any {
+    user(user?: User, remember = true): User | this | null {
         if (user !== undefined) {
-            return this.set("user", user);
+            if (remember) {
+                return this.set("user-session", user);
+            } else {
+                this.nonpersisting.set("user-session", user);
+                return this;
+            }
         }
-        return this.get("user");
+        if (this.has("user-session")) {
+            // persisting
+            return this.get("user-session");
+        } else if (this.nonpersisting.has("user-session")) {
+            // non persisting
+            return this.nonpersisting.get("user-session");
+        }
+        return null;
     }
 }
 
@@ -255,5 +291,42 @@ export class FlashSession implements FlashStateContract {
     }
     clear(): this {
         return this.setAll({});
+    }
+}
+
+export class NonPersistingSession implements NonPersistingStateContract {
+    key: string;
+    Storage: typeof window.sessionStorage;
+    constructor() {
+        this.key = "vue-non-persisting-session-key";
+        this.Storage = window.sessionStorage;
+    }
+    get(key: string): any {}
+    getAll(): object {
+        try {
+            return JSON.parse(this.Storage.getItem(this.key) || "");
+        } catch (error) {
+            return {};
+        }
+    }
+    set(key: string, value: any): this {
+        const data = this.getAll() as any;
+        data[key] = value;
+        return this.setAll(data);
+    }
+    setAll(data: object): this {
+        this.Storage.setItem(this.key, JSON.stringify(data));
+        return this;
+    }
+    remove(key: string): this {
+        const data = this.getAll() as any;
+        delete data[key];
+        return this.setAll(data);
+    }
+    clear(): this {
+        return this.setAll({});
+    }
+    has(key: string): boolean {
+        return key in this.getAll();
     }
 }

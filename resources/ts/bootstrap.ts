@@ -30,6 +30,7 @@ axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["X-CSRF-Token"] = token?.content;
+axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(config => {
     if (Session.hasToken()) {

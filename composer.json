@@ -14,7 +14,9 @@
         "fzaninotto/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
+        "laravel/sanctum": "^2.4",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.0",
         "nao-pon/flysystem-google-drive": "^1.1",
         "nexmo/client": "^2.0"
     },

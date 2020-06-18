@@ -28,7 +28,8 @@ export const state: UserState = {
     user: undefined,
     forms: {
         sign_up
-    }
+    },
+    logged: false
 };
 
 export const User: Module<UserState, RootState> = {

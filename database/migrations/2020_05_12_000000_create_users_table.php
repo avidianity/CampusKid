@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('provider_id')->unique();
             $table->string('provider_type');
             $table->string('email')->unique();
+            $table->rememberToken();
             $table
                 ->foreignId('role_id')
                 ->nullable()

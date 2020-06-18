@@ -1,9 +1,9 @@
 <template>
     <div id="root">
-        <div class="container-fluid pt-2">
+        <div class="container-fluid">
             <div class="row">
                 <div
-                    class="col-sm-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4 main p-3 rounded mt-5 shadow border"
+                    class="col-sm-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4 main p-3 rounded shadow border"
                 >
                     <div class="d-flex">
                         <h2 class="mr-auto">Login</h2>
@@ -13,7 +13,7 @@
                                 alt=""
                                 height="50"
                                 width="50"
-                                class="rounded-circle border shadow-sm"
+                                class="rounded-circle border shadow-sm logo"
                             />
                         </router-link>
                     </div>
@@ -80,6 +80,24 @@
                         <i class="fas fa-spinner fa-spin" v-if="processing"></i>
                         {{ processing ? "Signing" : "Sign" }} In
                     </button>
+                    <div class="form-check ml-1 mt-1">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            v-model="remember_me"
+                            id="remember_me"
+                        />
+                        <label class="form-check-label" for="remember_me">
+                            Remember Me
+                        </label>
+                    </div>
+                    <small class="form-text text-muted">
+                        Do not check if you do not want your session to be
+                        saved.
+                    </small>
+                    <small class="form-text text-muted">
+                        This will require you to login again on your next visit.
+                    </small>
                     <router-link to="/sign-up" class="btn-link d-block mt-2">
                         Create an Account
                     </router-link>
@@ -92,12 +110,16 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Action } from "vuex-class";
+
 import Message from "@classes/Message";
 import { ValidationMessage } from "../classes/FormValidation";
 import { AxiosResponse, AxiosError } from "axios";
+import { User } from "@classes/Models";
 
 @Component
 export default class SignInComponent extends Vue {
+    @Action login: any;
     processing = false;
     message: {
         has: boolean;
@@ -108,9 +130,17 @@ export default class SignInComponent extends Vue {
         username: string;
         password: string;
     };
+    remember_me = false;
     messages: {
         [key: string]: ValidationMessage;
     };
+    created() {
+        if (Session.hasToken()) {
+            const user = Session.user() as User;
+            this.login(user);
+            this.$router.push(user.homeRoute());
+        }
+    }
     constructor() {
         super();
         this.message = {
@@ -154,18 +184,36 @@ export default class SignInComponent extends Vue {
             email: this.form.username
         })
             .then((response: AxiosResponse) => response.data)
-            .then(response => console.log(response))
+            .then((response: { token: string; data: User }) => {
+                const user = new User(response.data);
+                Session.token(response.token, this.remember_me);
+                Session.user(user, this.remember_me);
+                Session.temp.remove("sign-in");
+                this.login(user);
+                this.$router.push(user.homeRoute());
+            })
             .catch((error: AxiosError) => {
                 if (error.response && error.response.status === 401) {
                     for (const key in error.response.data.errors) {
-                        for (const message of error.response.data.errors[key]) {
-                            if (key in this.messages) {
-                                this.messages[key].clear();
-                                this.messages[key].timeout(
-                                    message,
-                                    "danger",
-                                    15000
-                                );
+                        if (key === "message") {
+                            this.message.has = true;
+                            this.message.body =
+                                error.response.data.errors[key][0];
+                            this.message.classes = {
+                                "alert alert-danger": true
+                            };
+                        } else {
+                            for (const message of error.response.data.errors[
+                                key
+                            ]) {
+                                if (key in this.messages) {
+                                    this.messages[key].clear();
+                                    this.messages[key].timeout(
+                                        message,
+                                        "danger",
+                                        15000
+                                    );
+                                }
                             }
                         }
                     }
@@ -203,7 +251,7 @@ export default class SignInComponent extends Vue {
     background: url("../assets/bg-home.png") center center;
     background-size: cover;
     background-repeat: no-repeat;
-    padding: 20px;
+    padding: 2px;
     height: 100vh;
     display: flex;
 }
@@ -211,6 +259,14 @@ export default class SignInComponent extends Vue {
 .main {
     background-color: #fff;
     font-family: "Lato-Light";
+    height: 100%;
+    margin-top: 3rem;
+}
+
+@media (min-width: 576px) {
+    #root {
+        padding: 20px;
+    }
 }
 
 .form-control,
@@ -225,5 +281,8 @@ export default class SignInComponent extends Vue {
 .close-btn:hover {
     color: rgb(100, 100, 100);
     cursor: pointer;
+}
+.back:focus {
+    outline: none;
 }
 </style>

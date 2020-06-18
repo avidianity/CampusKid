@@ -11,5 +11,16 @@ export const mutations: MutationTree<UserState> = {
     },
     CLEAR_SIGN_UP_FORM(state) {
         delete state.forms;
+    },
+    LOGIN(state, user: UserContract) {
+        state.user = user;
+        state.logged = true;
+    },
+    LOGOUT(state) {
+        delete state.user;
+        state.logged = false;
+        Session.clear();
+        Session.temp.clear();
+        Session.flash.clear();
     }
 };

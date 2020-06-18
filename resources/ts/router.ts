@@ -7,6 +7,7 @@ import SignUpPage from "@views/SignUp.vue";
 import SignInPage from "@views/SignIn.vue";
 import PolicyPage from "@views/Policy.vue";
 import TermsPage from "@views/Terms.vue";
+import DashboardPage from "@views/Dashboard.vue";
 import FourZeroFour from "@views/404.vue";
 
 Vue.use(VueRouter);
@@ -42,8 +43,12 @@ export default new VueRouter({
             component: TermsPage
         },
         {
+            path: "/dashboard",
+            component: DashboardPage
+        },
+        {
             path: "/*",
             component: FourZeroFour
-        }
+        },
     ]
 });

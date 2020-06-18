@@ -14,32 +14,32 @@
             class="navbar-toggler border-0"
             type="button"
             data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
+            data-target="#campuskidNavbar"
+            aria-controls="campuskidNavbar"
             aria-expanded="false"
             aria-label="Toggle navigation"
         >
             <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="campuskidNavbar">
             <ul class="navbar-nav ml-auto mr-2">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <router-link to="/help" class="nav-link">
                         Help
                         <span class="nav-line"></span>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <router-link to="/contact" class="nav-link">
                         Contact
                         <span class="nav-line"></span>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <router-link to="/sign-in" class="nav-link">
                         Sign In
                         <span class="nav-line"></span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
             <router-link

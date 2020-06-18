@@ -18,7 +18,7 @@ export default interface SessionContract {
     id(): string;
     clear(): this;
     remove(key: string): this;
-    token(token?: string): this | string;
+    token(token?: string, remember?: boolean): this | string | null;
     revokeToken(): this;
     hasToken(): boolean;
 }
@@ -45,6 +45,18 @@ export interface FlashStateContract {
     parent: SessionContract;
     get(key: string): any;
     getAll(): any;
+    set(key: string, value: any): this;
+    setAll(values: any): this;
+    remove(key: string): this;
+    clear(): this;
+    has(key: string): boolean;
+}
+
+export interface NonPersistingStateContract {
+    key: string;
+    Storage: typeof window.sessionStorage;
+    get(key: string): any;
+    getAll(): object;
     set(key: string, value: any): this;
     setAll(values: any): this;
     remove(key: string): this;

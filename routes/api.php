@@ -4,8 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', 'Auth\LoginController@check');
+    Route::get('/auth/logout', 'Auth\LoginController@logout');
 
     Route::apiResources([
         'detail' => 'DetailController',
@@ -114,6 +115,6 @@ Route::apiResource('departments', 'DepartmentController')->only([
 ]);
 
 Route::prefix('/auth')->group(function () {
-    Route::post('/register', 'Auth\RegisterController@store');
+    Route::post('/register', 'Auth\RegisterController@register');
     Route::post('/login', 'Auth\LoginController@attempt');
 });

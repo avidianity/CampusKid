@@ -49,4 +49,7 @@ export default class User extends Model implements UserContract {
         const role = this.access_levels[this.access_level];
         return role === "Administrator" || role === 3;
     }
+    homeRoute(): object {
+        return { path: "/dashboard" };
+    }
 }

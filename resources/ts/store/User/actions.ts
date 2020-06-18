@@ -19,5 +19,11 @@ export const actions: ActionTree<UserState, RootState> = {
     },
     clearSignUpForm({ commit }): any {
         commit("CLEAR_SIGN_UP_FORM");
+    },
+    login({ commit }, user: UserContract) {
+        commit("LOGIN", user);
+    },
+    logout({ commit }) {
+        commit("LOGOUT");
     }
 };

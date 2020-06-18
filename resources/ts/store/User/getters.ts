@@ -8,5 +8,8 @@ export const getters: GetterTree<UserState, RootState> = {
     },
     signUpForm(state): SignUpFormContract {
         return state.forms.sign_up;
+    },
+    logged(state): boolean {
+        return state.logged;
     }
 };

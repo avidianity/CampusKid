@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -11,7 +12,7 @@ use App\Casts\AccessLevel;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     protected $fillable = ['username', 'email', 'access_level'];
     protected $hidden = ['password', 'api_token'];
@@ -45,8 +46,7 @@ class User extends Authenticatable
             return response(
                 [
                     'errors' => [
-                        'username' => ['Credentials do not match our records.'],
-                        'email' => ['Credentials do not match our records.'],
+                        'message' => ['Credentials do not match our records.'],
                     ],
                 ],
                 401
@@ -80,11 +80,8 @@ class User extends Authenticatable
             }
         }
         if (Hash::check($data['password'], $user->password)) {
-            $token = $user->generateToken();
-            $user->api_token = $token;
-            $user->save();
-            $data = $user->toArray();
-            return ['data' => $data, 'token' => $token];
+            $token = $user->createToken('normal')->plainTextToken;
+            return ['data' => $user, 'token' => $token];
         }
         return response(
             ['errors' => ['password' => ['Password is incorrect.']]],

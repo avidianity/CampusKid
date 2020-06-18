@@ -11,7 +11,7 @@ require("laravel-mix-alias");
  |
  */
 
-mix.ts("resources/js/app.ts", "public/js")
+mix.ts("resources/ts/app.ts", "public/js")
     .sass("resources/sass/app.scss", "public/css")
     .options({
         hmrOptions: {
@@ -20,14 +20,14 @@ mix.ts("resources/js/app.ts", "public/js")
         }
     })
     .alias({
-        "@": "/resources/js",
-        "@assets": "/resources/js/assets",
-        "@components": "/resources/js/components",
-        "@store": "/resources/js/store",
-        "@types": "/resources/js/types",
-        "@views": "/resources/js/views",
+        "@": "/resources/ts",
+        "@assets": "/resources/ts/assets",
+        "@components": "/resources/ts/components",
+        "@store": "/resources/ts/store",
+        "@types": "/resources/ts/types",
+        "@views": "/resources/ts/views",
         "@styles": "/resources/sass",
-        "@classes": "/resources/js/classes"
+        "@classes": "/resources/ts/classes"
     })
     .webpackConfig({
         devServer: {

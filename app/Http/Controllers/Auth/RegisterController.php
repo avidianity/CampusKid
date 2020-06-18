@@ -24,6 +24,9 @@ class RegisterController extends Controller
         $role->save();
         $user->role_id = $role->id;
         $user->save();
-        return ['status' => true, 'data' => $user];
+        $token = $user->generateToken();
+        $user->api_token = $token;
+        $user->save();
+        return ['status' => true, 'data' => $user, 'token' => $token];
     }
 }

@@ -9,7 +9,7 @@ import App from "./App.vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-new Vue({
+const app = new Vue({
     router,
     store,
     el: "#app",

@@ -34,16 +34,33 @@ class User extends Authenticatable
         self::STUDENT => 'Student',
     ];
 
+    public function generateToken()
+    {
+        return Str::random(80);
+    }
+
     public static function authenticate($data)
     {
         if (!isset($data['email']) && !isset($data['username'])) {
-            return response('Credentials do not match our records.', 401);
+            return response(
+                [
+                    'errors' => [
+                        'username' => ['Credentials do not match our records.'],
+                        'email' => ['Credentials do not match our records.'],
+                    ],
+                ],
+                401
+            );
         }
         if (isset($data['email'])) {
             $user = self::where('email', $data['email'])->first();
             if (!$user) {
                 return response(
-                    ['errors' => ['Credentials do not match our records.']],
+                    [
+                        'errors' => [
+                            'email' => ['Email does not match our records.'],
+                        ],
+                    ],
                     401
                 );
             }
@@ -51,21 +68,26 @@ class User extends Authenticatable
             $user = self::where('username', $data['username'])->first();
             if (!$user) {
                 return response(
-                    ['errors' => ['Credentials do not match our records.']],
+                    [
+                        'errors' => [
+                            'username' => [
+                                'Username does not match our records.',
+                            ],
+                        ],
+                    ],
                     401
                 );
             }
         }
         if (Hash::check($data['password'], $user->password)) {
-            $token = Str::random(80);
+            $token = $user->generateToken();
             $user->api_token = $token;
             $user->save();
             $data = $user->toArray();
-            $data['api_token'] = $token;
-            return $data;
+            return ['data' => $data, 'token' => $token];
         }
         return response(
-            ['errors' => ['Credentials do not match our records.']],
+            ['errors' => ['password' => ['Password is incorrect.']]],
             401
         );
     }

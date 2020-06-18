@@ -42,11 +42,6 @@ body {
     color: #fff;
 }
 
-.btn-emperor:hover {
-    background-color: rgb(235, 235, 235);
-    color: rgb(40, 40, 40);
-}
-
 .btn-tradewind {
     background-color: $tradewind;
     color: rgb(240, 240, 240);
@@ -55,6 +50,11 @@ body {
 .btn-cutty-sark {
     background-color: $cutty_sark;
     color: #fff;
+}
+
+.btn-emperor:hover {
+    background-color: rgb(235, 235, 235);
+    color: rgb(40, 40, 40);
 }
 
 .btn-tradewind:hover {
@@ -67,6 +67,21 @@ body {
     color: #fff !important;
 }
 
+.btn-emperor.disabled {
+    background-color: $emperor;
+    color: #fff;
+}
+
+.btn-tradewind.disabled {
+    background-color: $tradewind;
+    color: rgb(240, 240, 240);
+}
+
+.btn-cutty-sark.disabled {
+    background-color: $cutty_sark;
+    color: #fff;
+}
+
 .hover-show {
     transition: 0.6s ease;
     opacity: 0;
@@ -75,4 +90,13 @@ body {
 
 .hover-show:hover {
     opacity: 1;
+}
+
+.form-alert {
+    border-radius: 6px;
+    padding: 2px 6px;
+}
+
+.form-alert > div {
+    color: #fff;
 }

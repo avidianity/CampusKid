@@ -26,7 +26,8 @@ mix.ts("resources/js/app.ts", "public/js")
         "@store": "/resources/js/store",
         "@types": "/resources/js/types",
         "@views": "/resources/js/views",
-        "@styles": "/resources/sass"
+        "@styles": "/resources/sass",
+        "@classes": "/resources/js/classes"
     })
     .webpackConfig({
         devServer: {

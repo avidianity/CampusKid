@@ -87,16 +87,6 @@ Route::middleware('auth:api')->group(function () {
         ]);
     });
 
-    Route::apiResource('occupations', 'OccupationController')->only([
-        'index',
-        'show',
-    ]);
-
-    Route::apiResource('departments', 'DepartmentController')->only([
-        'index',
-        'show',
-    ]);
-
     Route::apiResource('faculties', 'FacultyController')->only([
         'index',
         'show',
@@ -112,6 +102,16 @@ Route::middleware('auth:api')->group(function () {
         'show',
     ]);
 });
+
+Route::apiResource('occupations', 'OccupationController')->only([
+    'index',
+    'show',
+]);
+
+Route::apiResource('departments', 'DepartmentController')->only([
+    'index',
+    'show',
+]);
 
 Route::prefix('/auth')->group(function () {
     Route::post('/register', 'Auth\RegisterController@store');

@@ -1,32 +1,46 @@
-import Axios from "axios";
-import $ from "jquery";
 import "bootstrap";
+import VueSession from "@classes/VueSession";
+import SessionContract from "~types/Session";
+import axios, { AxiosInstance } from "axios";
+import { CSRFTokenException } from "@classes/CSRF";
 
 declare global {
     interface Window {
-        $: any;
-        Axios: any;
+        Session: any;
+        misc: any;
     }
+    interface Object {
+        [key: string]: any;
+    }
+    var Axios: AxiosInstance;
+    var Session: VueSession;
 }
 
-window.$ = $;
-
-Axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
-Axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-
-let token: HTMLMetaElement | null = document.head.querySelector(
+const token: HTMLMetaElement | null = document.querySelector(
     'meta[name="csrf-token"]'
 );
 
-if (token) {
-    Axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-} else {
-    console.error(
-        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+if (!token) {
+    throw new CSRFTokenException(
+        "There is no CSRF Token. Please reload the page."
     );
 }
 
-window.Axios = Axios;
+axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
+axios.defaults.headers.common["Accept"] = "application/json";
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+axios.defaults.headers.common["X-CSRF-Token"] = token?.content;
+
+axios.interceptors.request.use(config => {
+    if (Session.hasToken()) {
+        config.headers["Authorization"] = `Bearer ${Session.token()}`;
+    }
+    return config;
+});
+
+globalThis.Axios = axios;
+
+globalThis.Session = new VueSession();
 
 // import Echo from 'laravel-echo';
 

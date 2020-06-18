@@ -29,6 +29,11 @@ class RegisterUser extends FormRequest
             'username' => ['required', 'min:6', 'unique:users'],
             'password' => ['required', 'min:6'],
             'access_level' => ['required', Rule::in([1, 2])],
+            'department_id' => ['required', 'exists:App\Department,id'],
+            'occupation_id' => [
+                'required_if:access_level,2',
+                'exists:App\Occupation,id',
+            ],
         ];
     }
 
@@ -48,6 +53,10 @@ class RegisterUser extends FormRequest
                 'Please provide an account type. (Student, Faculty)',
             'access_level.in' =>
                 'Please choose either \'Student\' or \'Faculty\'.',
+            'department_id.required' => 'Department is required.',
+            'deparment_id.exists' => 'Department does not exist.',
+            'occupation_id.required_if' => 'Occupation is required.',
+            'occupation_id.exists' => 'Occupation does not exist.',
         ];
     }
 }

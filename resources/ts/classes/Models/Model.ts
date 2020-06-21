@@ -1,4 +1,6 @@
-export default abstract class Model {
+import { ModelContract } from "~types/Models";
+
+export default abstract class Model implements ModelContract {
     created_at: Date;
     updated_at: Date;
     [key: string]: any;
@@ -15,7 +17,9 @@ export default abstract class Model {
         }
         return this;
     }
-    save() {
-        console.log(this.constructor.name);
+    save(url: string, headers: Object = {}) {
+        return this.id
+            ? Axios.post(url, this, headers)
+            : Axios.put(url, this, headers);
     }
 }

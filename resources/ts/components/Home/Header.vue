@@ -10,7 +10,18 @@
                 discussions as well as tasking with homeworks and many more. We
                 handle it all for you!
             </p>
-            <router-link to="/sign-up" class="btn btn-cutty-sark">
+            <router-link
+                :to="homeRoute"
+                class="btn btn-tradewind"
+                v-if="logged"
+            >
+                Dashboard
+            </router-link>
+            <router-link
+                to="/sign-up"
+                class="btn btn-cutty-sark"
+                v-if="!logged"
+            >
                 Get Started
             </router-link>
         </div>
@@ -19,6 +30,22 @@
         </div>
     </div>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { User } from "@classes/Models/index";
+
+@Component
+export default class HeaderComponent extends Vue {
+    get logged(): boolean {
+        return this.$store.getters.logged;
+    }
+    get homeRoute(): string {
+        return (Session.user() as User).homeRoute().path;
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 .btn {

@@ -5,7 +5,7 @@ import SessionContract, {
     FlashStateContract,
     NonPersistingStateContract
 } from "~types/Session";
-import { User } from "@models/index";
+import { User } from "@classes/Models";
 
 export default class Session implements SessionContract {
     key: string;
@@ -138,10 +138,10 @@ export default class Session implements SessionContract {
         }
         if (this.has("user-session")) {
             // persisting
-            return this.get("user-session");
+            return new User(this.get("user-session"));
         } else if (this.nonpersisting.has("user-session")) {
             // non persisting
-            return this.nonpersisting.get("user-session");
+            return new User(this.nonpersisting.get("user-session"));
         }
         return null;
     }

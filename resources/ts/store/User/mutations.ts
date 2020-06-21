@@ -1,9 +1,9 @@
 import { MutationTree } from "vuex";
 import { UserState, SignUpFormContract } from "~types/store";
-import { UserContract } from "~types/Models";
+import { User, File } from "@classes/Models/index";
 
 export const mutations: MutationTree<UserState> = {
-    FILL_USER(state, payload: UserContract) {
+    FILL_USER(state, payload: User) {
         state.user = payload;
     },
     FILL_SIGN_UP_FORM(state, payload: SignUpFormContract) {
@@ -12,7 +12,7 @@ export const mutations: MutationTree<UserState> = {
     CLEAR_SIGN_UP_FORM(state) {
         delete state.forms;
     },
-    LOGIN(state, user: UserContract) {
+    LOGIN(state, user: User) {
         state.user = user;
         state.logged = true;
     },
@@ -22,5 +22,8 @@ export const mutations: MutationTree<UserState> = {
         Session.clear();
         Session.temp.clear();
         Session.flash.clear();
+    },
+    FILL_PROFILE_PICTURE(state, file: File) {
+        state.profile = file;
     }
 };

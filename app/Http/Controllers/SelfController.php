@@ -47,7 +47,8 @@ class SelfController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = $request->user()->update($request->all());
+        return $user;
     }
 
     /**
@@ -59,5 +60,15 @@ class SelfController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fourZeroFour()
+    {
+        return response('', 404);
+    }
+
+    public function main()
+    {
+        return view('main');
     }
 }

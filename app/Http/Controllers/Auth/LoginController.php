@@ -57,4 +57,9 @@ class LoginController extends Controller
             ->delete();
         return new Response('', 204);
     }
+
+    public function check(Request $request)
+    {
+        return $request->user();
+    }
 }

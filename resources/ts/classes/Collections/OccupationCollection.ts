@@ -1,8 +1,8 @@
-import { PaginatedCollection } from "./PaginatedCollection";
+import PaginatedCollection from "./PaginatedCollection";
 import { PaginationContract } from "~types/Models";
 import Occupation from "@models/Occupation";
 
-export class OccupationCollection extends PaginatedCollection {
+export default class OccupationCollection extends PaginatedCollection {
     data: Array<Occupation>;
     constructor(response: PaginationContract) {
         super(response);

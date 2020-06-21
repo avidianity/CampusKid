@@ -7,10 +7,18 @@ import SignUpPage from "@views/SignUp.vue";
 import SignInPage from "@views/SignIn.vue";
 import PolicyPage from "@views/Policy.vue";
 import TermsPage from "@views/Terms.vue";
+
 import DashboardPage from "@views/Dashboard.vue";
+import MainDashboardPage from "@views/MainDashboard.vue";
+import UsersIndexPage from "@views/User.vue";
+
 import FourZeroFour from "@views/404.vue";
 
 Vue.use(VueRouter);
+
+import GuardsFactory from "@classes/Guards";
+
+const Guards = new GuardsFactory();
 
 export default new VueRouter({
     mode: "history",
@@ -44,11 +52,23 @@ export default new VueRouter({
         },
         {
             path: "/dashboard",
-            component: DashboardPage
+            component: DashboardPage,
+            beforeEnter: Guards.isAdmin(),
+            children: [
+                {
+                    path: "",
+                    component: MainDashboardPage,
+                    name: "Main-Dashboard"
+                },
+                {
+                    path: "users",
+                    component: UsersIndexPage
+                }
+            ]
         },
         {
             path: "/*",
             component: FourZeroFour
-        },
+        }
     ]
 });

@@ -29,7 +29,15 @@ import appInfoCartoon from "@components/Home/InfoCartoon.vue";
         appInfoCartoon
     }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+    created() {
+        const user = Session.user();
+        if (user) {
+            this.$store.dispatch("login", user);
+            this.$router.push(user.homeRoute());
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -80,6 +80,12 @@ class User extends Authenticatable
             }
         }
         if (Hash::check($data['password'], $user->password)) {
+            $request = request();
+            Login::create([
+                'user_id' => $user->id,
+                'user_agent' => $request->userAgent(),
+                'ip_address' => $request->ip(),
+            ]);
             $token = $user->createToken('normal')->plainTextToken;
             return ['data' => $user, 'token' => $token];
         }
@@ -197,12 +203,12 @@ class User extends Authenticatable
 
     public function profile_picture()
     {
-        return $this->hasOne(File::class, 'profile_picture_id');
+        return $this->belongsTo(File::class, 'profile_picture_id');
     }
 
     public function cover_photo()
     {
-        return $this->hasOne(File::class, 'cover_photo_id');
+        return $this->belongsTo(File::class, 'cover_photo_id');
     }
 
     public function delete()

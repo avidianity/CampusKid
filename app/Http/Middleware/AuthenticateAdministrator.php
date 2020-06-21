@@ -16,7 +16,7 @@ class AuthenticateAdministrator
     public function handle($request, Closure $next)
     {
         if (!$request->user()->isAdministrator()) {
-            return response(['message' => 'Unauthenticated'], 403);
+            return response()->json(['message' => 'Unauthenticated'], 403);
         }
         return $next($request);
     }

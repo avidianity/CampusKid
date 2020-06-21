@@ -1,5 +1,5 @@
 // @import "~bootstrap/scss/bootstrap";
-// @import "./AdminLTE/AdminLTE";
+// @import "@styles/AdminLTE/AdminLTE";
 // @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 // @import "~@fortawesome/fontawesome-free/scss/solid";
 // @import "~@fortawesome/fontawesome-free/scss/regular";
@@ -80,6 +80,10 @@ body {
 .btn-cutty-sark.disabled {
     background-color: $cutty_sark;
     color: #fff;
+}
+
+.bg-warning, .bg-warning > a {
+    color: #fff !important;
 }
 
 .hover-show {

@@ -25,7 +25,12 @@ class AsAPIOnly
     public function handle($request, Closure $next)
     {
         if (!$request->ajax()) {
-            return response('Request must be AJAX.', 405);
+            return response(
+                [
+                    'errors' => 'Request must be AJAX.',
+                ],
+                405
+            );
         }
         $request->headers->set('Accept', 'application/json');
         $response = $next($request);

@@ -10,13 +10,6 @@ import Axios, { AxiosError } from "axios";
 
 Vue.use(Vuex);
 
-/**
- * Model Skeletons
- */
-
-let departments: DepartmentCollection;
-let occupations: OccupationCollection;
-
 const store: StoreOptions<RootState> = {
     actions: {
         fetchDepartments({ commit }) {
@@ -42,6 +35,9 @@ const store: StoreOptions<RootState> = {
                 .catch((error: AxiosError) => {
                     console.log(error.toJSON());
                 });
+        },
+        setRoute({ commit }, name) {
+            commit("SET_ROUTE", name);
         }
     },
     mutations: {
@@ -50,6 +46,9 @@ const store: StoreOptions<RootState> = {
         },
         FILL_OCCUPATIONS(state, occupations: OccupationCollection) {
             state.occupations = occupations;
+        },
+        SET_ROUTE(state, name: string) {
+            state.route = name;
         }
     },
     getters: {
@@ -58,6 +57,9 @@ const store: StoreOptions<RootState> = {
         },
         occupations({ occupations }): OccupationCollection {
             return occupations;
+        },
+        route({ route }): string {
+            return route;
         }
     },
     modules: {

@@ -1,13 +1,13 @@
 import { ActionTree } from "vuex";
 import Axios from "axios";
 import { UserState, RootState, SignUpFormContract } from "~types/store";
-import { UserContract } from "~types/Models";
+import { User, File } from "@classes/Models/index";
 
 export const actions: ActionTree<UserState, RootState> = {
     fetchUser({ commit }): any {
         Axios.get("/")
             .then(response => {
-                const payload: UserContract = response && response.data;
+                const payload: User = response && response.data;
                 commit("FILL_USER", payload);
             })
             .catch(error => {
@@ -20,10 +20,13 @@ export const actions: ActionTree<UserState, RootState> = {
     clearSignUpForm({ commit }): any {
         commit("CLEAR_SIGN_UP_FORM");
     },
-    login({ commit }, user: UserContract) {
+    login({ commit }, user: User) {
         commit("LOGIN", user);
     },
     logout({ commit }) {
         commit("LOGOUT");
+    },
+    fillProfilePicture({ commit }, file: File) {
+        commit("FILL_PROFILE_PICTURE", file);
     }
 };

@@ -35,7 +35,7 @@
                         <span class="nav-line"></span>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="!logged">
                     <router-link to="/sign-in" class="nav-link">
                         Sign In
                         <span class="nav-line"></span>
@@ -45,12 +45,40 @@
             <router-link
                 to="/sign-up"
                 class="btn btn-tradewind btn-sm my-2 my-sm-0 mr-2"
+                v-if="!logged"
             >
                 Sign Up
+            </router-link>
+            <router-link
+                :to="homeRoute"
+                class="btn btn-cutty-sark btn-sm my-2 my-sm-0 mr-2"
+                v-if="logged"
+            >
+                Dashboard
             </router-link>
         </div>
     </nav>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { User } from "@classes/Models/index";
+
+@Component
+export default class NavbarComponent extends Vue {
+    get logged(): boolean {
+        return this.$store.getters.logged;
+    }
+    get homeRoute() {
+        try {
+            return (Session.user() as User).homeRoute().path;
+        } catch (error) {
+            return "/";
+        }
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 @import "@styles/global.scss";

@@ -1,18 +1,21 @@
-import {
-    DepartmentCollection,
-    OccupationCollection
-} from "@classes/Collections";
+import * as Collections from "@classes/Collections";
 
-import { UserContract } from "./Models";
+import * as Models from "@classes/Models";
 
 export interface RootState {
-    departments: DepartmentCollection;
-    occupations: OccupationCollection;
+    departments: Collections.DepartmentCollection;
+    occupations: Collections.OccupationCollection;
+    administrators: Collections.AdministratorCollection;
+    faculties: Collections.FacultyCollection;
+    students: Collections.StudentCollection;
+    route: string;
 }
 
 export interface UserState {
-    user?: UserContract;
+    user?: Models.User;
     logged: boolean;
+    profile?: Models.File;
+    cover?: any;
     [key: string]: any;
 }
 

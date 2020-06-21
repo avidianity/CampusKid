@@ -2,7 +2,7 @@ import { OccupationContract } from "~types/Models";
 import Model from "./Model";
 
 export default class Occupation extends Model implements OccupationContract {
-    id: number;
+    id?: number;
     name: string;
     constructor(data: any) {
         super(data);

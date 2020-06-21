@@ -2,7 +2,7 @@ import { DetailContract } from "~types/Models";
 import Model from "./Model";
 
 export default class Detail extends Model implements DetailContract {
-    id: number;
+    id?: number;
     first_name: string;
     last_name: string;
     gender: string;

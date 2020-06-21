@@ -162,8 +162,12 @@ export default class SignUp extends Vue {
                             address: null
                         },
                         role: {
-                            occupation_id: departments.data[0].id,
-                            department_id: occupations.data[0].id
+                            occupation_id: departments.data[0].id as
+                                | number
+                                | null,
+                            department_id: occupations.data[0].id as
+                                | number
+                                | null
                         }
                     };
                     Session.temp.set("sign-up", form, 20);

@@ -44,7 +44,7 @@ export default class MainDashboard extends Vue {
             "bg-info",
             "bg-warning text-white",
             "bg-danger",
-            "bg-tradewind"
+            "bg-cutty-sark"
         ];
         const names = [
             "New Users",

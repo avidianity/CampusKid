@@ -3,6 +3,7 @@ import FileContract from "./FileContract";
 import StudentContract from "./StudentContract";
 import FacultyContract from "./FacultyContract";
 import AdministratorContract from "./AdministratorContract";
+import DetailContract from "./DetailContract";
 
 export default interface UserContract extends TimestampContract {
     id?: number;
@@ -19,6 +20,7 @@ export default interface UserContract extends TimestampContract {
     cover_photo: FileContract | null;
     cover_photo_id: number | null;
     role?: StudentContract | FacultyContract | AdministratorContract;
+    detail?: DetailContract;
     isStudent(): boolean;
     isFaculty(): boolean;
     isAdministrator(): boolean;

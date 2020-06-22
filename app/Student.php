@@ -36,4 +36,14 @@ class Student extends Model
     {
         return $this->hasMany(ClassroomSubscription::class);
     }
+
+    public function classrooms()
+    {
+        return $this->hasManyThrough(
+            Classroom::class,
+            ClassroomSubscription::class,
+            'student_id',
+            'id'
+        );
+    }
 }

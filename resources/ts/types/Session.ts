@@ -8,6 +8,7 @@ export default interface SessionContract {
     state: StateContract;
     temp: ExpiringStateContract;
     flash: FlashStateContract;
+    nonpersisting: NonPersistingStateContract;
     start(): this;
     has(key: string): boolean;
     get(key: string): any;

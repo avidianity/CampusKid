@@ -18,6 +18,7 @@ export const mutations: MutationTree<UserState> = {
     },
     LOGOUT(state) {
         delete state.user;
+        delete state.profile;
         state.logged = false;
         Session.clear();
         Session.temp.clear();

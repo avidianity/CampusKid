@@ -10,15 +10,24 @@ import TermsPage from "@views/Terms.vue";
 
 import DashboardPage from "@views/Dashboard.vue";
 import MainDashboardPage from "@views/MainDashboard.vue";
-import UsersIndexPage from "@views/User.vue";
+import UsersIndexPage from "@views/Users/Index.vue";
+import AdministratorsPage from "@views/Users/Administrator.vue";
+import FacultiesPage from "@views/Users/Faculty.vue";
+import StudentsPage from "@views/Users/Student.vue";
+import UsersPage from "@views/Users/User.vue";
 
 import FourZeroFour from "@views/404.vue";
+import Dashboard404 from "@components/Dashboard404.vue";
+import Dashboard503 from "@components/Dashboard503.vue";
 
 Vue.use(VueRouter);
 
-import GuardsFactory from "@classes/Guards";
+import Guards from "@classes/Guards";
 
-const Guards = new GuardsFactory();
+const FZF = {
+    path: "*",
+    component: Dashboard404
+};
 
 export default new VueRouter({
     mode: "history",
@@ -62,8 +71,40 @@ export default new VueRouter({
                 },
                 {
                     path: "users",
-                    component: UsersIndexPage
-                }
+                    component: UsersIndexPage,
+                    children: [
+                        {
+                            path: "",
+                            component: UsersPage
+                        },
+                        {
+                            path: "administrators",
+                            component: AdministratorsPage
+                        },
+                        {
+                            path: "faculties",
+                            component: FacultiesPage
+                        },
+                        {
+                            path: "students",
+                            component: StudentsPage
+                        },
+                        FZF
+                    ]
+                },
+                {
+                    path: "classrooms",
+                    component: Dashboard503
+                },
+                {
+                    path: "departments",
+                    component: Dashboard503
+                },
+                {
+                    path: "occupations",
+                    component: Dashboard503
+                },
+                FZF
             ]
         },
         {

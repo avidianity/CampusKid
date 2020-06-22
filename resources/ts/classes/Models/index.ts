@@ -1,4 +1,5 @@
 import Administrator from "./Administrator";
+import Classroom from "./Classroom";
 import Department from "./Department";
 import Detail from "./Detail";
 import Faculty from "./Faculty";
@@ -15,7 +16,8 @@ export {
     File,
     Administrator,
     Faculty,
-    Student
+    Student,
+    Classroom
 };
 
 window.models = {
@@ -26,5 +28,6 @@ window.models = {
     File,
     Administrator,
     Faculty,
-    Student
+    Student,
+    Classroom
 };

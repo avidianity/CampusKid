@@ -301,8 +301,10 @@ export class NonPersistingSession implements NonPersistingStateContract {
         this.key = "vue-non-persisting-session-key";
         this.Storage = window.sessionStorage;
     }
-    get(key: string): any {}
-    getAll(): object {
+    get(key: string): any {
+        return this.has(key) ? this.getAll()[key] : null;
+    }
+    getAll(): Object {
         try {
             return JSON.parse(this.Storage.getItem(this.key) || "");
         } catch (error) {

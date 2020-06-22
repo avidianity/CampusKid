@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "CampusKid",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A school management system.",
     "keywords": [
         "framework",
         "laravel"

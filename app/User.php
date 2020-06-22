@@ -53,7 +53,13 @@ class User extends Authenticatable
             );
         }
         if (isset($data['email'])) {
-            $user = self::where('email', $data['email'])->first();
+            $user = self::where('email', $data['email'])
+                ->with('detail')
+                ->with('detail')
+                ->with('role')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->first();
             if (!$user) {
                 return response(
                     [
@@ -65,7 +71,13 @@ class User extends Authenticatable
                 );
             }
         } elseif (isset($data['username'])) {
-            $user = self::where('username', $data['username'])->first();
+            $user = self::where('username', $data['username'])
+                ->with('detail')
+                ->with('detail')
+                ->with('role')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->first();
             if (!$user) {
                 return response(
                     [

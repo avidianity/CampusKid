@@ -1,19 +1,10 @@
 import { UserContract } from "~types/Models";
-import Model from "./Model";
+import { File, Administrator, Faculty, Student, Detail } from "@classes/Models";
+import Model from "@classes/Models/Model";
 import AccessLevels from "~types/AccessLevels";
-import File from "./File";
-import Administrator from "./Administrator";
-import Faculty from "./Faculty";
-import Student from "./Student";
 
 type Route = {
     path: string;
-};
-
-const RoleClass = {
-    ["Administrator" as string]: Administrator,
-    ["Faculty" as string]: Faculty,
-    ["Student" as string]: Student
 };
 
 export default class User extends Model implements UserContract {
@@ -32,7 +23,8 @@ export default class User extends Model implements UserContract {
     cover_photo_id: number | null;
     access_levels: typeof AccessLevels;
     role?: Administrator | Faculty | Student;
-    constructor(data: UserContract) {
+    detail?: Detail;
+    constructor(data: any) {
         super(data);
         this.id = data.id;
         this.provider_id = data.provider_id;
@@ -58,8 +50,16 @@ export default class User extends Model implements UserContract {
             Administrator: 3
         };
         if (data.role) {
-            const key = this.access_level as string;
-            this.role = new RoleClass[key](data.role);
+            if (this.isAdministrator()) {
+                this.role = new Administrator(data.role);
+            } else if (this.isFaculty()) {
+                this.role = new Faculty(data.role);
+            } else if (this.isStudent()) {
+                this.role = new Student(data.role);
+            }
+        }
+        if (data.detail) {
+            this.detail = new Detail(data.detail);
         }
     }
     isStudent(): boolean {

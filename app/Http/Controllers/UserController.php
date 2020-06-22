@@ -15,6 +15,7 @@ class UserController extends Controller
     public function index()
     {
         return User::with('profile_picture')
+            ->with('detail')
             ->with('cover_photo')
             ->paginate(10);
     }

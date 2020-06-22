@@ -1,6 +1,6 @@
 <template>
-    <div style="height: 100vh;" class="container d-flex">
-        <div class="error-page align-self-center mx-auto">
+    <div class="container d-flex h-100 w-100">
+        <div class="error-page align-self-center mx-auto pt-5">
             <h2 class="headline text-warning">404</h2>
             <div class="error-content">
                 <h3>
@@ -10,8 +10,6 @@
                 <p>
                     We could not find the page you were looking for. Meanwhile,
                     you may
-                    <router-link to="/">return to the Home page</router-link>.
-                    Or
                     <a href="" @click.prevent.stop="redirect()">
                         go back to the last page you visited.
                     </a>

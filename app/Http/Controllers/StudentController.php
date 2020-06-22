@@ -19,6 +19,7 @@ class StudentController extends Controller
     {
         return Student::with('user.detail')
             ->with('department')
+            ->with('classrooms')
             ->paginate(10);
     }
 

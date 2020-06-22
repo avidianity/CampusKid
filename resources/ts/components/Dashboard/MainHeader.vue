@@ -176,7 +176,7 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <li class="user-header bg-primary">
+                    <li class="user-header" :style="cover_photo">
                         <img
                             :src="profile_picture"
                             class="img-circle elevation-2"
@@ -260,7 +260,28 @@ export default class MainHeaderComponent extends Vue {
     get profile_picture(): string {
         return this.$store.getters.profile
             ? this.$store.getters.profile.url
-            : "https://via.placeholder.com/160";
+            : "https://i.pravatar.cc/160";
+    }
+    get self() {
+        return this.$store.getters.user;
+    }
+    get cover_photo() {
+        return this.$store.getters.user.profile
+            ? {
+                  background: `url("${this.$store.getters.user.profile.url}") center center`,
+                  "background-repeat": "no-repeat"
+              }
+            : {
+                  background: "#007bff",
+                  color: "#fff"
+              };
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.user-header {
+    max-width: 280px;
+    max-height: 175px;
+}
+</style>

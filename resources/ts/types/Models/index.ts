@@ -1,4 +1,5 @@
 import AdministratorContract from "./AdministratorContract";
+import ClassroomContract from "./ClassroomContract";
 import DepartmentContract from "./DepartmentContract";
 import DetailContract from "./DetailContract";
 import FacultyContract from "./FacultyContract";
@@ -12,6 +13,7 @@ import UserContract from "./UserContract";
 
 export {
     AdministratorContract,
+    ClassroomContract,
     DepartmentContract,
     DetailContract,
     FacultyContract,

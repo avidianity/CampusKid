@@ -38,39 +38,11 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th
-                                    v-for="(header, index) in headers"
-                                    :key="index"
-                                >
-                                    {{ header }}
-                                </th>
+                                <slot name="headers"></slot>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in data" :key="index">
-                                <td v-for="(key, nth) in keys" :key="nth">
-                                    {{
-                                        printable(item[key]) &&
-                                        !image(item[key])
-                                            ? item[key]
-                                            : ""
-                                    }}
-
-                                    <span
-                                        v-if="badge(item[key])"
-                                        :class="item[key].class"
-                                    >
-                                        {{ item[key].name }}
-                                    </span>
-                                    <img
-                                        v-if="image(item[key])"
-                                        :src="item[key].url"
-                                        alt=""
-                                        :class="item[key].class"
-                                    />
-                                    {{ image(item[key]) ? item[key].name : "" }}
-                                </td>
-                            </tr>
+                            <slot name="body"></slot>
                         </tbody>
                     </table>
                 </div>
@@ -88,39 +60,13 @@ import Component from "vue-class-component";
 
 @Component({
     props: {
-        headers: Array,
-        title: String,
-        data: Array,
-        keys: Array
+        title: String
     }
 })
 export default class TableComponent extends Vue {
     query = "";
     search() {
         this.$emit("search", this.query);
-    }
-    type(item: any) {
-        return typeof item;
-    }
-    printable(item: any) {
-        return this.type(item) !== "object";
-    }
-    badge(item: any) {
-        return (
-            this.type(item) === "object" &&
-            item.name &&
-            item.class &&
-            item.type === "badge"
-        );
-    }
-    image(item: any) {
-        return (
-            this.type(item) === "object" &&
-            item.name &&
-            item.url &&
-            item.class &&
-            item.type === "image"
-        );
     }
 }
 </script>
@@ -129,5 +75,9 @@ export default class TableComponent extends Vue {
 .card {
     max-width: none;
     max-height: none;
+}
+td {
+    font-size: 16px;
+    font-family: "Lato-Light";
 }
 </style>

@@ -28,6 +28,7 @@ class AsAPIOnly
             return response(
                 [
                     'errors' => 'Request must be AJAX.',
+                    'headers' => $request->header(),
                 ],
                 405
             );

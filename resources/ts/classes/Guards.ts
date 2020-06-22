@@ -2,7 +2,7 @@ import store from "@store/index";
 import { User } from "@classes/Models/index";
 import { NavigationGuard } from "vue-router";
 
-export default class Guards {
+class Guards {
     isAdmin(): NavigationGuard {
         return (to, from, next) => {
             let user = store.getters.user as User;
@@ -49,3 +49,5 @@ export default class Guards {
         };
     }
 }
+
+export default new Guards();

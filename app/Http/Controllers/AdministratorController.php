@@ -20,7 +20,9 @@ class AdministratorController extends Controller
     public function index(Request $request)
     {
         return Administrator::with('user.detail')
-            ->with('user.role.occupation')
+            ->with('occupation')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
             ->paginate(10);
     }
 

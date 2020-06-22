@@ -12,5 +12,14 @@ import Admin from "@components/Admin.vue";
         appAdmin: Admin
     }
 })
-export default class Dashboard extends Vue {}
+export default class Dashboard extends Vue {
+    mounted() {
+        if (Session.flash.has("toastr")) {
+            const toast = Session.flash.get("toastr");
+            if (toast.type === "success") {
+                const alert = toastr.success(toast.message);
+            }
+        }
+    }
+}
 </script>

@@ -41,4 +41,7 @@ mix.ts("resources/ts/app.ts", "public/js")
             }
         }
     })
+    mix.options({
+        extractVueStyles: true,
+    })
     .disableNotifications();

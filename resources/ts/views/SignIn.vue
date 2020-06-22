@@ -190,6 +190,10 @@ export default class SignInComponent extends Vue {
                 Session.user(user, this.remember_me);
                 Session.temp.remove("sign-in");
                 this.login(user);
+                Session.flash.set("toastr", {
+                    type: "success",
+                    message: `Welcome back, ${user.username}!`
+                });
                 this.$router.push(user.homeRoute());
             })
             .catch((error: AxiosError) => {
@@ -218,7 +222,7 @@ export default class SignInComponent extends Vue {
                         }
                     }
                 } else {
-                    console.log(error.toJSON());
+                    console.log(error.toJSON ? error.toJSON() : error);
                 }
             })
             .then(() => {

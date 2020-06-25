@@ -1,5 +1,7 @@
 <p align="center"><img src="https://campuskid.herokuapp.com/images/logo.svg" width="400"></p>
 
+<a href="campuskid.herokuapp.com">CampusKid Demo</a>
+
 ## About CampusKid
 
 CampusKid is a web application designed to make teachers and students
@@ -17,7 +19,9 @@ CampusKid is currently being developed with the following features:
 -   And many more..
 
 Features are being implemented slowly as to make sure that there will be no conflicts
-with what is currently available.
+with what is currently available. The project is pretty new so there is not much
+on the front-end yet. But most of the backend is complete except for
+the grading system and file sharing system.
 
 ## Contributing
 
@@ -44,6 +48,10 @@ You may propose new features or improvements the application. If you propose a n
 -   Participants must ensure that their language and actions are free of personal attacks and disparaging personal remarks.
 -   When interpreting the words and actions of others, participants should always assume good intentions.
 -   Behavior that can be reasonably considered harassment will not be tolerated.
+
+## Issues
+
+If you see any problems, bugs or issue. Please open an issue in the repository.
 
 ## License
 

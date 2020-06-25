@@ -1,6 +1,6 @@
 <p align="center"><img src="https://campuskid.herokuapp.com/images/logo.svg" width="200"></p>
 
-<a href="campuskid.herokuapp.com">CampusKid Demo</a>
+[CampusKid Demo Site](https://campuskid.herokuapp.com)
 
 ## About CampusKid
 

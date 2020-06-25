@@ -51,13 +51,23 @@
                     </small>
                     <label for="password">Password:</label>
                     <input
-                        type="password"
+                        :type="passwordType"
                         name="password"
                         id="password"
                         placeholder="Password"
                         class="form-control form-control-sm"
                         v-model="password"
                     />
+                    <div class="form-check ml-1 mt-1">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            v-model="toggledPassword"
+                        />
+                        <small class="form-check-label">
+                            Show Password
+                        </small>
+                    </div>
                     <small
                         class="form-text text-muted"
                         :class="messages.password.class"
@@ -72,7 +82,7 @@
                     </small>
                     <button
                         type="submit"
-                        class="btn btn-emperor btn-sm mt-3"
+                        class="btn btn-emperor btn-sm mt-1"
                         :class="{ disabled: processing }"
                         :disabled="processing"
                         @click.prevent.stop="submit()"
@@ -121,6 +131,7 @@ import { User } from "@classes/Models";
 export default class SignInComponent extends Vue {
     @Action login: any;
     processing = false;
+    toggledPassword = false;
     message: {
         has: boolean;
         body: string;
@@ -169,6 +180,9 @@ export default class SignInComponent extends Vue {
             this.message.classes = message.classes;
         }
     }
+    get passwordType() {
+        return this.toggledPassword ? "text" : "password";
+    }
     closeMessage() {
         this.message = {
             has: false,
@@ -200,12 +214,19 @@ export default class SignInComponent extends Vue {
                 if (error.response && error.response.status === 401) {
                     for (const key in error.response.data.errors) {
                         if (key === "message") {
-                            this.message.has = true;
-                            this.message.body =
-                                error.response.data.errors[key][0];
-                            this.message.classes = {
-                                "alert alert-danger": true
-                            };
+                            toastr.error(
+                                error.response.data.errors[key][0],
+                                "422",
+                                {
+                                    positionClass: "toast-top-center"
+                                }
+                            );
+                            // this.message.has = true;
+                            // this.message.body =
+                            //     error.response.data.errors[key][0];
+                            // this.message.classes = {
+                            //     "alert alert-danger": true
+                            // };
                         } else {
                             for (const message of error.response.data.errors[
                                 key

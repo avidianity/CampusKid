@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Detail;
+use App\User;
 use App\Http\Requests\ValidateDetail;
 
 class DetailController extends Controller
@@ -62,6 +63,31 @@ class DetailController extends Controller
     public function update(Request $request, $id)
     {
         $detail = $request->user()->detail;
+        $detail->update($request->all());
+        return $detail;
+    }
+
+    public function storeOther(ValidateDetail $request)
+    {
+        $creds = $request->get('credentials');
+        $result = User::confirm($creds);
+        if (!$result['status']) {
+            return $result['response'];
+        }
+        $detail = new Detail($request->validated());
+        $detail->user_id = isset($creds['email'])
+            ? User::where('email', $creds['email'])->first()->id
+            : User::where('username', $creds['username'])->first()->id;
+        $detail->save();
+        return $detail;
+    }
+
+    public function updateOther(Request $request, Detail $detail)
+    {
+        $result = User::confirm($request->get('credentials'));
+        if (!$result['status']) {
+            return $result['response'];
+        }
         $detail->update($request->all());
         return $detail;
     }

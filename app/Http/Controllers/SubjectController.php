@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Subject;
+use App\Http\Requests\ValidateSubject;
 
 class SubjectController extends Controller
 {
@@ -14,7 +15,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        return Subject::paginate(10);
+        return Subject::with('classrooms')->paginate(10);
     }
 
     /**
@@ -23,9 +24,9 @@ class SubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateSubject $request)
     {
-        return Subject::create($request->all());
+        return Subject::create($request->validated());
     }
 
     /**
@@ -34,9 +35,9 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Subject $subject)
+    public function show($id)
     {
-        return $subject;
+        return Subject::with('classrooms')->findOrFail($id);
     }
 
     /**

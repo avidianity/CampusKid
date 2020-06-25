@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -105,6 +106,47 @@ class User extends Authenticatable
             ['errors' => ['password' => ['Password is incorrect.']]],
             401
         );
+    }
+
+    public static function confirm($data)
+    {
+        if (
+            (!isset($data['email']) && !isset($data['username'])) ||
+            !isset($data['password'])
+        ) {
+            return [
+                'status' => false,
+                'response' => response(
+                    ['errors' => ['No credentials provided.']],
+                    403
+                ),
+            ];
+        }
+        if (isset($data['email'])) {
+            $user = User::where('email', $data['email'])->first();
+        }
+        if (!$user) {
+            $user = User::where('username', $data['username'])->first();
+        }
+        if (!$user) {
+            return [
+                'status' => false,
+                'response' => response(
+                    ['errors' => ['Credentials do not exist in records.']],
+                    403
+                ),
+            ];
+        }
+        if (Hash::check($data['password'], $user->password)) {
+            return ['status' => true, 'response' => response('', 204)];
+        }
+        return [
+            'status' => false,
+            'response' => response(
+                ['errors' => ['Incorrect credentials.']],
+                403
+            ),
+        ];
     }
 
     public function canPostToClassroom($class_id)

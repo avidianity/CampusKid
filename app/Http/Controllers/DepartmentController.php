@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Department;
+use App\Http\Requests\ValidateDepartment;
 
 class DepartmentController extends Controller
 {
@@ -26,9 +27,9 @@ class DepartmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateDepartment $request)
     {
-        return Department::create($request->all());
+        return Department::create($request->validated());
     }
 
     /**

@@ -36,6 +36,16 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware('only.admin')->group(function () {
+        Route::put(
+            '/other/administrator/{administrator}',
+            'AdministratorController@updateOther'
+        );
+        Route::put('/other/faculty/{faculty}', 'FacultyController@updateOther');
+        Route::put('/other/student/{student}', 'StudentController@updateOther');
+        Route::put('/other/detail/{detail}', 'DetailController@updateOther');
+        Route::post('/other/detail', 'DetailController@storeOther');
+        Route::put('/other/user/{user}', 'UserController@updateOther');
+
         Route::apiResources([
             'administrators' => 'AdministratorController',
             'users' => 'UserController',
@@ -48,14 +58,34 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
+    Route::apiResource('classrooms', 'ClassroomController')->only([
+        'index',
+        'show',
+    ]);
+
+    Route::prefix('/classroom')->group(function () {
+        Route::apiResource('tasks', 'TaskController')->only(['index', 'show']);
+        Route::apiResource('grades', 'GradeController')->only([
+            'index',
+            'show',
+        ]);
+    });
+
     Route::middleware('only.faculty')->group(function () {
-        Route::apiResources([
-            'classrooms' => 'ClassroomController',
+        Route::apiResource('classrooms', 'ClassroomController')->except([
+            'index',
+            'show',
         ]);
 
         Route::prefix('/classroom')->group(function () {
-            Route::apiResource('tasks', 'TaskController');
-            Route::apiResource('grades', 'GradeController')->except('index');
+            Route::apiResource('tasks', 'TaskController')->except([
+                'index',
+                'show',
+            ]);
+            Route::apiResource('grades', 'GradeController')->except([
+                'index',
+                'show',
+            ]);
         });
     });
 
@@ -145,6 +175,7 @@ Route::group(['middleware' => ['auth:sanctum', 'only.admin']], function () {
 Route::prefix('/auth')->group(function () {
     Route::post('/register', 'Auth\RegisterController@register');
     Route::post('/login', 'Auth\LoginController@attempt');
+    Route::post('/confirm', 'Auth\LoginController@confirm');
 });
 
 Route::fallback('SelfController@fourZeroFour');

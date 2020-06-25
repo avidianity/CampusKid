@@ -1,3 +1,5 @@
+import { UserContract } from "~types/Models";
+
 export interface StateContract {
     [key: string]: any;
 }
@@ -18,10 +20,13 @@ export default interface SessionContract {
     setAll(data: object): this;
     id(): string;
     clear(): this;
+    clearAll(): this;
     remove(key: string): this;
     token(token?: string, remember?: boolean): this | string | null;
     revokeToken(): this;
     hasToken(): boolean;
+    user(user?: UserContract, remember?: boolean): UserContract | this | null;
+    removeUser(): this;
 }
 
 export interface ExpiringStateContract {

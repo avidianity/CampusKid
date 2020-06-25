@@ -187,6 +187,15 @@ export default class SignUp extends Vue {
 <style lang="scss" scoped>
 @import "@styles/global.scss";
 
+#root {
+    background: url("../assets/bg-home.png") center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 10px;
+    height: 100vh;
+    display: flex;
+}
+
 .slide-fade-enter-active {
     transition: all 0.5s ease-in;
 }
@@ -201,8 +210,8 @@ export default class SignUp extends Vue {
 
 .main {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     border-radius: 0;
     border-radius: 13px;
 }
@@ -268,7 +277,17 @@ export default class SignUp extends Vue {
     max-width: 100px;
 }
 
+@media (min-width: 576px) {
+    #root {
+        padding: 25px;
+    }
+}
+
 @media (min-width: 768px) {
+    #root {
+        padding: 35px;
+    }
+
     .active {
         border-radius: 0 !important;
     }
@@ -316,14 +335,5 @@ export default class SignUp extends Vue {
         max-height: 200px;
         max-width: 200px;
     }
-}
-
-#root {
-    background: url("../assets/bg-home.png") center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    padding: 5px;
-    height: 100vh;
-    display: flex;
 }
 </style>

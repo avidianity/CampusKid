@@ -5,6 +5,8 @@ import AdministratorCollection from "./AdministratorCollection";
 import FacultyCollection from "./FacultyCollection";
 import StudentCollection from "./StudentCollection";
 import PaginatedCollection from "./PaginatedCollection";
+import ClassroomCollection from "./ClassroomCollection";
+import SubjectCollection from "./SubjectCollection";
 
 export {
     OccupationCollection,
@@ -13,5 +15,7 @@ export {
     AdministratorCollection,
     FacultyCollection,
     StudentCollection,
-    PaginatedCollection
+    PaginatedCollection,
+    ClassroomCollection,
+    SubjectCollection
 };

@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-sm navbar-dark bg-emperor">
-        <a class="navbar-brand ml-2" href="#">
+        <router-link class="navbar-brand ml-2" to="/" exact>
             <img
                 src="@assets/logo.png"
                 height="30"
@@ -9,7 +9,7 @@
                 class="d-inline-block"
             />
             CampusKid
-        </a>
+        </router-link>
         <button
             class="navbar-toggler border-0"
             type="button"
@@ -83,6 +83,16 @@ export default class NavbarComponent extends Vue {
 <style lang="scss" scoped>
 @import "@styles/global.scss";
 
+@media(max-width: 575px) {
+    .navbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+}
+
 .nav-line {
     display: none;
     width: 0%;
@@ -110,5 +120,9 @@ export default class NavbarComponent extends Vue {
     padding: 6px 24px;
     border-radius: 20px;
     font-family: "Lato-Bold";
+}
+
+.navbar-toggler:focus {
+    outline: none;
 }
 </style>

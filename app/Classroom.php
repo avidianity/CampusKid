@@ -46,6 +46,21 @@ class Classroom extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function profile_picture()
+    {
+        return $this->belongsTo(File::class, 'profile_picture_id');
+    }
+
+    public function cover_photo()
+    {
+        return $this->belongsTo(File::class, 'cover_photo_id');
+    }
+
     public function generateToken()
     {
         $this->token = Str::random(7);

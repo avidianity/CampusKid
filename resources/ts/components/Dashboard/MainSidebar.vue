@@ -1,6 +1,6 @@
 <template>
     <aside class="main-sidebar elevation-4 sidebar-light-primary">
-        <a href="#" class="brand-link">
+        <router-link to="/" class="brand-link" exact>
             <img
                 src="@assets/logo.png"
                 alt="CampusKid Logo"
@@ -8,11 +8,11 @@
                 style="opacity: .8"
             />
             <span class="brand-text font-weight-light">CampusKid</span>
-        </a>
+        </router-link>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul
-                    class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-compact nav-flat"
+                    class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-compact"
                     data-widget="treeview"
                     role="menu"
                     data-accordion="false"

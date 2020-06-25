@@ -1,22 +1,26 @@
 import { PaginationContract } from "~types/Models";
 
 import Administrator from "@classes/Models/Administrator";
+import Classroom from "@classes/Models/Classroom";
 import Department from "@classes/Models/Department";
 import Detail from "@classes/Models/Detail";
 import Faculty from "@classes/Models/Faculty";
 import File from "@classes/Models/File";
 import Occupation from "@classes/Models/Occupation";
 import Student from "@classes/Models/Student";
+import Subject from "@classes/Models/Subject";
 import User from "@classes/Models/User";
 
 const ClassModel = {
     ["Administrator" as string]: Administrator,
+    ["Classroom" as string]: Classroom,
     ["Department" as string]: Department,
     ["Detail" as string]: Detail,
     ["Faculty" as string]: Faculty,
     ["File" as string]: File,
     ["Occupation" as string]: Occupation,
     ["Student" as string]: Student,
+    ["Subject" as string]: Subject,
     ["User" as string]: User
 };
 
@@ -49,6 +53,13 @@ export default abstract class PaginatedCollection
         this.data = [];
     }
     fillModels(models: Array<any>, classname: string) {
+        if (!(classname in ClassModel)) {
+            console.error(
+                `${classname} is not registered in ClassModel.`,
+                ClassModel
+            );
+            throw new Error(`${classname} is not registered in ClassModel.`);
+        }
         for (const data of models) {
             this.data.push(new ClassModel[classname](data));
         }

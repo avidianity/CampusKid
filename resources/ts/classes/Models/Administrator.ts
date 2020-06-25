@@ -1,7 +1,6 @@
 import { AdministratorContract } from "~types/Models";
 import Model from "./Model";
-import Occupation from "./Occupation";
-import User from "./User";
+import { Occupation, User } from "@classes/Models";
 
 export default class Administrator extends Model
     implements AdministratorContract {

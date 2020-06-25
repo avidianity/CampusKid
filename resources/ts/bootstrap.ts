@@ -36,7 +36,7 @@ if (!token) {
     );
 }
 
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -72,6 +72,9 @@ globalThis.Axios = axios;
 globalThis.Session = new VueSession();
 globalThis.toastr = toastr;
 
+/**
+ * Get full month of the current date.
+ */
 Date.prototype.getFullMonth = function() {
     const months = [
         "January",

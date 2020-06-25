@@ -8,6 +8,7 @@ import ModelContract from "./ModelContract";
 import OccupationContract from "./OccupationContract";
 import PaginationContract from "./PaginationContract";
 import StudentContract from "./StudentContract";
+import SubjectContract from "./SubjectContract";
 import TimestampContract from "./TimestampContract";
 import UserContract from "./UserContract";
 
@@ -22,6 +23,7 @@ export {
     OccupationContract,
     PaginationContract,
     StudentContract,
+    SubjectContract,
     TimestampContract,
     UserContract
 };

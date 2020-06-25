@@ -41,7 +41,7 @@ export default class Session implements SessionContract {
         return null;
     }
     set(key: string, data: any): this {
-        console.log(`SessionSet: ${key} = `, data);
+        console.trace(`SessionSet: ${key} = `, data);
         if (key === "session-id" || key === "key") {
             return this;
         }
@@ -86,6 +86,14 @@ export default class Session implements SessionContract {
         this.state = {};
         this.setAll({});
         return this.start();
+    }
+    clearAll(): this {
+        this.removeUser();
+        this.clear();
+        this.flash.clear();
+        this.temp.clear();
+        this.nonpersisting.clear();
+        return this;
     }
     remove(key: string): this {
         const data = this.getAll() as any;
@@ -145,6 +153,16 @@ export default class Session implements SessionContract {
         }
         return null;
     }
+    removeUser(): this {
+        if (this.has("user-session")) {
+            // persisting
+            this.remove("user-session");
+        } else if (this.nonpersisting.has("user-session")) {
+            // non persisting
+            this.nonpersisting.remove("user-session");
+        }
+        return this;
+    }
 }
 
 export class SessionException extends Error {
@@ -194,7 +212,7 @@ export class ExpiringSession implements ExpiringStateContract {
         return this;
     }
     set(key: string, value: any, minutes: number): this {
-        console.log(`ExpiringSessionSet: ${key} = `, value);
+        console.trace(`ExpiringSessionSet: ${key} = `, value);
         const data: ExpiryContract = {
             value,
             expiry: new Date(Date.now() + minutes * 60 * 1000).getTime()
@@ -264,7 +282,7 @@ export class FlashSession implements FlashStateContract {
         return value;
     }
     set(key: string, value: any): this {
-        console.log(`FlashSessionSet: ${key} = `, value);
+        console.trace(`FlashSessionSet: ${key} = `, value);
         const data = this.getAll();
         data[key] = value;
         return this.setAll(data);

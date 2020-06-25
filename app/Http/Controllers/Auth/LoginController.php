@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -45,6 +46,11 @@ class LoginController extends Controller
     public function attempt(Request $request)
     {
         return User::authenticate($request->all());
+    }
+
+    public function confirm(Request $request)
+    {
+        return User::confirm($request);
     }
 
     public function logout(Request $request)

@@ -6,6 +6,7 @@ import Faculty from "./Faculty";
 import File from "./File";
 import Occupation from "./Occupation";
 import Student from "./Student";
+import Subject from "./Subject";
 import User from "./User";
 
 export {
@@ -17,7 +18,8 @@ export {
     Administrator,
     Faculty,
     Student,
-    Classroom
+    Classroom,
+    Subject
 };
 
 window.models = {
@@ -29,5 +31,6 @@ window.models = {
     Administrator,
     Faculty,
     Student,
-    Classroom
+    Classroom,
+    Subject
 };

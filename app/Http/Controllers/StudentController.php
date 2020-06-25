@@ -18,6 +18,8 @@ class StudentController extends Controller
     public function index()
     {
         return Student::with('user.detail')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
             ->with('department')
             ->with('classrooms')
             ->paginate(10);
@@ -57,7 +59,6 @@ class StudentController extends Controller
         $user->role_id = $student->id;
         $user->save();
 
-        $student->occupation = $student->occupation;
         $student->department = $student->department;
         $user->detail = $detail;
         $user->role = $student;
@@ -72,7 +73,12 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        return Student::with('user.detail')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
+            ->with('department')
+            ->with('classrooms')
+            ->findOrFail($id);
     }
 
     /**
@@ -108,6 +114,16 @@ class StudentController extends Controller
         return ['user' => $user];
     }
 
+    public function updateOther(Request $request, Student $student)
+    {
+        $result = User::confirm($request->get('credentials'));
+        if (!$result['status']) {
+            return $result['response'];
+        }
+        $student->update($request->except(['user_id']));
+        return $student;
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -116,6 +132,6 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return response('', 405);
     }
 }

@@ -5,7 +5,7 @@
                 <a
                     class="nav-link"
                     data-widget="pushmenu"
-                    href="#"
+                    href="javascript:void(0)"
                     role="button"
                 >
                     <i class="fas fa-bars"></i>
@@ -39,7 +39,7 @@
                     <a href="#" class="dropdown-item">
                         <div class="media">
                             <img
-                                src="https://via.placeholder.com/128"
+                                src="https://i.pravatar.cc/160"
                                 alt="User Avatar"
                                 class="img-size-50 mr-3 img-circle"
                             />
@@ -66,7 +66,7 @@
                     <a href="#" class="dropdown-item">
                         <div class="media">
                             <img
-                                src="https://via.placeholder.com/128"
+                                src="https://i.pravatar.cc/160"
                                 alt="User Avatar"
                                 class="img-size-50 img-circle mr-3"
                             />
@@ -91,7 +91,7 @@
                     <a href="#" class="dropdown-item">
                         <div class="media">
                             <img
-                                src="https://via.placeholder.com/128"
+                                src="https://i.pravatar.cc/160"
                                 alt="User Avatar"
                                 class="img-size-50 img-circle mr-3"
                             />

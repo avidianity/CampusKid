@@ -1,6 +1,6 @@
 <template>
     <div id="root">
-        <div class="container bg-white mx-auto px-0 shadow-sm">
+        <div id="container" class="container bg-white mx-auto px-0 shadow-sm">
             <app-navbar></app-navbar>
             <div class="container pt-5">
                 In order to receive information about your Personal Data, the
@@ -371,11 +371,24 @@ export default Vue.extend({
     background: url("../assets/bg-home.png") center center;
     background-size: cover;
     background-repeat: no-repeat;
-    padding: 20px;
+    padding: 0;
     font-family: "Lato-Light";
 }
 
-.container {
-    border-radius: 12px;
+#container {
+    border-radius: 0px;
+    padding-top: 60px;
+}
+
+@media (min-width: 576px) {
+    #root {
+        padding: 20px;
+    }
+
+    #container {
+        box-shadow: 0 0 10px rgb(30, 30, 30);
+        border-radius: 12px;
+        padding-top: 6px;
+    }
 }
 </style>

@@ -13,7 +13,6 @@
             </template>
         </app-content>
         <app-control-sidebar></app-control-sidebar>
-        <app-footer></app-footer>
     </div>
 </template>
 

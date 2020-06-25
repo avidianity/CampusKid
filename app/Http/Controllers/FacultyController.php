@@ -20,6 +20,8 @@ class FacultyController extends Controller
     public function index()
     {
         return Faculty::with('user.detail')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
             ->with('department')
             ->with('occupation')
             ->paginate(10);
@@ -76,9 +78,11 @@ class FacultyController extends Controller
     public function show($id)
     {
         return Faculty::with('user.detail')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
             ->with('department')
             ->with('occupation')
-            ->find($id);
+            ->findOrFail($id);
     }
 
     /**
@@ -113,6 +117,16 @@ class FacultyController extends Controller
         unset($faculty->user);
         $user->role = $faculty;
         return ['user' => $user];
+    }
+
+    public function updateOther(Request $request, Faculty $faculty)
+    {
+        $result = User::confirm($request->get('credentials'));
+        if (!$result['status']) {
+            return $result['response'];
+        }
+        $faculty->update($request->except(['user_id']));
+        return $faculty;
     }
 
     /**

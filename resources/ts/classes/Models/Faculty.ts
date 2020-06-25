@@ -1,8 +1,6 @@
 import { FacultyContract } from "~types/Models";
 import Model from "./Model";
-import Occupation from "./Occupation";
-import Department from "./Department";
-import User from "./User";
+import { Occupation, Department, User } from "@classes/Models";
 
 export default class Faculty extends Model implements FacultyContract {
     id?: number;

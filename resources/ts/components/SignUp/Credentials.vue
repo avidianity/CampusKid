@@ -99,13 +99,23 @@
                 </small>
                 <label for="password">Password:</label>
                 <input
-                    type="password"
+                    :type="passwordType"
                     name="password"
                     placeholder="Password"
                     v-model="password"
                     class="form-control form-control-sm"
                     id="password"
                 />
+                <div class="form-check ml-1 mt-1">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        v-model="toggledPassword"
+                    />
+                    <small class="form-check-label">
+                        Show Password
+                    </small>
+                </div>
                 <small
                     class="form-text text-muted"
                     :class="messages.password.class"
@@ -212,6 +222,7 @@ export default class CredentialsComponent extends Vue {
     messages: {
         [key: string]: ValidationMessage;
     };
+    toggledPassword = false;
     processing: boolean;
     constructor() {
         super();
@@ -226,6 +237,9 @@ export default class CredentialsComponent extends Vue {
         };
         window["misc"] = this.messages;
         this.processing = false;
+    }
+    get passwordType() {
+        return this.toggledPassword ? "text" : "password";
     }
     created() {
         const level = Session.temp.get("sign-up-level");

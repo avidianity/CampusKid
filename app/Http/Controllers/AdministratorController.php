@@ -74,12 +74,14 @@ class AdministratorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Administrator $administrator)
+    public function show($id)
     {
         return $administrator
             ->with('user.detail')
-            ->with('user.role.occupation')
-            ->find($administrator->id);
+            ->with('occupation')
+            ->with('user.profile_picture')
+            ->with('user.cover_photo')
+            ->findOrFail($id);
     }
 
     /**
@@ -130,6 +132,16 @@ class AdministratorController extends Controller
         $response['detail'] = $detail;
         $response['role'] = $administrator;
         return ['user' => $response];
+    }
+
+    public function updateOther(Request $request, Administrator $admin)
+    {
+        $result = User::confirm($request->get('credentials'));
+        if (!$result['status']) {
+            return $result['response'];
+        }
+        $admin->update($request->except(['user_id']));
+        return $admin;
     }
 
     /**

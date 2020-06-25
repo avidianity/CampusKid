@@ -2,52 +2,25 @@
     <app :user="user">
         <template v-slot:main-sidebar>
             <sidebar-link
-                :has-treeview="false"
-                :link="{
-                    url: '/dashboard',
-                    name: 'Dashboard',
-                    icon: 'fas fa-tachometer-alt'
-                }"
-                :exact="true"
-            ></sidebar-link>
-            <sidebar-link
-                :link="{
-                    url: '/dashboard/users',
-                    name: 'Users',
-                    icon: 'fas fa-users'
-                }"
-                :has-treeview="true"
+                v-for="(link, index) in links"
+                :key="index"
+                :has-treeview="link.hasTreeview"
+                :link="link"
+                :exact="link.exact"
+                :menu-open="link.menuOpen"
+                :isRouter="link.isRouter"
+                :has-badge="link.hasBadge"
+                :badge="link.badge"
             >
-                <treeview :links="links"></treeview>
+                <treeview
+                    v-if="link.hasTreeview"
+                    :links="link.children"
+                ></treeview>
             </sidebar-link>
-            <sidebar-link
-                :has-treeview="false"
-                :link="{
-                    url: '/dashboard/classrooms',
-                    name: 'Classrooms',
-                    icon: 'fas fa-chalkboard'
-                }"
-            ></sidebar-link>
-            <sidebar-link
-                :has-treeview="false"
-                :link="{
-                    url: '/dashboard/departments',
-                    name: 'Departments',
-                    icon: 'fas fa-building'
-                }"
-            ></sidebar-link>
-            <sidebar-link
-                :has-treeview="false"
-                :link="{
-                    url: '/dashboard/occupations',
-                    name: 'Occupations',
-                    icon: 'fas fa-briefcase'
-                }"
-            ></sidebar-link>
         </template>
         <template v-slot:content-header>
             <div class="col-sm-6">
-                <h1>{{ route_name }}</h1>
+                <h1>{{ route }}</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -75,7 +48,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Action } from "vuex-class";
+import { Getter } from "vuex-class";
 
 import AdminLTE from "@components/AdminLTE.vue";
 import SidebarLink from "@components/Dashboard/Sidebar/SidebarLink.vue";
@@ -91,34 +64,90 @@ import { User } from "@classes/Models/index";
     }
 })
 export default class AdminComponent extends Vue {
-    @Action setRoute: any;
-    created() {
-        this.setRoute("Dashboard");
-    }
+    @Getter route: any;
     get user(): User {
         return this.$store.getters.user as User;
     }
     get links(): Array<object> {
         return [
             {
+                url: "/dashboard",
+                name: "Dashboard",
+                icon: "fas fa-tachometer-alt",
+                hasTreeview: false,
+                exact: true
+            },
+            {
+                url: "/dashboard/users",
+                name: "Users",
+                icon: "fas fa-users",
+                hasTreeview: false,
+                exact: true
+            },
+            {
                 url: "/dashboard/users/administrators",
-                icons: "fas fa-user-lock",
-                name: "Administrators"
+                icon: "fas fa-user-lock",
+                name: "Administrators",
+                hasTreeview: false,
+                exact: false
             },
             {
                 url: "/dashboard/users/faculties",
-                icons: "fas fa-user-tie",
-                name: "Faculties"
+                icon: "fas fa-user-tie",
+                name: "Faculties",
+                hasTreeview: false,
+                exact: false
             },
             {
                 url: "/dashboard/users/students",
-                icons: "fas fa-user-graduate",
-                name: "Students"
+                icon: "fas fa-user-graduate",
+                name: "Students",
+                hasTreeview: false,
+                exact: false
+            },
+            {
+                url: "/dashboard/classrooms",
+                name: "Classrooms",
+                icon: "fas fa-chalkboard",
+                hasTreeview: false,
+                exact: false
+            },
+            {
+                url: "/dashboard/departments",
+                name: "Departments",
+                icon: "fas fa-building",
+                hasTreeview: false,
+                exact: false
+            },
+            {
+                url: "/dashboard/occupations",
+                name: "Occupations",
+                icon: "fas fa-briefcase",
+                hasTreeview: false,
+                exact: false
+            },
+            {
+                url: "/dashboard/subjects",
+                name: "Subjects",
+                icon: "fas fa-book-open",
+                hasTreeview: false,
+                exact: false
+            },
+            {
+                url: "/dashboard/activities",
+                name: "Activities",
+                icon: "fas fa-chart-bar",
+                hasTreeview: false,
+                exact: false,
+                hasBadge: true,
+                badge: {
+                    class: {
+                        "badge-danger": true
+                    },
+                    name: "Coming Soon"
+                }
             }
         ];
-    }
-    get route_name(): string {
-        return this.$store.getters.route;
     }
 }
 </script>

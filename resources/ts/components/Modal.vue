@@ -9,10 +9,18 @@
             <slot name="name"></slot>
         </button>
         <div class="modal fade" :id="`modal${id}`" aria-modal="false">
-            <div class="modal-dialog modal-dialog-centered">
+            <div
+                class="modal-dialog modal-dialog-centered"
+                :class="{
+                    'modal-lg': size === 'large',
+                    'modal-md': size === 'medium',
+                    'modal-sm': size === 'small',
+                    'modal-xl': size === 'xl-large'
+                }"
+            >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">
+                        <h4 class="modal-title" v-html="title">
                             {{ title }}
                         </h4>
                         <button
@@ -53,7 +61,17 @@ const Vue = ParentVue.extend({
     props: {
         id: [String, Number],
         classes: Array,
-        title: String
+        title: String,
+        size: {
+            type: String,
+            default: "medium",
+            validator(value) {
+                return (
+                    ["large", "medium", "small", "xl-large"].indexOf(value) !==
+                    -1
+                );
+            }
+        }
     }
 });
 

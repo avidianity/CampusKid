@@ -8,14 +8,18 @@ export interface RootState {
     administrators: Collections.AdministratorCollection;
     faculties: Collections.FacultyCollection;
     students: Collections.StudentCollection;
+    classrooms: Collections.ClassroomCollection;
+    subjects: Collections.SubjectCollection;
     route: string;
+    loads: LoadsContract;
+    loadErrors: LoadErrorsContract;
 }
 
 export interface UserState {
     user?: Models.User;
     logged: boolean;
     profile?: Models.File;
-    cover?: any;
+    cover?: Models.File;
     [key: string]: any;
 }
 
@@ -37,4 +41,24 @@ export interface SignUpFormContract {
         department_id: number | null;
         occupation_id: number | null;
     };
+}
+
+export interface LoadsContract {
+    departments: boolean;
+    occupations: boolean;
+    administrators: boolean;
+    faculties: boolean;
+    students: boolean;
+    classrooms: boolean;
+    subjects: boolean;
+}
+
+export interface LoadErrorsContract {
+    departments: boolean;
+    occupations: boolean;
+    administrators: boolean;
+    faculties: boolean;
+    students: boolean;
+    classrooms: boolean;
+    subjects: boolean;
 }

@@ -15,10 +15,24 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
-        return Classroom::where('faculty_id', $request->user()->role->id)
-            ->with('department')
-            ->with('students')
-            ->paginate(10);
+        $user = $request->user();
+        if ($user->isFaculty()) {
+            return Classroom::where('faculty_id', $user->role->id)
+                ->with('department')
+                ->with('students')
+                ->with('subject')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->paginate(10);
+        } else {
+            return Classroom::with('faculty.user.detail')
+                ->with('department')
+                ->with('students')
+                ->with('subject')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->paginate(10);
+        }
     }
 
     /**

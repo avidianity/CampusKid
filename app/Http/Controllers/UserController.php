@@ -15,6 +15,7 @@ class UserController extends Controller
     public function index()
     {
         return User::with('profile_picture')
+            ->with('role')
             ->with('detail')
             ->with('cover_photo')
             ->paginate(10);
@@ -37,9 +38,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return $user;
+        return User::with('profile_picture')
+            ->with('role')
+            ->with('detail')
+            ->with('cover_photo')
+            ->findOrFail($id);
     }
 
     /**
@@ -51,7 +56,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response('', 405);
+        $user = $request->user();
+        $user->update($request->all());
+        return $user;
+    }
+
+    public function updateOther(Request $request, User $user)
+    {
+        $result = User::confirm($request->get('credentials'));
+        if (!$result['status']) {
+            return $result['response'];
+        }
+        $data = $request->all();
+        $user->fill($data);
+        if (isset($data['password']) && !empty(trim($data['password']))) {
+            $user->password = $data['password'];
+        }
+        $user->save();
+        return $user;
     }
 
     /**

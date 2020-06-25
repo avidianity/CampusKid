@@ -17,12 +17,12 @@ export const mutations: MutationTree<UserState> = {
         state.logged = true;
     },
     LOGOUT(state) {
+        state.user = undefined;
+        state.profile = undefined;
         delete state.user;
         delete state.profile;
         state.logged = false;
-        Session.clear();
-        Session.temp.clear();
-        Session.flash.clear();
+        Session.clearAll();
     },
     FILL_PROFILE_PICTURE(state, file: File) {
         state.profile = file;

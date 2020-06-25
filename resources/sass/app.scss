@@ -6,8 +6,12 @@
 // @import "~@fortawesome/fontawesome-free/scss/brands";
 // @import "~aos/src/sass/aos";
 @import "~toastr/toastr";
-
+@import "toastr";
 @import "variables";
+
+.vh-100 {
+    height: 100vh;
+}
 
 body {
     font-family: "Lato-Regular";

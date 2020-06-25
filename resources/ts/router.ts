@@ -1,21 +1,59 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import VueRouter, { RouteConfig } from "vue-router";
 
-// Views
+/**
+ * Static and Starter
+ */
 import IndexPage from "@views/Index.vue";
 import SignUpPage from "@views/SignUp.vue";
 import SignInPage from "@views/SignIn.vue";
 import PolicyPage from "@views/Policy.vue";
 import TermsPage from "@views/Terms.vue";
 
+/**
+ * Dynamic App loading,
+ * Loads: Admin, Faculty, Student Dashboards
+ */
 import DashboardPage from "@views/Dashboard.vue";
 import MainDashboardPage from "@views/MainDashboard.vue";
+
+/**
+ * Users
+ */
 import UsersIndexPage from "@views/Users/Index.vue";
 import AdministratorsPage from "@views/Users/Administrator.vue";
 import FacultiesPage from "@views/Users/Faculty.vue";
 import StudentsPage from "@views/Users/Student.vue";
 import UsersPage from "@views/Users/User.vue";
 
+/**
+ * Adds
+ */
+import AddIndexPage from "@views/Add/Index.vue";
+import AddUserPage from "@views/Add/User.vue";
+import AddAdministratorPage from "@views/Add/Administrator.vue";
+import AddFacultyPage from "@views/Add/Faculty.vue";
+import AddStudentPage from "@views/Add/Student.vue";
+import AddDepartmentPage from "@views/Add/Department.vue";
+import AddOccupationPage from "@views/Add/Occupation.vue";
+import AddSubjectPage from "@views/Add/Subject.vue";
+
+/**
+ * Classroom
+ */
+import ClassroomIndexPage from "@views/Classroom/Index.vue";
+import ClassroomsPage from "@views/Classroom/Classroom.vue";
+
+/**
+ * Singles
+ */
+import DepartmentPage from "@views/Singles/Department.vue";
+import OccupationPage from "@views/Singles/Occupation.vue";
+import SubjectPage from "@views/Singles/Subject.vue";
+
+/**
+ * Error Pages
+ */
 import FourZeroFour from "@views/404.vue";
 import Dashboard404 from "@components/Dashboard404.vue";
 import Dashboard503 from "@components/Dashboard503.vue";
@@ -24,12 +62,12 @@ Vue.use(VueRouter);
 
 import Guards from "@classes/Guards";
 
-const FZF = {
+const FZF: RouteConfig = {
     path: "*",
     component: Dashboard404
 };
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",
     linkActiveClass: "active",
     linkExactActiveClass: "active",
@@ -67,7 +105,7 @@ export default new VueRouter({
                 {
                     path: "",
                     component: MainDashboardPage,
-                    name: "Main-Dashboard"
+                    name: "Dashboard"
                 },
                 {
                     path: "users",
@@ -75,34 +113,108 @@ export default new VueRouter({
                     children: [
                         {
                             path: "",
-                            component: UsersPage
+                            component: UsersPage,
+                            name: "Users"
                         },
                         {
                             path: "administrators",
-                            component: AdministratorsPage
+                            component: AdministratorsPage,
+                            name: "Administrators"
                         },
                         {
                             path: "faculties",
-                            component: FacultiesPage
+                            component: FacultiesPage,
+                            name: "Faculties"
                         },
                         {
                             path: "students",
-                            component: StudentsPage
+                            component: StudentsPage,
+                            name: "Students"
+                        },
+                        {
+                            path: "add",
+                            component: AddIndexPage,
+                            children: [
+                                {
+                                    path: "",
+                                    component: AddUserPage,
+                                    name: "Add User"
+                                },
+                                {
+                                    path: "administrator",
+                                    component: AddAdministratorPage,
+                                    name: "Add Administrator"
+                                },
+                                {
+                                    path: "faculty",
+                                    component: AddFacultyPage,
+                                    name: "Add Faculty"
+                                },
+                                {
+                                    path: "student",
+                                    component: AddStudentPage,
+                                    name: "Add Student"
+                                },
+                                FZF
+                            ]
                         },
                         FZF
                     ]
                 },
                 {
                     path: "classrooms",
-                    component: Dashboard503
+                    component: ClassroomIndexPage,
+                    children: [
+                        {
+                            path: "",
+                            component: ClassroomsPage,
+                            name: "Classrooms"
+                        }
+                    ]
                 },
                 {
                     path: "departments",
-                    component: Dashboard503
+                    component: DepartmentPage,
+                    name: "Departments"
                 },
                 {
                     path: "occupations",
-                    component: Dashboard503
+                    component: OccupationPage,
+                    name: "Occupations"
+                },
+                {
+                    path: "subjects",
+                    component: SubjectPage,
+                    name: "Subjects"
+                },
+                {
+                    path: "activities",
+                    component: Dashboard503,
+                    name: "Activities"
+                },
+                /**
+                 * Non-user Adds
+                 */
+                {
+                    path: "add",
+                    component: AddIndexPage,
+                    children: [
+                        {
+                            path: "department",
+                            component: AddDepartmentPage,
+                            name: "Add Department"
+                        },
+                        {
+                            path: "occupation",
+                            component: AddOccupationPage,
+                            name: "Add Occupation"
+                        },
+                        {
+                            path: "subject",
+                            component: AddSubjectPage,
+                            name: "Add Subject"
+                        }
+                    ]
                 },
                 FZF
             ]
@@ -113,3 +225,12 @@ export default new VueRouter({
         }
     ]
 });
+
+import store from "@store/index";
+
+router.beforeEach((to, from, next) => {
+    store.dispatch("setRoute", to.name);
+    next();
+});
+
+export default router;

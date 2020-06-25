@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Occupation;
+use App\Http\Requests\ValidateOccupation;
 
 class OccupationController extends Controller
 {
@@ -14,7 +15,9 @@ class OccupationController extends Controller
      */
     public function index()
     {
-        return Occupation::with('faculties.user.detail')->paginate(10);
+        return Occupation::with('faculties.user.detail')
+            ->with('administrators.user.detail')
+            ->paginate(10);
     }
 
     /**
@@ -23,9 +26,9 @@ class OccupationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateOccupation $request)
     {
-        return Occupation::create($request->all());
+        return Occupation::create($request->validated());
     }
 
     /**
@@ -36,7 +39,9 @@ class OccupationController extends Controller
      */
     public function show($id)
     {
-        return Occupation::with('faculties.user.detail')->find($id);
+        return Occupation::with('faculties.user.detail')
+            ->with('administrators.user.detail')
+            ->findOrFail($id);
     }
 
     /**

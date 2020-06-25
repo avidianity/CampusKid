@@ -40,14 +40,23 @@ export class ValidationMessage {
     private validation_messages: string[];
     private set: boolean;
     private hasDefault: boolean;
+    private defaultMessage: string;
     constructor(default_validation_message: string = "") {
         this.validation_message_class = {};
         this.validation_messages = [];
+        this.defaultMessage = "";
         this.hasDefault = default_validation_message.length > 0;
         if (this.hasDefault) {
+            this.defaultMessage = default_validation_message;
             this.validation_messages.push(default_validation_message);
         }
         this.set = false;
+    }
+    default(message: string): this {
+        this.hasDefault = true;
+        this.defaultMessage = message;
+        this.validation_messages.push(message);
+        return this;
     }
     has(): boolean {
         return this.set;
@@ -75,6 +84,9 @@ export class ValidationMessage {
         }
         setTimeout(() => {
             this.clear();
+            if (this.defaultMessage.length > 0) {
+                this.default(this.defaultMessage);
+            }
         }, duration);
         return this;
     }
@@ -139,6 +151,13 @@ export class ValidationMessage {
             this.validation_messages.splice(0, 1);
             this.hasDefault = false;
         }
+        return this;
+    }
+    addClass(name: string): this {
+        this.validation_message_class = {
+            ...this.validation_message_class,
+            [name]: true
+        };
         return this;
     }
     get class(): object {

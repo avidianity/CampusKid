@@ -18,10 +18,15 @@ class CreateLoginsTable extends Migration
             $table->text('user_agent')->nullable();
             $table->ipAddress('ip_address');
             $table->foreignId('user_id');
+            $table->foreignId('token_id');
             $table
                 ->foreign('user_id')
                 ->references('id')
                 ->on('users');
+            $table
+            	->foreign('token_id')
+            	->references('id')
+            	->on('personal_access_tokens');
             $table->timestamp('date')->useCurrent();
         });
     }

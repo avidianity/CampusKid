@@ -18,6 +18,7 @@ class PostCommentController extends Controller
         $post_id = $request->input('post_id');
         return PostComment::where('post_id', $post_id)
             ->with('user.detail')
+            ->with('user.profile_picture')
             ->with('files')
             ->paginate(5);
     }
@@ -35,9 +36,13 @@ class PostCommentController extends Controller
             return response(['errors' => ['Forbidden.']], 403);
         }
         $comment = new PostComment($data);
-        $comment->user_id = $request->user()->id;
+        $user = $request->user();
+        $comment->user_id = $user->id;
         $comment->post_id = $data['post_id'];
         $comment->save();
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+        $comment->user = $user;
         return $comment;
     }
 
@@ -50,8 +55,9 @@ class PostCommentController extends Controller
     public function show($id)
     {
         return PostComment::with('user.detail')
+            ->with('user.profile_picture')
             ->with('files')
-            ->find($id);
+            ->findOrFail($id);
     }
 
     /**
@@ -63,7 +69,18 @@ class PostCommentController extends Controller
      */
     public function update(Request $request, PostComment $comment)
     {
-        $comment->update($request->all());
+        if (!$request->user()->ownsComment($comment)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $data = $request->only(['body']);
+        if(!isset($data['body']) || empty($data['body'])) {
+            return response(['errors' => ['body' => 'Body can\'t be empty.']], 422);
+        }
+        $comment->update($data);
+        $user = $request->user();
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+        $comment->user = $user;
         return $comment;
     }
 
@@ -78,10 +95,7 @@ class PostCommentController extends Controller
         if (!$request->user()->ownsComment($comment)) {
             return response(['errors' => ['Forbidden.']], 403);
         }
-        $comment->files->each(function ($file) {
-            $file->delete();
-        });
         $comment->delete();
-        return ['status' => true];
+        return response('', 204);
     }
 }

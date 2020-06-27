@@ -1,13 +1,14 @@
 <template>
-    <div>
-        <button
-            type="button"
+    <div :class="{ 'd-inline': inline }">
+        <component
+            :is="tag"
+            href=""
             :class="styles"
-            data-toggle="modal"
-            :data-target="`#modal${id}`"
+            @click.prevent.stop="modal()"
+            :title="title"
         >
             <slot name="name"></slot>
-        </button>
+        </component>
         <div class="modal fade" :id="`modal${id}`" aria-modal="false">
             <div
                 class="modal-dialog modal-dialog-centered"
@@ -19,7 +20,7 @@
                 }"
             >
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" v-if="title.length > 0">
                         <h4 class="modal-title" v-html="title">
                             {{ title }}
                         </h4>
@@ -36,7 +37,7 @@
                         <slot name="body"></slot>
                     </div>
                     <div class="modal-footer">
-                        <div class="row">
+                        <div class="d-flex">
                             <slot name="footer"></slot>
                             <button
                                 type="button"
@@ -61,7 +62,10 @@ const Vue = ParentVue.extend({
     props: {
         id: [String, Number],
         classes: Array,
-        title: String,
+        title: {
+            type: String,
+            default: ""
+        },
         size: {
             type: String,
             default: "medium",
@@ -71,6 +75,14 @@ const Vue = ParentVue.extend({
                     -1
                 );
             }
+        },
+        tag: {
+            type: String,
+            default: "button"
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     }
 });
@@ -84,5 +96,14 @@ export default class ModalComponent extends Vue {
         }
         return result;
     }
+    modal() {
+        $(`#modal${this.id}`).modal("toggle");
+    }
 }
 </script>
+
+<style lang="scss" scoped>
+.modal-body {
+    font-family: "Lato-Light";
+}
+</style>

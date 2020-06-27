@@ -22,4 +22,10 @@ class PostComment extends Model
     {
         return $this->hasMany(PostCommentFile::class);
     }
+
+    public function delete()
+    {
+        $this->files()->delete();
+        return parent::delete();
+    }
 }

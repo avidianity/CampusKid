@@ -19,18 +19,31 @@ class ClassroomController extends Controller
         if ($user->isFaculty()) {
             return Classroom::where('faculty_id', $user->role->id)
                 ->with('department')
-                ->with('students')
+                ->with('students.user.detail')
+                ->with('students.user.profile_picture')
+                ->with('students.user.cover_photo')
                 ->with('subject')
                 ->with('profile_picture')
                 ->with('cover_photo')
+                ->with('tasks.comments.user.detail')
+                ->with('tasks.comments.user.profile_picture')
+                ->with('tasks.files')
+                ->with('tasks.submissions')
                 ->paginate(10);
         } else {
             return Classroom::with('faculty.user.detail')
+                ->with('faculty.occupation')
                 ->with('department')
-                ->with('students')
+                ->with('students.user.detail')
+                ->with('students.user.profile_picture')
+                ->with('students.user.cover_photo')
                 ->with('subject')
                 ->with('profile_picture')
                 ->with('cover_photo')
+                ->with('tasks.comments.user.detail')
+                ->with('tasks.comments.user.profile_picture')
+                ->with('tasks.files')
+                ->with('tasks.submissions')
                 ->paginate(10);
         }
     }
@@ -57,12 +70,41 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return Classroom::where('faculty_id', $request->user()->role->id)
-            ->with('department')
-            ->with('students')
-            ->find($id);
+        $user = $request->user();
+        if ($user->isAdministrator()) {
+            return Classroom::with('faculty.user.detail')
+                ->with('faculty.occupation')
+                ->with('department')
+                ->with('students.user.detail')
+                ->with('students.user.profile_picture')
+                ->with('students.user.cover_photo')
+                ->with('subject')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->with('tasks.comments.user.detail')
+                ->with('tasks.comments.user.profile_picture')
+                ->with('tasks.files')
+                ->with('tasks.submissions')
+                ->findOrFail($id);
+        } else {
+            return $user->role
+                ->classrooms()
+                ->with('faculty.occupation')
+                ->with('department')
+                ->with('students.user.detail')
+                ->with('students.user.profile_picture')
+                ->with('students.user.cover_photo')
+                ->with('subject')
+                ->with('profile_picture')
+                ->with('cover_photo')
+                ->with('tasks.comments.user.detail')
+                ->with('tasks.comments.user.profile_picture')
+                ->with('tasks.files')
+                ->with('tasks.submissions')
+                ->findOrFail($id);
+        }
     }
 
     /**

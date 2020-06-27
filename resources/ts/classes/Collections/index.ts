@@ -7,6 +7,7 @@ import StudentCollection from "./StudentCollection";
 import PaginatedCollection from "./PaginatedCollection";
 import ClassroomCollection from "./ClassroomCollection";
 import SubjectCollection from "./SubjectCollection";
+import PostCollection from "./PostCollection";
 
 export {
     OccupationCollection,
@@ -17,5 +18,6 @@ export {
     StudentCollection,
     PaginatedCollection,
     ClassroomCollection,
-    SubjectCollection
+    SubjectCollection,
+    PostCollection
 };

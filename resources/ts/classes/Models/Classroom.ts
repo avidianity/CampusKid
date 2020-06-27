@@ -1,6 +1,13 @@
 import { ClassroomContract } from "~types/Models";
 import Model from "./Model";
-import { File, Faculty, Student, Department, Subject } from "@classes/Models";
+import {
+    File,
+    Faculty,
+    Student,
+    Department,
+    Subject,
+    Task
+} from "@classes/Models";
 
 export default class Classroom extends Model implements ClassroomContract {
     id?: number;
@@ -18,6 +25,7 @@ export default class Classroom extends Model implements ClassroomContract {
     subject_id: number;
     subject?: Subject;
     students?: Array<Student>;
+    tasks?: Array<Task>;
     constructor(data: any) {
         super(data);
         this.id = data.id;
@@ -50,6 +58,13 @@ export default class Classroom extends Model implements ClassroomContract {
                 students.push(new Student(student));
             }
             this.students = students;
+        }
+        if (data.tasks) {
+            const tasks: Array<Task> = [];
+            for (const task of data.tasks) {
+                tasks.push(new Task(task));
+            }
+            this.tasks = tasks;
         }
     }
 }

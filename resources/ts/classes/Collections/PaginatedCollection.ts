@@ -1,27 +1,20 @@
 import { PaginationContract } from "~types/Models";
 
-import Administrator from "@classes/Models/Administrator";
-import Classroom from "@classes/Models/Classroom";
-import Department from "@classes/Models/Department";
-import Detail from "@classes/Models/Detail";
-import Faculty from "@classes/Models/Faculty";
-import File from "@classes/Models/File";
-import Occupation from "@classes/Models/Occupation";
-import Student from "@classes/Models/Student";
-import Subject from "@classes/Models/Subject";
-import User from "@classes/Models/User";
+import * as Models from "@classes/Models";
 
 const ClassModel = {
-    ["Administrator" as string]: Administrator,
-    ["Classroom" as string]: Classroom,
-    ["Department" as string]: Department,
-    ["Detail" as string]: Detail,
-    ["Faculty" as string]: Faculty,
-    ["File" as string]: File,
-    ["Occupation" as string]: Occupation,
-    ["Student" as string]: Student,
-    ["Subject" as string]: Subject,
-    ["User" as string]: User
+    ["Administrator" as string]: Models.Administrator,
+    ["Classroom" as string]: Models.Classroom,
+    ["Department" as string]: Models.Department,
+    ["Detail" as string]: Models.Detail,
+    ["Faculty" as string]: Models.Faculty,
+    ["File" as string]: Models.File,
+    ["Occupation" as string]: Models.Occupation,
+    ["Post" as string]: Models.Post,
+    ["PostComment" as string]: Models.PostComment,
+    ["Student" as string]: Models.Student,
+    ["Subject" as string]: Models.Subject,
+    ["User" as string]: Models.User
 };
 
 export default abstract class PaginatedCollection

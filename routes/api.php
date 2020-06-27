@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/comments/{comment}', 'PostCommentController@show')->name(
             'post.comments.show'
         );
-        Route::post('/comments', 'PostController@store')->name(
+        Route::post('/comments', 'PostCommentController@store')->name(
             'post.comments.store'
         );
         Route::delete(

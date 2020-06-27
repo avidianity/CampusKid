@@ -52,6 +52,9 @@ const store: StoreOptions<RootState> = {
             administrators: false,
             subjects: false
         },
+        shows: {
+            contentHeader: true
+        },
         route: ""
     },
     actions: {
@@ -125,6 +128,21 @@ const store: StoreOptions<RootState> = {
         },
         setRoute({ commit }, name) {
             commit("SET_ROUTE", name);
+        },
+        toggleContentHeader({ commit }, toggle: boolean) {
+            commit("TOGGLE_CONTENT_HEADER", toggle);
+        },
+        findClassroomByID({ state }, id: number) {
+            try {
+                const classroom = state.classrooms.data.find(
+                    classroom => classroom.id === Number(id)
+                );
+                return classroom
+                    ? Promise.resolve(classroom)
+                    : Promise.reject(classroom);
+            } catch (error) {
+                return Promise.reject();
+            }
         }
     },
     mutations: {
@@ -150,6 +168,9 @@ const store: StoreOptions<RootState> = {
         },
         SET_ROUTE(state, name: string) {
             state.route = name;
+        },
+        TOGGLE_CONTENT_HEADER(state, toggle: boolean) {
+            state.shows.contentHeader = toggle;
         }
     },
     getters: {
@@ -158,6 +179,9 @@ const store: StoreOptions<RootState> = {
         },
         occupations({ occupations }) {
             return occupations;
+        },
+        classrooms({ classrooms }) {
+            return classrooms;
         },
         subjects({ subjects }) {
             return subjects;
@@ -170,6 +194,9 @@ const store: StoreOptions<RootState> = {
         },
         loadErrors({ loadErrors }) {
             return loadErrors;
+        },
+        shows({ shows }) {
+            return shows;
         }
     },
     modules: {

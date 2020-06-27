@@ -16,8 +16,8 @@ mix.ts("resources/ts/app.ts", "public/js")
     .options({
         hmrOptions: {
             host: "mekoi.dev.local",
-            port: 8080
-        }
+            port: 8080,
+        },
     })
     .alias({
         "@": "/resources/ts",
@@ -27,7 +27,7 @@ mix.ts("resources/ts/app.ts", "public/js")
         "@types": "/resources/ts/types",
         "@views": "/resources/ts/views",
         "@styles": "/resources/sass",
-        "@classes": "/resources/ts/classes"
+        "@classes": "/resources/ts/classes",
     })
     .webpackConfig({
         devServer: {
@@ -36,12 +36,13 @@ mix.ts("resources/ts/app.ts", "public/js")
             host: "mekoi.dev.local",
             proxy: {
                 "**": {
-                    target: "http://mekoi.dev.local/campuskid/public"
-                }
-            }
-        }
-    })
-    mix.options({
-        extractVueStyles: true,
-    })
-    .disableNotifications();
+                    target: "http://mekoi.dev.local/campuskid/public",
+                },
+            },
+        },
+    });
+mix.options({
+    extractVueStyles: true,
+});
+
+// mix.disableNotifications();

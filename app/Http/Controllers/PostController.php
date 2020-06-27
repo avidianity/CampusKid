@@ -23,10 +23,14 @@ class PostController extends Controller
             );
         }
         return Post::where('classroom_id', $data['classroom_id'])
+            ->with('files')
             ->with('user.detail')
+            ->with('user.profile_picture')
             ->with('comments.user.detail')
+            ->with('comments.user.profile_picture')
             ->with('comments.files')
-            ->paginate(10);
+            ->orderBy('updated_at', 'DESC')
+            ->paginate(5);
     }
 
     /**
@@ -38,11 +42,7 @@ class PostController extends Controller
     public function store(ValidatePost $request)
     {
         $data = $request->validated();
-        if (
-            !$request
-                ->user()
-                ->canPostToClassroom($request->input('classroom_id'))
-        ) {
+        if (!$request->user()->canPostToClassroom($data['classroom_id'])) {
             return response(
                 ['errors' => ['You cannot post to this class.']],
                 403
@@ -51,6 +51,11 @@ class PostController extends Controller
         $data['user_id'] = $request->user()->id;
         $post = Post::create($data);
         $post->saveFiles($request);
+        $post->comments = [];
+        $user = $request->user();
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+        $post->user = $user;
         return $post;
     }
 
@@ -65,11 +70,13 @@ class PostController extends Controller
         if (!$request->user()->canPostToClassroom($post->classroom_id)) {
             return response(['errors' => ['Forbidden.']], 403);
         }
-        return $post
+        return Post::with('files')
             ->with('user.detail')
+            ->with('user.profile_picture')
             ->with('comments.user.detail')
+            ->with('comments.user.profile_picture')
             ->with('comments.files')
-            ->get();
+            ->find($post->id);
     }
 
     /**
@@ -81,8 +88,20 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if (!$request->user()->ownsPost($post)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
         $data = $request->only(['body']);
         $post->update($data);
+        $post->comments = $post
+            ->comments()
+            ->with('user.detail')
+            ->with('files')
+            ->get();
+        $user = $post->user;
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+        $post->user = $user;
         return $post;
     }
 
@@ -92,8 +111,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request, Post $post)
     {
-        return response('', 405);
+        if (!$request->user()->ownsPost($post)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        $post->delete();
+        return response('', 204);
     }
 }

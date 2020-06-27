@@ -13,6 +13,7 @@ export interface RootState {
     route: string;
     loads: LoadsContract;
     loadErrors: LoadErrorsContract;
+    shows: TogglesContract;
 }
 
 export interface UserState {
@@ -61,4 +62,8 @@ export interface LoadErrorsContract {
     students: boolean;
     classrooms: boolean;
     subjects: boolean;
+}
+
+export interface TogglesContract {
+    contentHeader: boolean;
 }

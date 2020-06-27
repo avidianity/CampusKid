@@ -1,118 +1,131 @@
 <template>
-    <div class="container-fluid">
-        <div v-if="!loaded">
-            <h4 class="d-inline">Loading...</h4>
-            <i class="fas fa-circle-notch fa-spin"></i>
+    <div class="container-fluid pt-2 pb-5">
+        <div class="row" v-if="loaded && !error">
+            <app-header :classroom="classroom"></app-header>
+            <app-pill></app-pill>
+            <div class="tab-content col-sm-12 col-md-9">
+                <app-posts
+                    :posts="posts"
+                    :profilePicture="profilePicture"
+                    :classroomID="classroom.id"
+                ></app-posts>
+                <app-members :classroom="classroom"></app-members>
+                <app-tasks
+                    :classroom="classroom"
+                    :profilePicture="profilePicture"
+                ></app-tasks>
+            </div>
         </div>
-        <error v-if="error"></error>
-        <app-table
-            v-if="loaded && !error"
-            :title="'Classrooms'"
-            @search="initSearch"
-        >
-            <template v-slot:buttons v-if="isFaculty">
-                <router-link
-                    to="/dashboard/classroom/add"
-                    class="btn btn-tool"
-                    tag="button"
-                    title="Add Classroom"
-                >
-                    <i class="fas fa-chalkboard"></i>
-                </router-link>
-            </template>
-            <template v-slot:headers>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Subject</th>
-                <th>Faculty</th>
-                <th>Department</th>
-                <th class="text-center">Students</th>
-                <th class="text-center">
-                    Action
-                </th>
-            </template>
-            <template v-slot:body>
-                <tr v-for="(classroom, index) in classrooms" :key="index">
-                    <td>{{ classroom.id }}</td>
-                    <td>{{ classroom.name }}</td>
-                    <td>{{ classroom.subject.name }}</td>
-                    <td>
-                        {{ classroom.faculty.user.detail.last_name }},
-                        {{ classroom.faculty.user.detail.first_name }}
-                    </td>
-                    <td>{{ classroom.department.abbreviation }}</td>
-                    <td class="text-center">{{ classroom.students.length }}</td>
-                    <td class="text-center">
-                        <router-link
-                            :to="`/dashboard/classrooms/${classroom.id}`"
-                            class="btn btn-primary btn-sm btn-flat"
-                        >
-                            <i class="fas fa-info-circle"></i>
-                            View
-                        </router-link>
-                    </td>
-                </tr>
-            </template>
-            <pagination
-                :pagination="pagination"
-                @navigation="navigate"
-            ></pagination>
-        </app-table>
+        <div class="pt-5 col-12" v-if="!loaded && !error">
+            <div class="mt-5 text-center pt-5 d-flex">
+                <div class="mx-auto">
+                    <h4 class="m-1 d-inline">Loading...</h4>
+                    <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <app-error v-if="error"></app-error>
+        <app-error-404
+            v-if="error && is404"
+            title="Oops! Classroom not found."
+            body="We could not find the classroom you were looking for."
+        ></app-error-404>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Route, NavigationGuardNext } from "vue-router";
 import { Action } from "vuex-class";
+import { AxiosError, AxiosResponse } from "axios";
 
-import Table from "@components/Table.vue";
-import Pagination from "@components/Pagination.vue";
+import * as Models from "@classes/Models";
+import { PostCollection } from "@classes/Collections";
+
+import Header from "./Header.vue";
+import Pill from "./Tabs/Pill.vue";
+import Posts from "./Tabs/Posts.vue";
+import Members from "./Tabs/Members.vue";
+import Tasks from "./Tabs/Tasks.vue";
 import D500 from "@components/Dashboard500.vue";
-
-import { User, Classroom } from "@models/index";
-import { ClassroomCollection } from "@classes/Collections";
+import D404 from "@components/Dashboard404.vue";
 
 @Component({
     components: {
-        appTable: Table,
-        Pagination,
-        Error: D500
+        appHeader: Header,
+        appPill: Pill,
+        appPosts: Posts,
+        appMembers: Members,
+        appTasks: Tasks,
+        appError: D500,
+        appError404: D404
     }
 })
-export default class ClassroomComponent extends Vue {
-    @Action fetchClassrooms: any;
-    pagination = {};
-    classrooms: Array<Classroom> = [];
+export default class VueComponent extends Vue {
+    @Action toggleContentHeader: any;
+    @Action findClassroomByID: any;
     loaded = false;
     error = false;
+    is500 = false;
+    is404 = false;
+    classroom: Models.Classroom | null = null;
+    posts: Array<Models.Post> = [];
+    pagination: PostCollection | null = null;
+    get self() {
+        return this.$store.getters.user;
+    }
+    get profilePicture() {
+        return this.$store.getters.profilePicture;
+    }
     created() {
-        this.navigate("/classrooms");
-    }
-    get isFaculty(): boolean {
-        return (Session.user() as User).isFaculty();
-    }
-    get getters() {
-        return this.$store.getters;
-    }
-    navigate(url: string) {
-        this.error = false;
-        Session.set("current-nav-url", url);
-        this.fetchClassrooms(url)
-            .then((classrooms: ClassroomCollection) => {
-                const data = classrooms.data;
-                this.classrooms = data;
-                delete classrooms.data;
-                this.pagination = classrooms;
+        this.toggleContentHeader(false);
+        this.findClassroomByID(this.$route.params.id)
+            .then((result: Models.Classroom) => {
+                return result;
+            })
+            .catch(() => {
+                return Axios.get(`classrooms/${this.$route.params.id}`).then(
+                    (response: AxiosResponse) =>
+                        new Models.Classroom(response.data)
+                );
+            })
+            .then((classroom: Models.Classroom) => {
+                this.classroom = classroom;
+                return Axios.get(`/posts?classroom_id=${classroom.id}`);
+            })
+            .then((response: AxiosResponse) => response.data)
+            .then((data: PostCollection) => {
+                const posts = new PostCollection(data);
+                this.posts = posts.data;
+                delete posts.data;
+                this.pagination = posts;
                 this.loaded = true;
             })
-            .catch((error: any) => {
+            .catch((error: AxiosError) => {
+                this.loaded = true;
                 this.error = true;
-                console.log(error);
+                this.classroom = null;
+                if (error.response && error.response.status === 500) {
+                    this.is500 = true;
+                } else if (error.response && error.response.status === 404) {
+                    this.is404 = true;
+                }
             });
     }
     initSearch(query: string) {
         console.log(query);
     }
+    beforeRouteLeave(to: Route, from: Route, next: NavigationGuardNext) {
+        this.toggleContentHeader(true);
+        next();
+    }
 }
 </script>
+
+<style lang="scss">
+.card {
+    max-width: none !important;
+    max-height: none !important;
+}
+</style>

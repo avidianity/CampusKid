@@ -1,4 +1,4 @@
-<p align="center"><img src="https://campuskid.herokuapp.com/images/logo.svg" width="200"></p>
+<p align="center"><img src="https://campuskid.herokuapp.com/images/logo.svg" width="100"></p>
 
 [CampusKid Demo Site](https://campuskid.herokuapp.com)
 
@@ -27,11 +27,12 @@ the grading system and file sharing system.
 
 Contributions are very welcome! You may install the application locally on your
 system, make improvements or new features and then submit pull requests.
+
 For contact information:
 
 Email: <a mailto="manlupigjohnmichael@gmail.com">manlupigjohnmichael@gmail.com</a>
 
-Facebook: <a href="https://www.facebook.com/mekkyinblack">John Michael</a>
+Facebook: <a href="https://www.facebook.com/mekkyinblack">John Michael Manlupi1</a>
 
 ### Extending the Application
 

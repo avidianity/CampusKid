@@ -5,11 +5,10 @@
             <div class="error-content">
                 <h3>
                     <i class="fas fa-exclamation-triangle text-warning"></i>
-                    Oops! Page not found.
+                    {{ title }}
                 </h3>
                 <p>
-                    We could not find the page you were looking for. Meanwhile,
-                    you may
+                    {{ body }} Meanwhile, you may
                     <a href="" @click.prevent.stop="redirect()">
                         go back to the last page you visited.
                     </a>
@@ -21,6 +20,16 @@
 
 <script>
 export default {
+    props: {
+        title: {
+            type: String,
+            default: "Oops! Page not found."
+        },
+        body: {
+            type: String,
+            default: "We could not find the page you were looking for."
+        }
+    },
     methods: {
         redirect() {
             this.$router.go(-1);

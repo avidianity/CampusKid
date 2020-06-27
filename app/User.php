@@ -152,13 +152,18 @@ class User extends Authenticatable
     public function canPostToClassroom($class_id)
     {
         if ($this->isStudent()) {
-            return $this->role->subscriptions
+            return $this->role()
+                ->subscriptions()
                 ->where('classroom_id', $class_id)
                 ->first()
                 ? true
                 : false;
         } elseif ($this->isFaculty()) {
-            return $this->role->classrooms->find($class_id) ? true : false;
+            return $this->role()
+                ->classrooms()
+                ->find($class_id)
+                ? true
+                : false;
         } else {
             // Admin
             return true;
@@ -195,6 +200,11 @@ class User extends Authenticatable
     public function ownsClassroom($class_id): bool
     {
         return $this->isFaculty() && $this->canPostToClassroom($class_id);
+    }
+
+    public function ownsPost(Post $post): bool
+    {
+        return $this->id = $post->user_id;
     }
 
     public function ownsTask(Task $task): bool

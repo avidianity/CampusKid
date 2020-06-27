@@ -39,4 +39,21 @@ class Post extends Model
     {
         return $this->hasMany(PostComment::class);
     }
+
+    public function files()
+    {
+        return $this->hasManyThrough(
+            File::class,
+            PostFile::class,
+            'file_id',
+            'id'
+        );
+    }
+
+    public function delete()
+    {
+        $this->comments()->delete();
+        $this->files()->delete();
+        return parent::delete();
+    }
 }

@@ -42,7 +42,8 @@ import AddSubjectPage from "@views/Add/Subject.vue";
  * Classroom
  */
 import ClassroomIndexPage from "@views/Classroom/Index.vue";
-import ClassroomsPage from "@views/Classroom/Classroom.vue";
+import ClassroomListPage from "@views/Classroom/List.vue";
+import ClassroomPage from "@views/Classroom/Classroom.vue";
 
 /**
  * Singles
@@ -63,174 +64,182 @@ Vue.use(VueRouter);
 import Guards from "@classes/Guards";
 
 const FZF: RouteConfig = {
-    path: "*",
-    component: Dashboard404
+	path: "*",
+	component: Dashboard404,
 };
 
 const router = new VueRouter({
-    mode: "history",
-    linkActiveClass: "active",
-    linkExactActiveClass: "active",
-    routes: [
-        {
-            path: "/",
-            name: "index",
-            component: IndexPage
-        },
-        {
-            path: "/sign-up",
-            name: "Sign-Up",
-            component: SignUpPage
-        },
-        {
-            path: "/sign-in",
-            name: "Sign-In",
-            component: SignInPage
-        },
-        {
-            path: "/privacy-policy",
-            name: "Privacy-Policy",
-            component: PolicyPage
-        },
-        {
-            path: "/terms-of-service",
-            name: "Terms-of-Service",
-            component: TermsPage
-        },
-        {
-            path: "/dashboard",
-            component: DashboardPage,
-            beforeEnter: Guards.isAdmin(),
-            children: [
-                {
-                    path: "",
-                    component: MainDashboardPage,
-                    name: "Dashboard"
-                },
-                {
-                    path: "users",
-                    component: UsersIndexPage,
-                    children: [
-                        {
-                            path: "",
-                            component: UsersPage,
-                            name: "Users"
-                        },
-                        {
-                            path: "administrators",
-                            component: AdministratorsPage,
-                            name: "Administrators"
-                        },
-                        {
-                            path: "faculties",
-                            component: FacultiesPage,
-                            name: "Faculties"
-                        },
-                        {
-                            path: "students",
-                            component: StudentsPage,
-                            name: "Students"
-                        },
-                        {
-                            path: "add",
-                            component: AddIndexPage,
-                            children: [
-                                {
-                                    path: "",
-                                    component: AddUserPage,
-                                    name: "Add User"
-                                },
-                                {
-                                    path: "administrator",
-                                    component: AddAdministratorPage,
-                                    name: "Add Administrator"
-                                },
-                                {
-                                    path: "faculty",
-                                    component: AddFacultyPage,
-                                    name: "Add Faculty"
-                                },
-                                {
-                                    path: "student",
-                                    component: AddStudentPage,
-                                    name: "Add Student"
-                                },
-                                FZF
-                            ]
-                        },
-                        FZF
-                    ]
-                },
-                {
-                    path: "classrooms",
-                    component: ClassroomIndexPage,
-                    children: [
-                        {
-                            path: "",
-                            component: ClassroomsPage,
-                            name: "Classrooms"
-                        }
-                    ]
-                },
-                {
-                    path: "departments",
-                    component: DepartmentPage,
-                    name: "Departments"
-                },
-                {
-                    path: "occupations",
-                    component: OccupationPage,
-                    name: "Occupations"
-                },
-                {
-                    path: "subjects",
-                    component: SubjectPage,
-                    name: "Subjects"
-                },
-                {
-                    path: "activities",
-                    component: Dashboard503,
-                    name: "Activities"
-                },
-                /**
-                 * Non-user Adds
-                 */
-                {
-                    path: "add",
-                    component: AddIndexPage,
-                    children: [
-                        {
-                            path: "department",
-                            component: AddDepartmentPage,
-                            name: "Add Department"
-                        },
-                        {
-                            path: "occupation",
-                            component: AddOccupationPage,
-                            name: "Add Occupation"
-                        },
-                        {
-                            path: "subject",
-                            component: AddSubjectPage,
-                            name: "Add Subject"
-                        }
-                    ]
-                },
-                FZF
-            ]
-        },
-        {
-            path: "/*",
-            component: FourZeroFour
-        }
-    ]
+	mode: "history",
+	linkActiveClass: "active",
+	linkExactActiveClass: "active",
+	routes: [
+		{
+			path: "/",
+			name: "index",
+			component: IndexPage,
+		},
+		{
+			path: "/sign-up",
+			name: "Sign-Up",
+			component: SignUpPage,
+		},
+		{
+			path: "/sign-in",
+			name: "Sign-In",
+			component: SignInPage,
+		},
+		{
+			path: "/privacy-policy",
+			name: "Privacy-Policy",
+			component: PolicyPage,
+		},
+		{
+			path: "/terms-of-service",
+			name: "Terms-of-Service",
+			component: TermsPage,
+		},
+		{
+			path: "/dashboard",
+			component: DashboardPage,
+			beforeEnter: Guards.isAdmin(),
+			children: [
+				{
+					path: "",
+					component: MainDashboardPage,
+					name: "Dashboard",
+				},
+				{
+					path: "users",
+					component: UsersIndexPage,
+					children: [
+						{
+							path: "",
+							component: UsersPage,
+							name: "Users",
+						},
+						{
+							path: "administrators",
+							component: AdministratorsPage,
+							name: "Administrators",
+						},
+						{
+							path: "faculties",
+							component: FacultiesPage,
+							name: "Faculties",
+						},
+						{
+							path: "students",
+							component: StudentsPage,
+							name: "Students",
+						},
+						{
+							path: "add",
+							component: AddIndexPage,
+							children: [
+								{
+									path: "",
+									component: AddUserPage,
+									name: "Add User",
+								},
+								{
+									path: "administrator",
+									component: AddAdministratorPage,
+									name: "Add Administrator",
+								},
+								{
+									path: "faculty",
+									component: AddFacultyPage,
+									name: "Add Faculty",
+								},
+								{
+									path: "student",
+									component: AddStudentPage,
+									name: "Add Student",
+								},
+								FZF,
+							],
+						},
+						FZF,
+					],
+				},
+				{
+					path: "classrooms",
+					component: ClassroomIndexPage,
+					children: [
+						{
+							path: "",
+							component: ClassroomListPage,
+							name: "Classrooms",
+						},
+						{
+							path: ":id",
+							component: ClassroomPage,
+							name: "",
+						},
+						FZF,
+					],
+				},
+				{
+					path: "departments",
+					component: DepartmentPage,
+					name: "Departments",
+				},
+				{
+					path: "occupations",
+					component: OccupationPage,
+					name: "Occupations",
+				},
+				{
+					path: "subjects",
+					component: SubjectPage,
+					name: "Subjects",
+				},
+				{
+					path: "activities",
+					component: Dashboard503,
+					name: "Activities",
+				},
+				/**
+				 * Non-user Adds
+				 */
+				{
+					path: "add",
+					component: AddIndexPage,
+					children: [
+						{
+							path: "department",
+							component: AddDepartmentPage,
+							name: "Add Department",
+						},
+						{
+							path: "occupation",
+							component: AddOccupationPage,
+							name: "Add Occupation",
+						},
+						{
+							path: "subject",
+							component: AddSubjectPage,
+							name: "Add Subject",
+						},
+						FZF,
+					],
+				},
+				FZF,
+			],
+		},
+		{
+			path: "/*",
+			component: FourZeroFour,
+		},
+	],
 });
 
 import store from "@store/index";
 
 router.beforeEach((to, from, next) => {
-    store.dispatch("setRoute", to.name);
-    next();
+	store.dispatch("setRoute", to.name);
+	store.dispatch("toggleContentHeader", true);
+	next();
 });
 
 export default router;

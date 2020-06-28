@@ -21,7 +21,7 @@
                     alt=""
                     class="img-fluid img-float bottom-left"
                 />
-                <div class="mt-3 progress-pane">
+                <div class="mt-3 progress-pane" v-if="!message">
                     <ul class="progress-list">
                         <li
                             class="progress-item rounded-left"
@@ -67,7 +67,7 @@
                         </li>
                     </ul>
                 </div>
-                <transition name="slide-fade" mode="out-in" v-if="!loaded">
+                <transition name="slide-fade" mode="out-in" v-if="!loaded && !message">
                     <div class="container pt-5">
                         <div class="row">
                             <div class="col-md-4 offset-md-4 text-center">
@@ -80,7 +80,7 @@
                     </div>
                 </transition>
                 <keep-alive>
-                    <transition name="slide-fade" mode="out-in">
+                    <transition name="slide-fade" mode="out-in" v-if="loaded && !message">
                         <component
                             v-if="component"
                             :is="component"
@@ -88,6 +88,11 @@
                         ></component>
                     </transition>
                 </keep-alive>
+                <app-message
+                	:title="'Unavailable'"
+                	:code="'503'"
+                	:body="'We are not able to register you yet as we do not have any Departments and Occupations saved in our system. Please try again some other time.'"
+                ></app-message>		
             </div>
         </div>
     </div>
@@ -102,6 +107,7 @@ import { Action } from "vuex-class";
 import appRole from "@components/SignUp/Role.vue";
 import appCredentials from "@components/SignUp/Credentials.vue";
 import appDetail from "@components/SignUp/Detail.vue";
+import appMessage from '@components/Message.vue';
 
 import { SignUpFormContract } from "~types/store";
 import { DepartmentCollection, OccupationCollection } from "@collections/index";
@@ -121,6 +127,7 @@ export default class SignUp extends Vue {
     @Action fetchOccupations: any;
     @Action login: any;
     loaded = false;
+    message = false;
     constructor() {
         super();
         this.component = null;
@@ -139,44 +146,53 @@ export default class SignUp extends Vue {
             responses => {
                 const departments = responses[0] as DepartmentCollection;
                 const occupations = responses[1] as OccupationCollection;
-                if (Session.temp.has("sign-up")) {
-                    const form: SignUpFormContract = Session.temp.get(
-                        "sign-up"
-                    );
-                    Session.temp.set("sign-up", form, 20);
-                    this.fillSignUpForm(form);
-                } else {
-                    Session.temp.renew(true);
-                    const form: SignUpFormContract = {
-                        user: {
-                            access_level: null,
-                            email: null,
-                            username: null,
-                            password: null
-                        },
-                        detail: {
-                            first_name: null,
-                            last_name: null,
-                            gender: "Male",
-                            birthday: null,
-                            address: null
-                        },
-                        role: {
-                            occupation_id: departments.data[0].id as
-                                | number
-                                | null,
-                            department_id: occupations.data[0].id as
-                                | number
-                                | null
-                        }
-                    };
-                    Session.temp.set("sign-up", form, 20);
-                    this.fillSignUpForm(form);
-                }
-                this.component = "appRole";
-                this.loaded = true;
+	            if(departments.data.length > 0 && occupations.data.length > 0) {
+	            	if (Session.temp.has("sign-up")) {
+	                    const form: SignUpFormContract = Session.temp.get(
+	                        "sign-up"
+	                    );
+	                    Session.temp.set("sign-up", form, 20);
+	                    this.fillSignUpForm(form);
+	                } else {
+	                    Session.temp.renew(true);
+	                    const form: SignUpFormContract = {
+	                        user: {
+	                            access_level: null,
+	                            email: null,
+	                            username: null,
+	                            password: null
+	                        },
+	                        detail: {
+	                            first_name: null,
+	                            last_name: null,
+	                            gender: "Male",
+	                            birthday: null,
+	                            address: null
+	                        },
+	                        role: {
+	                            occupation_id: departments.data[0].id as
+	                                | number
+	                                | null,
+	                            department_id: occupations.data[0].id as
+	                                | number
+	                                | null
+	                        }
+	                    };
+	                    Session.temp.set("sign-up", form, 20);
+	                    this.fillSignUpForm(form);
+	                }
+	                this.component = "appRole";
+	                this.loaded = true;
+	            }
+	            else {
+	            	this.loaded = true;
+	            	this.message = true;
+	            }
             }
-        );
+        )
+        .catch(error => {
+        	window.location.reload(true);
+        });
     }
     beforeRouteLeave(to: any, from: any, next: any) {
         next();

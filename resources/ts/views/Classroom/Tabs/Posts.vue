@@ -470,13 +470,26 @@ export default class VueComponent extends Vue {
             .then((response) => response.data)
             .then((data: PostComment) => {
                 this.comments.edit = false;
-                $(`#modaleditcomment${comment.id}`).modal("hide");
-                const post = this.filteredPosts[PostIndex];
-                (post.comments as Array<PostComment>)[
-                    CommentIndex
-                ] = new PostComment(data);
-                this.posts.splice(PostIndex, 1, post);
-                toastr.success("Comment saved.");
+                const modal = $(`#modaleditcomment${comment.id}`);
+                if(modal.hasClass('show')) {
+                    modal.modal("hide");
+                    modal.on('hidden.bs.modal', e => {
+                        const post = this.filteredPosts[PostIndex];
+                        (post.comments as Array<PostComment>)[
+                            CommentIndex
+                        ] = new PostComment(data);
+                        this.posts.splice(PostIndex, 1, post);
+                        toastr.success("Comment saved.");
+                    });
+                }
+                else {
+                    const post = this.filteredPosts[PostIndex];
+                    (post.comments as Array<PostComment>)[
+                        CommentIndex
+                    ] = new PostComment(data);
+                    this.posts.splice(PostIndex, 1, post);
+                    toastr.success("Comment saved.");
+                }
             })
             .catch((error) => {
                 this.comments.edit = false;
@@ -490,22 +503,37 @@ export default class VueComponent extends Vue {
         Axios.delete(`post/comments/${comment.id}`)
             .then(() => {
                 this.comments.delete = false;
-                $(`#modaldeletecomment${comment.id}`).modal("hide");
-                $(`#modaldeletecomment${comment.id}`).on(
-                    "hidden.bs.modal",
-                    (e) => {
-                        const post = this.filteredPosts[PostIndex];
-                        const form = this.forms[PostIndex];
-                        form.comments.splice(CommentIndex, 1);
-                        this.forms.splice(PostIndex, 1, form);
-                        (post.comments as Array<PostComment>).splice(
-                            CommentIndex,
-                            1
-                        );
-                        this.filteredPosts.splice(PostIndex, 1, post);
-                        toastr.info("Comment deleted.");
-                    }
-                );
+                const modal = $(`#modaldeletecomment${comment.id}`);
+                if(modal.hasClass('show')) {
+                    modal.modal("hide");
+                    modal.on(
+                        "hidden.bs.modal",
+                        (e) => {
+                            const post = this.filteredPosts[PostIndex];
+                            const form = this.forms[PostIndex];
+                            form.comments.splice(CommentIndex, 1);
+                            this.forms.splice(PostIndex, 1, form);
+                            (post.comments as Array<PostComment>).splice(
+                                CommentIndex,
+                                1
+                            );
+                            this.filteredPosts.splice(PostIndex, 1, post);
+                            toastr.info("Comment deleted.");
+                        }
+                    );
+                }
+                else {
+                    const post = this.filteredPosts[PostIndex];
+                    const form = this.forms[PostIndex];
+                    form.comments.splice(CommentIndex, 1);
+                    this.forms.splice(PostIndex, 1, form);
+                    (post.comments as Array<PostComment>).splice(
+                        CommentIndex,
+                        1
+                    );
+                    this.filteredPosts.splice(PostIndex, 1, post);
+                    toastr.info("Comment deleted.");
+                }
             })
             .catch((error) => {
                 this.comments.delete = false;
@@ -559,13 +587,22 @@ export default class VueComponent extends Vue {
             .then((response) => response.data)
             .then(() => {
                 this.processes.delete = false;
-                $(`#modaldeletepost${post.id}`).modal("hide");
-                $(`#modaldeletepost${post.id}`).on("hidden.bs.modal", (e) => {
+                const modal = $(`#modaldeletepost${post.id}`);
+                if(modal.hasClass('show')) {
+                    modal.modal("hide");
+                    modal.on("hidden.bs.modal", (e) => {
+                        toastr.info("Post deleted.");
+                        this.commentForms.splice(index, 1);
+                        this.forms.splice(index, 1);
+                        this.filteredPosts.splice(index, 1);
+                    });
+                }
+                else {
                     toastr.info("Post deleted.");
                     this.commentForms.splice(index, 1);
                     this.forms.splice(index, 1);
                     this.filteredPosts.splice(index, 1);
-                });
+                }
             })
             .catch((error) => {
                 toastr.error("Oops! Something went wrong. Please try again.");

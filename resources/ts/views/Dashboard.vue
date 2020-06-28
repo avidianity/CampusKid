@@ -23,13 +23,13 @@ export default class Dashboard extends Vue {
     created() {
         this.fetchAssets();
     }
-    fetchAssets() {
+    fetchAssets(): any {
         return Promise.all([
             this.fetchDepartments(),
             this.fetchOccupations(),
             this.fetchClassrooms()
         ]).catch(error => {
-            this.fetchAssets();
+            return this.fetchAssets();
         });
     }
     mounted() {

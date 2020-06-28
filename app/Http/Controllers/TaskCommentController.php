@@ -17,6 +17,7 @@ class TaskCommentController extends Controller
     {
         return TaskComment::where('task_id', $request->input('task_id'))
             ->with('user.detail')
+            ->with('user.profile_picture')
             ->paginate(5);
     }
 
@@ -29,13 +30,19 @@ class TaskCommentController extends Controller
     public function store(ValidateTaskComment $request)
     {
         $data = $request->validated();
-        if (!$request->user()->canCommentToTask($data['task_id'])) {
+        $user = $request->user();
+        if (!$user->canCommentToTask($data['task_id'])) {
             return response(['errors' => ['Forbidden.']], 403);
         }
+
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+
         $comment = new TaskComment($data);
         $comment->task_id = $data['task_id'];
-        $comment->user_id = $request->user()->id;
+        $comment->user_id = $user->id;
         $comment->save();
+        $comment->user = $user;
         return $comment;
     }
 
@@ -47,7 +54,9 @@ class TaskCommentController extends Controller
      */
     public function show($id)
     {
-        return TaskComment::with('user.detail')->find($id);
+        return TaskComment::with('user.detail')
+            ->with('user.profile_picture')
+            ->findOrFail($id);
     }
 
     /**
@@ -59,10 +68,15 @@ class TaskCommentController extends Controller
      */
     public function update(Request $request, TaskComment $comment)
     {
-        if (!$request->user()->ownsComment($comment)) {
+        $user = $request->user();
+        if (!$user->ownsComment($comment)) {
             return response(['errors' => ['Forbidden.']], 403);
         }
-        $comment->update($request->all());
+
+        $user->detail = $user->detail;
+        $user->profile_picture = $user->profile_picture;
+        $comment->update($request->only(['body']));
+        $comment->user = $user;
         return $comment;
     }
 

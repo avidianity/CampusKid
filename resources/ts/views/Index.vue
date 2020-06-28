@@ -15,23 +15,27 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+
+import { User } from "@classes/Models";
+
 import appNavbar from "@components/Home/Navbar.vue";
 import appHeader from "@components/Home/Header.vue";
 import appFooter from "@components/Home/Footer.vue";
 import appInfo from "@components/Home/Info.vue";
 import appInfoCartoon from "@components/Home/InfoCartoon.vue";
+
 @Component({
     components: {
         appNavbar,
         appHeader,
         appFooter,
         appInfo,
-        appInfoCartoon
-    }
+        appInfoCartoon,
+    },
 })
 export default class Home extends Vue {
     created() {
-        const user = Session.user();
+        const user = Session.user() as User;
         if (user) {
             this.$store.dispatch("login", user);
             this.$router.push(user.homeRoute());

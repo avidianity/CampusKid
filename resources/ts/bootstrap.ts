@@ -3,7 +3,7 @@ import VueSession from "@classes/VueSession";
 import axios, { AxiosInstance } from "axios";
 import $ from "jquery";
 import toastr from "toastr";
-import Router from './router';
+import Router from "./router";
 import { CSRFTokenException } from "@classes/CSRF";
 
 declare global {
@@ -39,7 +39,7 @@ if (!token) {
     );
 }
 
-axios.defaults.baseURL = "http://mekoi.dev.local/campuskid/public/api";
+axios.defaults.baseURL = "/api";
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -48,7 +48,7 @@ axios.defaults.headers.common["X-CSRF-Token"] = token?.content;
 // axios.defaults.headers.common["Cookie"] = `XSRF-TOKEN=${token?.content}`;
 // axios.defaults.withCredentials = true;
 
-axios.interceptors.request.use((config) => {
+axios.interceptors.request.use(config => {
     if (Session.hasToken()) {
         config.headers["Authorization"] = `Bearer ${Session.token()}`;
     }
@@ -56,10 +56,10 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use(
-    (response) => {
+    response => {
         return response;
     },
-    (error) => {
+    error => {
         const user = Session.user();
         if (
             error.response &&

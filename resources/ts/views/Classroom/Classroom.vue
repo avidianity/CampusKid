@@ -21,6 +21,9 @@
                 <div class="mx-auto">
                     <h4 class="m-1 d-inline">Loading...</h4>
                     <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    <div class="text-muted">
+                        {{ loadInfo }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,6 +69,7 @@ export default class VueComponent extends Vue {
     @Action toggleContentHeader: any;
     @Action findClassroomByID: any;
     loaded = false;
+    loadInfo = '';
     error = false;
     is500 = false;
     is404 = false;
@@ -80,6 +84,7 @@ export default class VueComponent extends Vue {
     }
     created() {
         this.toggleContentHeader(false);
+        this.loadInfo = '0/2 Fetching classroom.';
         this.findClassroomByID(this.$route.params.id)
             .then((result: Models.Classroom) => {
                 return result;
@@ -92,6 +97,7 @@ export default class VueComponent extends Vue {
             })
             .then((classroom: Models.Classroom) => {
                 this.classroom = classroom;
+                this.loadInfo = '1/2 Loading classroom\'s data.';
                 return Axios.get(`/posts?classroom_id=${classroom.id}`);
             })
             .then((response: AxiosResponse) => response.data)

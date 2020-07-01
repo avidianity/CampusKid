@@ -140,6 +140,50 @@
                                     </button>
                                 </template>
                             </app-modal>
+                            <app-modal
+                                :id="`deletetaskcomment${comment.id}`"
+                                title="Delete Comment"
+                                :classes="[
+                                    'lato-light',
+                                    'size-14',
+                                    'no-underline',
+                                    'ml-1',
+                                ]"
+                                tag="a"
+                                :inline="true"
+                            >
+                                <template v-slot:name>
+                                    Delete
+                                </template>
+                                <template v-slot:body>
+                                    <div class="lato-light">
+                                        Are you sure you want to delete this
+                                        comment?
+                                    </div>
+                                </template>
+                                <template v-slot:footer>
+                                    <button
+                                        class="btn btn-danger btn-sm btn-flat ml-auto mr-1"
+                                        @click.prevent.stop="
+                                            deleteComment(index, CommentIndex)
+                                        "
+                                        :disabled="processes.deletes.comment[index][CommentIndex]"
+                                        :class="{
+                                            disabled: processes.deletes.comment[index][CommentIndex],
+                                        }"
+                                    >
+                                        <i
+                                            class="fas fa-circle-notch fa-spin"
+                                            v-if="processes.deletes.comment[index][CommentIndex]"
+                                        ></i>
+                                        {{
+                                            processes.deletes.comment[index][CommentIndex]
+                                                ? "Deleting..."
+                                                : "Confirm"
+                                        }}
+                                    </button>
+                                </template>
+                            </app-modal>
                         </div>
                     </div>
                 </div>
@@ -217,6 +261,13 @@ export default class VueComponent extends Vue {
              * Comment[TaskIndex][CommentIndex]
              */
             comment: Array<Array<boolean>>,
+        },
+        deletes: {
+            tasks: Array<boolean>,
+            /**
+             * Comment[TaskIndex][CommentIndex]
+             */
+            comment: Array<Array<boolean>>,
         }
     };
     constructor() {
@@ -227,6 +278,10 @@ export default class VueComponent extends Vue {
                 comment: false,
             },
             edits: {
+                tasks: [],
+                comment: []
+            },
+            deletes: {
                 tasks: [],
                 comment: []
             }
@@ -257,6 +312,11 @@ export default class VueComponent extends Vue {
             (task.comments as Array<TaskComment>).forEach((comment, i) => {
                 this.processes.edits.comment[index][i] = false;
             })
+            this.processes.deletes.tasks[index] = false;
+            this.processes.deletes.comment[index] = [] as Array<boolean>;
+            (task.comments as Array<TaskComment>).forEach((comment, i) => {
+                this.processes.deletes.comment[index][i] = false;
+            });
         });
     }
     comment(index: number) {
@@ -277,6 +337,7 @@ export default class VueComponent extends Vue {
             this.tasks.splice(index, 1, task);
             this.forms[index].comments.push({...comment});
             this.processes.edits.comment[index].push(false);
+            this.processes.deletes.comment[index].push(false);
             toastr.info('Comment saved.');
         })
         .catch(error => {
@@ -343,7 +404,67 @@ export default class VueComponent extends Vue {
             else {
                 toastr.error('Error editing comment. Please try again.');
             }
+        });
+    }
+    deleteComment(TaskIndex: number, CommentIndex: number) {
+        const form = this.forms[TaskIndex];
+        const comment = form.comments[CommentIndex];
+        const process = this.processes.deletes.comment[TaskIndex];
+        process[CommentIndex] = true;
+        this.processes.deletes.comment.splice(TaskIndex, 1, process);
+        const editProcess = this.processes.edits.comment[TaskIndex];
+        editProcess.splice(CommentIndex, 1);
+        Axios.delete(`/classroom/task/comments/${comment.id}`)
+        .then(response => {
+            process.splice(CommentIndex, 1);
+            this.processes.deletes.comment.splice(TaskIndex, 1, process);
+            const modal = $(`#modaldeletetaskcomment${comment.id}`);
+            if(modal.hasClass('show')) {
+                modal.modal('hide');
+                modal.on('hidden.bs.modal', e => {
+                    const commentEdits = this.processes.edits.comment[TaskIndex];
+                    const commentDeletes = this.processes.deletes.comment[TaskIndex];
+                    commentEdits.splice(CommentIndex, 1);
+                    commentDeletes.splice(CommentIndex, 1);
+                    this.processes.edits.comment.splice(TaskIndex, 1, commentEdits);
+                    this.processes.deletes.comment.splice(TaskIndex, 1, commentDeletes);
+                    form.comments.splice(CommentIndex, 1);
+                    this.forms.splice(TaskIndex, 1, form);
+                    const task = this.tasks[TaskIndex];
+                    (task.comments as Array<TaskComment>).splice(CommentIndex, 1);
+                    this.tasks.splice(TaskIndex, 1, task);
+                    toastr.info('Comment deleted.');
+                });
+            }
+            else {
+                const commentEdits = this.processes.edits.comment[TaskIndex];
+                const commentDeletes = this.processes.deletes.comment[TaskIndex];
+                commentEdits.splice(CommentIndex, 1);
+                commentDeletes.splice(CommentIndex, 1);
+                this.processes.edits.comment.splice(TaskIndex, 1, commentEdits);
+                this.processes.deletes.comment.splice(TaskIndex, 1, commentDeletes);
+                form.comments.splice(CommentIndex, 1);
+                this.forms.splice(TaskIndex, 1, form);
+                const task = this.tasks[TaskIndex];
+                (task.comments as Array<TaskComment>).splice(CommentIndex, 1);
+                this.tasks.splice(TaskIndex, 1, task);
+                toastr.info('Comment deleted.');
+            }
         })
+        .catch(error => {
+            process[CommentIndex] = false;
+            this.processes.deletes.comment.splice(TaskIndex, 1, process);
+            if(error.response && error.response.status === 422) {
+                for(const key in error.response.data.errors) {
+                    for(const message of error.response.data.errors[key]) {
+                        toastr.error(message);
+                    }
+                }
+            }
+            else {
+                toastr.error('Error deleting comment. Please try again.');
+            }
+        });
     }
 }
 </script>

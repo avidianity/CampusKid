@@ -4,6 +4,7 @@ import { RootState } from "../types/store";
 import * as Collections from "@classes/Collections";
 import { User } from "./User";
 import Axios, { AxiosError } from "axios";
+import * as Models from "@classes/Models";
 
 Vue.use(Vuex);
 
@@ -134,9 +135,12 @@ const store: StoreOptions<RootState> = {
         },
         findClassroomByID({ state }, id: number) {
             try {
-                const classroom = state.classrooms.data.find(
-                    classroom => classroom.id === Number(id)
-                );
+                let classroom: Models.Classroom | null = null;
+                state.classrooms.data.forEach(data => {
+                    if (data.id == id) {
+                        classroom = data;
+                    }
+                });
                 return classroom
                     ? Promise.resolve(classroom)
                     : Promise.reject(classroom);

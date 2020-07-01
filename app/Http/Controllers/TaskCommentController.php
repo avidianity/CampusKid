@@ -86,12 +86,12 @@ class TaskCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskComment $comment)
+    public function destroy(Request $request, TaskComment $comment)
     {
         if (!$request->user()->ownsComment($comment)) {
             return response(['errors' => ['Forbidden.']], 403);
         }
         $comment->delete();
-        return ['status' => true];
+        return response('', 204);
     }
 }

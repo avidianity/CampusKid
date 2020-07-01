@@ -3,6 +3,7 @@ import VueSession from "@classes/VueSession";
 import axios, { AxiosInstance } from "axios";
 import $ from "jquery";
 import toastr from "toastr";
+import Router from './router';
 import { CSRFTokenException } from "@classes/CSRF";
 
 declare global {
@@ -59,10 +60,12 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
+        const user = Session.user();
         if (
             error.response &&
-            error.respose.status &&
-            error.response.status === 401
+            error.response.status &&
+            error.response.status === 401 &&
+            user !== null
         ) {
             Session.clear();
             Session.temp.clear();

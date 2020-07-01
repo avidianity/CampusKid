@@ -32,7 +32,7 @@ For contact information:
 
 Email: <a mailto="manlupigjohnmichael@gmail.com">manlupigjohnmichael@gmail.com</a>
 
-Facebook: <a href="https://www.facebook.com/mekkyinblack">John Michael Manlupi1</a>
+Facebook: <a href="https://www.facebook.com/mekkyinblack">John Michael Manlupig</a>
 
 ### Extending the Application
 

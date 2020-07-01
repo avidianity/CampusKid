@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Login extends Model
 {
-    protected $fillable = ['user_agent', 'ip_address', 'user_id'];
+    protected $fillable = ['user_agent', 'ip_address', 'user_id', 'token_id'];
 
     public $timestamps = false;
 

@@ -15,8 +15,8 @@ mix.ts("resources/ts/app.ts", "public/js")
     .sass("resources/sass/app.scss", "public/css")
     .options({
         hmrOptions: {
-            host: "mekoi.dev.local",
             port: 8080,
+            host: "localhost"
         },
     })
     .alias({
@@ -33,10 +33,10 @@ mix.ts("resources/ts/app.ts", "public/js")
         devServer: {
             compress: true,
             historyApiFallback: true,
-            host: "mekoi.dev.local",
+            host: "localhost",
             proxy: {
                 "**": {
-                    target: "http://mekoi.dev.local/campuskid/public",
+                    target: "http://localhost/campuskid/public",
                 },
             },
         },

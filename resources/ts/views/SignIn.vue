@@ -211,40 +211,46 @@ export default class SignInComponent extends Vue {
                 this.$router.push(user.homeRoute());
             })
             .catch((error: AxiosError) => {
-                if (error.response && error.response.status === 401) {
-                    for (const key in error.response.data.errors) {
-                        if (key === "message") {
-                            toastr.error(
-                                error.response.data.errors[key][0],
-                                "422",
-                                {
-                                    positionClass: "toast-top-center"
-                                }
-                            );
-                            // this.message.has = true;
-                            // this.message.body =
-                            //     error.response.data.errors[key][0];
-                            // this.message.classes = {
-                            //     "alert alert-danger": true
-                            // };
-                        } else {
-                            for (const message of error.response.data.errors[
-                                key
-                            ]) {
-                                if (key in this.messages) {
-                                    this.messages[key].clear();
-                                    this.messages[key].timeout(
-                                        message,
-                                        "danger",
-                                        15000
-                                    );
+                if (error.response && error.response.status) {
+                    if(error.response.status === 401) {
+                        for (const key in error.response.data.errors) {
+                            if (key === "message") {
+                                toastr.error(
+                                    error.response.data.errors[key][0],
+                                    "422",
+                                    {
+                                        positionClass: "toast-top-center",
+                                    }
+                                );
+                                // this.message.has = true;
+                                // this.message.body =
+                                //     error.response.data.errors[key][0];
+                                // this.message.classes = {
+                                //     "alert alert-danger": true
+                                // };
+                            } else {
+                                for (const message of error.response.data.errors[
+                                    key
+                                ]) {
+                                    if (key in this.messages) {
+                                        this.messages[key].clear();
+                                        this.messages[key].timeout(
+                                            message,
+                                            "danger",
+                                            15000
+                                        );
+                                    }
                                 }
                             }
                         }
                     }
+                    else {
+                        toastr.error('Oops! Something went wrong. Please try again later.');
+                    }
                 } else {
                     console.log(error.toJSON ? error.toJSON() : error);
-                }
+                    toastr.error('Oops! Something went wrong. Please try again later.');
+                }   
             })
             .then(() => {
                 this.processing = false;

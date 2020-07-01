@@ -1,6 +1,11 @@
 .toast-top-center {
-    top: 12px;
-    margin: 0 auto;
-    left: 50%;
-    margin-left: -150px;
+	top: 0;
+	right: 0;
+	width: 100%;
+}
+
+@for $i from 0 to 50 {
+	.top-#{$i} {
+		top: $i + px;
+	}
 }

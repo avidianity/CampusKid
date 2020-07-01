@@ -94,12 +94,15 @@ class User extends Authenticatable
         }
         if (Hash::check($data['password'], $user->password)) {
             $request = request();
+            $token = $user->createToken('normal')->plainTextToken;
             Login::create([
                 'user_id' => $user->id,
                 'user_agent' => $request->userAgent(),
                 'ip_address' => $request->ip(),
+                // Tokens have an ID and Token separated by a pipe line. 
+                // Ex. 1|qmho2no23n2omgbsegsgw...
+                'token_id' => explode('|', $token)[0],
             ]);
-            $token = $user->createToken('normal')->plainTextToken;
             return ['data' => $user, 'token' => $token];
         }
         return response(

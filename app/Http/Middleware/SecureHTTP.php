@@ -15,7 +15,10 @@ class SecureHTTP
      */
     public function handle($request, Closure $next)
     {
-        $request->setTrustedProxies([$request->getClientIp()]);
+        if(!$request->secure())
+        {
+            return redirect()->secure($request->getRequestUri());
+        }
         return $next($request); 
     }
 }

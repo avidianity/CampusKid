@@ -90,7 +90,11 @@ import Component from "vue-class-component";
 })
 export default class PaginationComponent extends Vue {
     navigate(url: string) {
-        this.$emit("navigation", url);
+        const array = url.split('/');
+        array.shift();
+        array.shift();
+        const final = `${window.location.protocol}//${array.join('/')}`;
+        this.$emit("navigation", final);
     }
 }
 </script>

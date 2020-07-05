@@ -88,12 +88,24 @@
                         ></component>
                     </transition>
                 </keep-alive>
-                <app-message
-                    v-if="loaded && message"
-                	:title="'Unavailable'"
-                	:code="'503'"
-                	:body="'We are not able to register you yet as we do not have any Departments and Occupations saved in our system. Please try again some other time.'"
-                ></app-message>		
+                <div class="container-fluid pt-5 text-center" v-if="loaded && message">
+                    <div class="container d-flex h-100 w-100">
+                        <div class="error-page align-self-center mx-auto pt-5">
+                            <h2 class="headline">
+                                503
+                            </h2>
+                            <div class="error-content">
+                                <h3>
+                                    <i class="fas fa-info-circle"></i>
+                                    Unavailable
+                                </h3>
+                                <p>
+                                    We are not able to register you yet as we do not have any Departments and Occupations saved in our system. Please try again some other time.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
             </div>
         </div>
     </div>
@@ -108,7 +120,6 @@ import { Action } from "vuex-class";
 import appRole from "@components/SignUp/Role.vue";
 import appCredentials from "@components/SignUp/Credentials.vue";
 import appDetail from "@components/SignUp/Detail.vue";
-import appMessage from '@components/Message.vue';
 
 import { SignUpFormContract } from "~types/store";
 import { DepartmentCollection, OccupationCollection } from "@collections/index";
@@ -119,7 +130,6 @@ import { Department, User } from "@models/index";
         appRole,
         appCredentials,
         appDetail,
-        appMessage
     }
 })
 export default class SignUp extends Vue {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\File;
 use App\User;
 
 class UserController extends Controller
@@ -18,6 +19,7 @@ class UserController extends Controller
             ->with('role')
             ->with('detail')
             ->with('cover_photo')
+            ->with('role')
             ->paginate(10);
     }
 
@@ -40,11 +42,21 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::with('profile_picture')
+        $user = User::with('profile_picture')
             ->with('role')
             ->with('detail')
             ->with('cover_photo')
+            ->with('role')
             ->findOrFail($id);
+        if ($user->isAdministrator()) {
+            $user->role->occupation = $user->role->occupation;
+        } elseif ($user->isFaculty()) {
+            $user->role->occupation = $user->role->occupation;
+            $user->role->department = $user->role->department;
+        } elseif ($user->isStudent()) {
+            $user->role->department = $user->role->department;
+        }
+        return $user;
     }
 
     /**
@@ -57,7 +69,17 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = $request->user();
-        $user->update($request->all());
+        $data = $request->only(['email', 'username']);
+        $files = $request->only(['profile_picture', 'cover_photo']);
+        if (isset($files['profile_picture'])) {
+            $file = File::saveOne($files['profile_picture']);
+            $data['profile_picture_id'] = $file->id;
+        }
+        if (isset($files['cover_photo'])) {
+            $file = File::saveOne($files['cover_photo']);
+            $data['cover_photo_id'] = $file->id;
+        }
+        $user->update($data);
         return $user;
     }
 

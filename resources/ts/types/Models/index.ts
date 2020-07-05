@@ -4,6 +4,7 @@ import DepartmentContract from "./DepartmentContract";
 import DetailContract from "./DetailContract";
 import FacultyContract from "./FacultyContract";
 import FileContract from "./FileContract";
+import LoginContract from "./LoginContract";
 import ModelContract from "./ModelContract";
 import OccupationContract from "./OccupationContract";
 import PaginationContract from "./PaginationContract";
@@ -15,6 +16,7 @@ import TaskContract from "./TaskContract";
 import TaskCommentContract from "./TaskCommentContract";
 import TaskSubmissionContract from "./TaskSubmissionContract";
 import TimestampContract from "./TimestampContract";
+import TokenContract from "./TokenContract";
 import UserContract from "./UserContract";
 
 export {
@@ -24,6 +26,7 @@ export {
     DetailContract,
     FacultyContract,
     FileContract,
+    LoginContract,
     ModelContract,
     OccupationContract,
     PaginationContract,
@@ -35,5 +38,6 @@ export {
     TaskCommentContract,
     TaskSubmissionContract,
     TimestampContract,
+    TokenContract,
     UserContract
 };

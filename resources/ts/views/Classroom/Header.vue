@@ -68,7 +68,7 @@ const Vue = ParentVue.extend({
 });
 
 @Component
-export default class VueComponent extends Vue {}
+export default class ClassroomHeaderComponent extends Vue {}
 </script>
 
 <style lang="scss"></style>

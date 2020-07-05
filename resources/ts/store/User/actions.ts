@@ -1,7 +1,7 @@
 import { ActionTree } from "vuex";
 import Axios from "axios";
 import { UserState, RootState, SignUpFormContract } from "~types/store";
-import { User, File } from "@classes/Models/index";
+import { User, File, Token } from "@classes/Models/index";
 
 export const actions: ActionTree<UserState, RootState> = {
     fetchUser({ commit }): any {
@@ -28,5 +28,8 @@ export const actions: ActionTree<UserState, RootState> = {
     },
     fillProfilePicture({ commit }, file: File) {
         commit("FILL_PROFILE_PICTURE", file);
+    },
+    fillTokens({ commit }, tokens: Array<Token>) {
+        commit("FILL_TOKENS", tokens);
     }
 };

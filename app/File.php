@@ -16,14 +16,14 @@ class File extends Model
         $files = [];
         foreach ($request->allFiles() as $file) {
             if ($file instanceof UploadedFile) {
-                $path = $file->storePublicly();
+                $path = '/storage/'.$f->storePublicly('files');
                 $type = $file->extension();
                 $name = $file->hashName();
-                if ($path === false) {
+                if ($path !== false) {
                     $file = new self([
                         'name' => $name,
                         'type' => $type,
-                        'url' => $url,
+                        'url' => $path,
                     ]);
                     $file->save();
                     $files[] = $file;
@@ -32,14 +32,14 @@ class File extends Model
             } elseif (gettype($file) === 'array') {
                 foreach ($file as $f) {
                     if ($f instanceof UploadedFile) {
-                        $path = $f->storePublicly();
+                        $path = '/storage/'.$f->storePublicly('files');
                         $type = $f->extension();
                         $name = $f->hashName();
-                        if ($path === false) {
+                        if ($path !== false) {
                             $file = new self([
                                 'name' => $name,
                                 'type' => $type,
-                                'url' => $url,
+                                'url' => $path,
                             ]);
                             $file->save();
                             $files[] = $file;
@@ -50,5 +50,25 @@ class File extends Model
             }
         }
         return $files;
+    }
+
+    public static function saveOne($f)
+    {
+        if($f instanceof UploadedFile)
+        {
+            $path = '/storage/'.$f->storePublicly('files');
+            $type = $f->extension();
+            $name = $f->hashName();
+            if ($path !== false) {
+                $file = new self([
+                    'name' => $name,
+                    'type' => $type,
+                    'url' => $path,
+                ]);
+                $file->save();
+                return $file;
+            }
+        }
+        return false;
     }
 }

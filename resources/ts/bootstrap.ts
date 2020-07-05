@@ -3,8 +3,24 @@ import VueSession from "@classes/VueSession";
 import axios, { AxiosInstance } from "axios";
 import $ from "jquery";
 import toastr from "toastr";
-import Router from "./router";
 import { CSRFTokenException } from "@classes/CSRF";
+
+function allPromise(promises: Array<Promise<any>>, callback: Function) {
+    const results: Array<any> = [];
+    let hasError = false;
+    for (const index in promises) {
+        promises[index]
+            .then((response: any) => {
+                callback(response, index, promises);
+                results.push(response);
+            })
+            .catch((error: any) => {
+                hasError = true;
+                results.push(error);
+            });
+    }
+    return hasError ? Promise.reject(results) : Promise.resolve(results);
+}
 
 declare global {
     interface Window {
@@ -24,10 +40,13 @@ declare global {
         isGreaterThan: (date: Date) => boolean;
         isLessThan: (date: Date) => boolean;
     }
+    var AllPromise: typeof allPromise;
     var Axios: AxiosInstance;
     var Session: VueSession;
     var toastr: Toastr;
 }
+
+const AllPromise = allPromise;
 
 const token: HTMLMetaElement | null = document.querySelector(
     'meta[name="csrf-token"]'

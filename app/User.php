@@ -15,7 +15,13 @@ class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
 
-    protected $fillable = ['username', 'email', 'access_level'];
+    protected $fillable = [
+        'username',
+        'email',
+        'access_level',
+        'profile_picture_id',
+        'cover_photo_id',
+    ];
     protected $hidden = ['password', 'api_token'];
     protected $casts = [
         'access_level' => AccessLevel::class,
@@ -56,7 +62,6 @@ class User extends Authenticatable
         if (isset($data['email'])) {
             $user = self::where('email', $data['email'])
                 ->with('detail')
-                ->with('detail')
                 ->with('role')
                 ->with('profile_picture')
                 ->with('cover_photo')
@@ -73,7 +78,6 @@ class User extends Authenticatable
             }
         } elseif (isset($data['username'])) {
             $user = self::where('username', $data['username'])
-                ->with('detail')
                 ->with('detail')
                 ->with('role')
                 ->with('profile_picture')
@@ -99,7 +103,7 @@ class User extends Authenticatable
                 'user_id' => $user->id,
                 'user_agent' => $request->userAgent(),
                 'ip_address' => $request->ip(),
-                // Tokens have an ID and Token separated by a pipe line. 
+                // Tokens have an ID and Token separated by a pipe line.
                 // Ex. 1|qmho2no23n2omgbsegsgw...
                 'token_id' => explode('|', $token)[0],
             ]);
@@ -303,5 +307,15 @@ class User extends Authenticatable
     {
         return $this->access_level === self::STUDENT ||
             $this->access_level === self::$access_levels[self::STUDENT];
+    }
+
+    public function logins()
+    {
+        return $this->hasMany(Login::class);
+    }
+
+    public function tokens()
+    {
+        return $this->morphMany(Token::class, 'tokenable');
     }
 }

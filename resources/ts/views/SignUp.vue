@@ -89,6 +89,7 @@
                     </transition>
                 </keep-alive>
                 <app-message
+                    v-if="loaded && message"
                 	:title="'Unavailable'"
                 	:code="'503'"
                 	:body="'We are not able to register you yet as we do not have any Departments and Occupations saved in our system. Please try again some other time.'"
@@ -117,7 +118,8 @@ import { Department, User } from "@models/index";
     components: {
         appRole,
         appCredentials,
-        appDetail
+        appDetail,
+        appMessage
     }
 })
 export default class SignUp extends Vue {

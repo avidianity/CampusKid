@@ -41,7 +41,6 @@ export default class Session implements SessionContract {
 		return null;
 	}
 	set(key: string, data: any): this {
-		console.trace(`SessionSet: ${key} = `, data);
 		if (key === "session-id" || key === "key") {
 			return this;
 		}
@@ -212,7 +211,6 @@ export class ExpiringSession implements ExpiringStateContract {
 		return this;
 	}
 	set(key: string, value: any, minutes: number): this {
-		console.trace(`ExpiringSessionSet: ${key} = `, value);
 		const data: ExpiryContract = {
 			value,
 			expiry: new Date(Date.now() + minutes * 60 * 1000).getTime(),
@@ -282,7 +280,6 @@ export class FlashSession implements FlashStateContract {
 		return value;
 	}
 	set(key: string, value: any): this {
-		console.trace(`FlashSessionSet: ${key} = `, value);
 		const data = this.getAll();
 		data[key] = value;
 		return this.setAll(data);

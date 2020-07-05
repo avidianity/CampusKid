@@ -80,7 +80,7 @@ import { ClassroomCollection } from "@classes/Collections";
         Error: D500
     }
 })
-export default class ClassroomComponent extends Vue {
+export default class ClassroomListComponent extends Vue {
     @Action fetchClassrooms: any;
     pagination = {};
     classrooms: Array<Classroom> = [];

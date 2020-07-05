@@ -1,9 +1,9 @@
 import { GetterTree } from "vuex";
 import { UserState, RootState, SignUpFormContract } from "~types/store";
-import { User, File } from "@classes/Models";
+import { User, File, Token } from "@classes/Models";
 
 export const getters: GetterTree<UserState, RootState> = {
-    user(state): User | undefined {
+    user(state): User | null {
         return state.user;
     },
     signUpForm(state): SignUpFormContract {
@@ -14,5 +14,8 @@ export const getters: GetterTree<UserState, RootState> = {
     },
     profilePicture(state): File | undefined {
         return state.profile;
+    },
+    tokens({ tokens }): Array<Token> {
+        return tokens;
     }
 };

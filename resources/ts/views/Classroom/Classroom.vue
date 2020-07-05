@@ -65,11 +65,11 @@ import D404 from "@components/Dashboard404.vue";
         appError404: D404
     }
 })
-export default class VueComponent extends Vue {
+export default class ClassroomComponent extends Vue {
     @Action toggleContentHeader: any;
     @Action findClassroomByID: any;
     loaded = false;
-    loadInfo = '';
+    loadInfo = "";
     error = false;
     is500 = false;
     is404 = false;
@@ -84,7 +84,7 @@ export default class VueComponent extends Vue {
     }
     created() {
         this.toggleContentHeader(false);
-        this.loadInfo = '0/2 Fetching classroom.';
+        this.loadInfo = "0/2 Fetching classroom.";
         this.findClassroomByID(this.$route.params.id)
             .then((result: Models.Classroom) => {
                 return result;
@@ -97,7 +97,7 @@ export default class VueComponent extends Vue {
             })
             .then((classroom: Models.Classroom) => {
                 this.classroom = classroom;
-                this.loadInfo = '1/2 Loading classroom\'s data.';
+                this.loadInfo = "1/2 Loading classroom's data.";
                 return Axios.get(`/posts?classroom_id=${classroom.id}`);
             })
             .then((response: AxiosResponse) => response.data)

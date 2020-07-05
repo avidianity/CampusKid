@@ -47,10 +47,10 @@
                             alt="user image"
                         />
                         <span class="username d-flex">
-                            <a href="#" class="lato-light">
+                            <router-link :to="`/dashboard/users/${post.user.id}`" class="lato-light">
                                 {{ post.user.detail.first_name }}
                                 {{ post.user.detail.last_name }}
-                            </a>
+                            </router-link>
                             <div
                                 class="ml-auto"
                                 v-if="post.user_id === self.id"
@@ -184,10 +184,10 @@
 
                     <div class="comment-text">
                         <span class="username">
-                            <a href="#" class="lato-light">
+                            <router-link :to="`/dashboard/users/${comment.user.id}`" class="lato-light">
                                 {{ comment.user.detail.first_name }}
                                 {{ comment.user.detail.last_name }}
-                            </a>
+                            </router-link>
                             <span class="text-muted float-right">
                                 {{
                                     comment.updated_at.format("F d, Y - g:i A")

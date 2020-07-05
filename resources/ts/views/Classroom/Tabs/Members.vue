@@ -4,7 +4,9 @@
             <div class="card-body">
                 <h3>Teacher</h3>
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <router-link 
+                        :to="`/dashboard/users/${classroom.faculty.user.id}`"
+                        class="list-group-item list-group-item-action">
                         <img
                             :src="
                                 classroom.faculty.user.profile_picture
@@ -18,15 +20,15 @@
                             {{ classroom.faculty.user.detail.first_name }}
                             {{ classroom.faculty.user.detail.last_name }}
                         </div>
-                    </a>
+                    </router-link>
                 </div>
                 <h3 class="mt-1">Students</h3>
                 <div class="list-group">
-                    <a
-                        href="#"
+                    <router-link
                         class="list-group-item list-group-item-action"
                         v-for="(student, index) in classroom.students"
                         :key="index"
+                        :to="`/dashboard/users/${student.user.id}`"
                     >
                         <img
                             :src="
@@ -41,7 +43,7 @@
                             {{ student.user.detail.first_name }}
                             {{ student.user.detail.last_name }}
                         </div>
-                    </a>
+                    </router-link>
                 </div>
             </div>
         </div>

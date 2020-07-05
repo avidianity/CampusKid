@@ -1,0 +1,17 @@
+$colors: (
+    "emperor": $emperor,
+    "cutty-sark": $cutty-sark,
+    "tradewind": $tradewind,
+    "keppel": $keppel,
+    "chinook": $chinook,
+    "mimosa": $mimosa
+);
+
+@each $name, $color in $colors {
+    .text-#{$name} {
+        color: $color;
+    }
+    .bg-#{$name} {
+        background: $color;
+    }
+}

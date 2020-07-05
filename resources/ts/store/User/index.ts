@@ -25,11 +25,12 @@ const sign_up: SignUpFormContract = {
 };
 
 export const state: UserState = {
-    user: undefined,
+    user: null,
     forms: {
         sign_up
     },
-    logged: false
+    logged: false,
+    tokens: []
 };
 
 export const User: Module<UserState, RootState> = {

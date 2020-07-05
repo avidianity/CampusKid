@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', 'SelfController@index');
+    Route::apiResource('/user', 'SelfController');
     Route::get('/auth/logout', 'Auth\LoginController@logout');
+    Route::apiResource('/auth/tokens', 'Auth\TokenController');
 
     Route::apiResources([
         'detail' => 'DetailController',
@@ -46,9 +47,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/other/detail', 'DetailController@storeOther');
         Route::put('/other/user/{user}', 'UserController@updateOther');
 
-        Route::apiResources([
-            'administrators' => 'AdministratorController',
-            'users' => 'UserController',
+        Route::apiResource('administrators', 'AdministratorController');
+        Route::apiResource('users', 'UserController')->only([
+            'store',
+            'update',
+            'destroy',
         ]);
 
         Route::apiResource('faculties', 'FacultyController')->only([
@@ -57,6 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'destroy',
         ]);
     });
+
+    Route::apiResource('users', 'UserController')->only(['index', 'show']);
 
     Route::apiResource('classrooms', 'ClassroomController')->only([
         'index',

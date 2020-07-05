@@ -44,7 +44,7 @@ const Vue = ParentVue.extend({
     }
 })
 export default class AdminLTEComponent extends Vue {
-    created() {
+    mounted() {
         require("@assets/AdminLTE/AdminLTE.js");
         $("body").addClass(
             "hold-transition sidebar-mini layout-fixed sidebar-collapse"

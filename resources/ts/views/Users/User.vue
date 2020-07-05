@@ -380,26 +380,38 @@ export default class UserComponent extends Vue {
         this.navigate("/users");
     }
     get occupations() {
-        return (this.$store.getters
-            .occupations as OccupationCollection).data.map(
-            (occupation: Occupation) => {
-                return {
-                    name: occupation.name,
-                    value: occupation.id as number
-                };
-            }
-        );
+        return this.$store.getters.occupations.data
+            ? this.$store.getters.occupations.data.map(
+                  (occupation: Occupation) => {
+                      return {
+                          name: occupation.name,
+                          value: occupation.id as number
+                      };
+                  }
+              )
+            : Session.get("occupations").data.map((occupation: Occupation) => {
+                  return {
+                      name: occupation.name,
+                      value: occupation.id as number
+                  };
+              });
     }
     get departments() {
-        return (this.$store.getters
-            .departments as DepartmentCollection).data.map(
-            (department: Department) => {
-                return {
-                    name: `${department.abbreviation} - ${department.name}`,
-                    value: department.id as number
-                };
-            }
-        );
+        return this.$store.getters.departments.data
+            ? this.$store.getters.departments.data.map(
+                  (department: Department) => {
+                      return {
+                          name: department.name,
+                          value: department.id as number
+                      };
+                  }
+              )
+            : Session.get("departments").data.map((department: Department) => {
+                  return {
+                      name: department.name,
+                      value: department.id as number
+                  };
+              });
     }
     submit(index: number) {
         (this.forms[index] as any).processing = true;

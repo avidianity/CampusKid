@@ -4,6 +4,7 @@ import Department from "./Department";
 import Detail from "./Detail";
 import Faculty from "./Faculty";
 import File from "./File";
+import Login from "./Login";
 import Model from "./Model";
 import Occupation from "./Occupation";
 import Post from "./Post";
@@ -13,6 +14,7 @@ import Subject from "./Subject";
 import Task from "./Task";
 import TaskComment from "./TaskComment";
 import TaskSubmission from "./TaskSubmission";
+import Token from "./Token";
 import User from "./User";
 
 export {
@@ -21,6 +23,7 @@ export {
     Detail,
     User,
     File,
+    Login,
     Model,
     Administrator,
     Faculty,
@@ -31,7 +34,8 @@ export {
     PostComment,
     Task,
     TaskComment,
-    TaskSubmission
+    TaskSubmission,
+    Token
 };
 
 window.models = {
@@ -49,5 +53,7 @@ window.models = {
     PostComment,
     Task,
     TaskComment,
-    TaskSubmission
+    TaskSubmission,
+    Login,
+    Token
 };

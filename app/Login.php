@@ -14,4 +14,9 @@ class Login extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function token()
+    {
+        return $this->belongsTo(Token::class);
+    }
 }

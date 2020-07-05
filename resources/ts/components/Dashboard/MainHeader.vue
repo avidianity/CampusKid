@@ -184,28 +184,39 @@
                         />
                         <p>
                             @{{ user.username }}
-                            <small
-                                >Member since
-                                {{ user.created_at.getMonthAndYear() }}</small
-                            >
+                            <small>
+                                Member since {{ user.created_at.getMonthAndYear() }}
+                            </small>
                         </p>
                     </li>
                     <li class="user-body">
                         <div class="row">
                             <div class="col-4 text-center">
-                                <a href="" @click.prevent.stop="">Followers</a>
+                                <router-link
+                                    :to="`/dashboard/users/${self.id}/following`"
+                                >
+                                    Following
+                                </router-link>
                             </div>
                             <div class="col-4 text-center">
-                                <a href="" @click.prevent.stop="">Activity</a>
+                                <router-link
+                                    :to="`/dashboard/users/${self.id}`"
+                                >
+                                    Posts
+                                </router-link>
                             </div>
                             <div class="col-4 text-center">
-                                <a href="" @click.prevent.stop="">Settings</a>
+                                <router-link
+                                    :to="`/dashboard/users/${self.id}/settings`"
+                                >
+                                    Settings
+                                </router-link>
                             </div>
                         </div>
                     </li>
                     <li class="user-footer">
                         <router-link
-                            to="/dashboard/profile"
+                            :to="`/dashboard/users/${self.id}`"
                             class="btn btn-default btn-flat"
                         >
                             Profile
@@ -258,17 +269,17 @@ export default class MainHeaderComponent extends Vue {
         });
     }
     get profile_picture(): string {
-        return this.$store.getters.profile
-            ? this.$store.getters.profile.url
+        return this.$store.getters.user.profile_picture
+            ? this.$store.getters.user.profile_picture.url
             : "https://i.pravatar.cc/160";
     }
     get self() {
         return this.$store.getters.user;
     }
     get cover_photo() {
-        return this.$store.getters.user.profile
+        return this.$store.getters.user.cover_photo
             ? {
-                  background: `url("${this.$store.getters.user.profile.url}") center center`,
+                  background: `url("${this.$store.getters.user.cover_photo.url}") center center`,
                   "background-repeat": "no-repeat"
               }
             : {

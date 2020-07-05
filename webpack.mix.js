@@ -17,7 +17,7 @@ mix.ts("resources/ts/app.ts", "public/js")
         hmrOptions: {
             port: 8080,
             host: "localhost"
-        },
+        }
     })
     .alias({
         "@": "/resources/ts",
@@ -27,7 +27,7 @@ mix.ts("resources/ts/app.ts", "public/js")
         "@types": "/resources/ts/types",
         "@views": "/resources/ts/views",
         "@styles": "/resources/sass",
-        "@classes": "/resources/ts/classes",
+        "@classes": "/resources/ts/classes"
     })
     .webpackConfig({
         devServer: {
@@ -36,13 +36,13 @@ mix.ts("resources/ts/app.ts", "public/js")
             host: "localhost",
             proxy: {
                 "**": {
-                    target: "http://localhost/campuskid/public",
-                },
-            },
-        },
+                    target: "http://localhost/campuskid/public"
+                }
+            }
+        }
     });
 mix.options({
-    extractVueStyles: true,
+    extractVueStyles: true
 });
 
-// mix.disableNotifications();
+mix.disableNotifications();

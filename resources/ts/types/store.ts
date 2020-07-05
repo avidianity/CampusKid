@@ -17,10 +17,11 @@ export interface RootState {
 }
 
 export interface UserState {
-    user?: Models.User;
+    user: Models.User | null;
     logged: boolean;
     profile?: Models.File;
     cover?: Models.File;
+    tokens: Array<Models.Token>;
     [key: string]: any;
 }
 

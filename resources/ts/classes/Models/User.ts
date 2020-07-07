@@ -75,14 +75,7 @@ export default class User extends Model implements UserContract {
         return role === "Administrator" || role === 3;
     }
     homeRoute(): Route {
-        if (this.isAdministrator()) {
-            return { path: "/dashboard" };
-        } else if (this.isFaculty()) {
-            return { path: "/faculty" };
-        } else if (this.isStudent()) {
-            return { path: "/student" };
-        }
-        throw new UserException("Access Level is undefined.");
+        return { path: "/dashboard" };
     }
     getProfilePicture(): Promise<File> {
         return Axios.get(`/files/${this.profile_picture_id}`)

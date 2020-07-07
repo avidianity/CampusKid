@@ -17,7 +17,7 @@ class CreateDetailsTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('gender', 6);
+            $table->enum('gender', ['Male', 'Female']);
             $table->date('birthday');
             $table->string('address');
             $table->foreignId('user_id');

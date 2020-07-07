@@ -107,7 +107,6 @@ const router = new VueRouter({
         {
             path: "/dashboard",
             component: DashboardPage,
-            beforeEnter: Guards.isAdmin(),
             children: [
                 {
                     path: "",
@@ -126,7 +125,8 @@ const router = new VueRouter({
                         {
                             path: "administrators",
                             component: AdministratorsPage,
-                            name: "Administrators"
+                            name: "Administrators",
+                            beforeEnter: Guards.isAdmin(),
                         },
                         {
                             path: "faculties",
@@ -150,7 +150,8 @@ const router = new VueRouter({
                                 {
                                     path: "administrator",
                                     component: AddAdministratorPage,
-                                    name: "Add Administrator"
+                                    name: "Add Administrator",
+                                    beforeEnter: Guards.isAdmin(),
                                 },
                                 {
                                     path: "faculty",

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\File;
 use App\Task;
+use App\TaskFile;
 use App\Http\Requests\ValidateTask;
 
 class TaskController extends Controller
@@ -33,7 +35,18 @@ class TaskController extends Controller
         $data = $request->validated();
         $task = new Task($data);
         $task->save();
-        return $task;
+        $files = File::saveFromRequest($request);
+        foreach($files as $file)
+        {
+            TaskFile::create([
+                'task_id' => $task->id,
+                'file_id' => $file->id
+            ]);
+        }
+        return Task::with('comments.user.detail')
+            ->with('comments.user.profile_picture')
+            ->with('files')
+            ->with('submissions')->find($task->id);
     }
 
     /**

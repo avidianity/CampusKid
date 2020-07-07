@@ -5,4 +5,5 @@ export default interface FileContract extends TimestampContract {
     name: string;
     type: string;
     url: string;
+    real_name: string;
 }

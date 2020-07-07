@@ -18,6 +18,7 @@ class ClassroomController extends Controller
         $user = $request->user();
         if ($user->isFaculty()) {
             return Classroom::where('faculty_id', $user->role->id)
+                ->with('faculty.user.detail')
                 ->with('department')
                 ->with('students.user.detail')
                 ->with('students.user.profile_picture')
@@ -91,6 +92,7 @@ class ClassroomController extends Controller
         } else {
             return $user->role
                 ->classrooms()
+                ->with('faculty.user.detail')
                 ->with('faculty.occupation')
                 ->with('department')
                 ->with('students.user.detail')

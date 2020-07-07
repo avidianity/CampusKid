@@ -1,18 +1,21 @@
 <template>
-    <div>
-        <app-admin></app-admin>
-    </div>
+    <component :is="mainComponent"></component>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Action } from "vuex-class";
+
+import { User } from '@classes/Models';
+
 import Admin from "@components/Admin.vue";
+import Faculty from "@components/Faculty.vue";
 
 @Component({
     components: {
-        appAdmin: Admin
+        appAdministrator: Admin,
+        appFaculty: Faculty
     }
 })
 export default class Dashboard extends Vue {
@@ -20,14 +23,18 @@ export default class Dashboard extends Vue {
     @Action fetchOccupations: any;
     @Action fetchSubjects: any;
     @Action fetchClassrooms: any;
+    mainComponent = '';
     created() {
+        const user = Session.user() as User;
+        this.mainComponent = `app-${(user.access_level as string).toLowerCase()}`;
         this.fetchAssets();
     }
     fetchAssets(): any {
         return Promise.all([
             this.fetchDepartments(),
             this.fetchOccupations(),
-            this.fetchClassrooms()
+            this.fetchClassrooms(),
+            this.fetchSubjects(),
         ]).catch(error => {
             return this.fetchAssets();
         });

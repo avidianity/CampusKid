@@ -14,12 +14,8 @@ class AnalyticsController extends Controller
 {
     public function index(Request $request)
     {
-        echo json_encode([
+        $data = [
             'user' => User::whereBetween('created_at', [
-                date('Y-m-') . '01',
-                date('Y-m-t'),
-            ])->count(),
-            'admin' => Administrator::whereBetween('created_at', [
                 date('Y-m-') . '01',
                 date('Y-m-t'),
             ])->count(),
@@ -36,7 +32,12 @@ class AnalyticsController extends Controller
                 date('Y-m-') . '01',
                 date('Y-m-t'),
             ])->count(),
-        ]);
+            'admin' => Administrator::whereBetween('created_at', [
+                date('Y-m-') . '01',
+                date('Y-m-t'),
+            ])->count(),
+        ];
+        return response()->json($data);
     }
 
     public function registeredUsers(Request $request)

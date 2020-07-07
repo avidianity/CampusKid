@@ -48,10 +48,10 @@ export default class MainDashboard extends Vue {
         ];
         const names = [
             "New Users",
-            "Administrators",
-            "Faculties",
-            "Students",
-            "Classrooms",
+            "New Administrators",
+            "New Faculties",
+            "New Students",
+            "New Classrooms",
             "Logins"
         ];
         const icons = [

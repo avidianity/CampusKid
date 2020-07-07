@@ -23,13 +23,15 @@
             <div class="text-center">
                 <img
                     class="profile-user-img img-fluid img-circle"
+                    :class="{
+                        'cursor-pointer': localUser.id == self.id
+                    }"
                     :src="
                         localUser.profile_picture
                             ? localUser.profile_picture.url
                             : 'https://via.placeholder.com/128'
                     "
                     alt="User profile picture"
-                    :style="[isSelf ? {cursor: 'pointer;'} : {}]"
                     @click.stop="isSelf ? $refs.profilePicture.click() : null"
                 />
                 <input
@@ -169,5 +171,8 @@ p,
 div,
 b {
     font-family: "Lato-Light" !important;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
 </style>

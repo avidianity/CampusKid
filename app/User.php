@@ -49,7 +49,8 @@ class User extends Authenticatable
 
     public static function authenticate($data)
     {
-        if (!isset($data['email']) && !isset($data['username'])) {
+        if (!isset($data['email']) && !isset($data['username'])) 
+        {
             return response(
                 [
                     'errors' => [
@@ -59,44 +60,38 @@ class User extends Authenticatable
                 401
             );
         }
-        if (isset($data['email'])) {
+        if (isset($data['email'])) 
+        {
             $user = self::where('email', $data['email'])
                 ->with('detail')
                 ->with('role')
                 ->with('profile_picture')
                 ->with('cover_photo')
                 ->first();
-            if (!$user) {
-                return response(
-                    [
-                        'errors' => [
-                            'email' => ['Email does not match our records.'],
-                        ],
-                    ],
-                    401
-                );
-            }
-        } elseif (isset($data['username'])) {
+        }
+        if (!$user && isset($data['username'])) 
+        {
             $user = self::where('username', $data['username'])
                 ->with('detail')
                 ->with('role')
                 ->with('profile_picture')
                 ->with('cover_photo')
                 ->first();
-            if (!$user) {
-                return response(
-                    [
-                        'errors' => [
-                            'username' => [
-                                'Username does not match our records.',
-                            ],
+        }
+        if (!$user) {
+            return response(
+                [
+                    'errors' => [
+                        'message' => [
+                            'Credentials does not match our records.',
                         ],
                     ],
-                    401
-                );
-            }
+                ],
+                401
+            );
         }
-        if (Hash::check($data['password'], $user->password)) {
+        if (Hash::check($data['password'], $user->password)) 
+        {
             $request = request();
             $token = $user->createToken('normal')->plainTextToken;
             Login::create([
@@ -223,6 +218,34 @@ class User extends Authenticatable
     public function ownsGrade(Grade $grade): bool
     {
         return $this->ownsClassroom($grade->classroom_id);
+    }
+
+    public function canDownloadFile($id): bool
+    {
+    	$type = 'task';
+    	$file = TaskFile::where('file_id', $id)->first();
+    	if(!$file)
+    	{
+    		$file = TaskSubmission::where('file_id', $id)->first();
+    	}
+    	if(!$file)
+    	{
+    		$type = 'post';
+    		$file = PostFile::where('file_id', $id)->first();
+    	}
+    	if(!$file)
+    	{
+    		return false;
+    	}
+    	switch($type)
+    	{
+    		case 'post':
+    			return $this->canCommentToPost($file->post->id);
+    			break;
+    		case 'task':
+    			return $this->canCommentToTask($file->task->id);
+    			break;
+    	}
     }
 
     public function setProviderAsSelf()

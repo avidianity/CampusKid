@@ -16,6 +16,7 @@
                     class="btn btn-tool"
                     tag="button"
                     title="Add Users"
+                    v-if="self.isAdministrator()"
                 >
                     <i class="fas fa-user-plus"></i>
                 </router-link>
@@ -24,6 +25,7 @@
                     class="btn btn-tool"
                     tag="button"
                     title="Add Administrator"
+                    v-if="self.isAdministrator()"
                 >
                     <i class="fas fa-user-lock"></i>
                 </router-link>
@@ -32,6 +34,7 @@
                     class="btn btn-tool"
                     tag="button"
                     title="Add Faculty"
+                    v-if="self.isAdministrator()"
                 >
                     <i class="fas fa-user-tie"></i>
                 </router-link>
@@ -71,7 +74,9 @@
                             {{ user.type.name }}
                         </span>
                     </td>
-                    <td class="text-right">
+                    <td :class="{
+                        'text-right': self.isAdministrator()
+                    }">
                         <modal
                             :id="`view${index}`"
                             :classes="[
@@ -125,14 +130,14 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" v-if="self.isAdministrator()">
                         <modal
                             :id="`edit${index}`"
                             :classes="[
                                 'btn',
                                 'btn-warning',
                                 'btn-sm',
-                                'btn-flat'
+                                'btn-flat',
                             ]"
                             :size="'large'"
                             :title="`Edit <b>${user.username}</b>`"
@@ -317,7 +322,7 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-left">
+                    <td class="text-left" v-if="self.isAdministrator()">
                         <a href="" class="btn btn-danger btn-sm btn-flat">
                             <i class="fas fa-user-times"></i>
                             Delete
@@ -378,6 +383,9 @@ export default class UserComponent extends Vue {
     error = false;
     created() {
         this.navigate("/users");
+    }
+    get self() {
+        return this.$store.getters.user;
     }
     get occupations() {
         return this.$store.getters.occupations.data

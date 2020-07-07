@@ -9,21 +9,23 @@ use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
-    protected $fillable = ['name', 'type', 'url'];
+    protected $fillable = ['name', 'type', 'url', 'real_name'];
 
-    public static function saveFrom(Request $request)
+    public static function saveFromRequest(Request $request)
     {
         $files = [];
         foreach ($request->allFiles() as $file) {
             if ($file instanceof UploadedFile) {
-                $path = '/storage/'.$f->storePublicly('files');
+                $path = '/storage/'.$file->storePublicly('files');
                 $type = $file->extension();
                 $name = $file->hashName();
+                $realName = $file->getClientOriginalName();
                 if ($path !== false) {
                     $file = new self([
                         'name' => $name,
                         'type' => $type,
                         'url' => $path,
+                        'real_name' => $realName
                     ]);
                     $file->save();
                     $files[] = $file;
@@ -35,14 +37,16 @@ class File extends Model
                         $path = '/storage/'.$f->storePublicly('files');
                         $type = $f->extension();
                         $name = $f->hashName();
+                        $realName = $file->getClientOriginalName();
                         if ($path !== false) {
-                            $file = new self([
+                            $x = new self([
                                 'name' => $name,
                                 'type' => $type,
                                 'url' => $path,
+                                'real_name' => $realName
                             ]);
-                            $file->save();
-                            $files[] = $file;
+                            $x->save();
+                            $files[] = $x;
                             continue;
                         }
                     }
@@ -59,11 +63,13 @@ class File extends Model
             $path = '/storage/'.$f->storePublicly('files');
             $type = $f->extension();
             $name = $f->hashName();
+            $realName = $file->getClientOriginalName();
             if ($path !== false) {
                 $file = new self([
                     'name' => $name,
                     'type' => $type,
                     'url' => $path,
+                    'real_name' => $realName
                 ]);
                 $file->save();
                 return $file;

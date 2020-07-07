@@ -16,6 +16,7 @@
                     class="btn btn-tool"
                     tag="button"
                     title="Add Faculty"
+                    v-if="self.isAdministrator()"
                 >
                     <i class="fas fa-user-tie"></i>
                 </router-link>
@@ -50,7 +51,9 @@
                     <td>
                         {{ faculty.department_name }}
                     </td>
-                    <td class="text-right">
+                    <td :class="{
+                        'text-right': self.isAdministrator()
+                    }">
                         <modal
                             :id="index"
                             :classes="[
@@ -104,7 +107,7 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" v-if="self.isAdministrator()">
                         <modal
                             :id="`edit${index}`"
                             :classes="[
@@ -294,7 +297,7 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-left">
+                    <td class="text-left" v-if="self.isAdministrator()">
                         <a href="" class="btn btn-danger btn-sm btn-flat">
                             <i class="fas fa-user-times"></i>
                             Delete
@@ -350,6 +353,9 @@ export default class FacultyComponent extends Vue {
     pagination = {};
     loaded = false;
     error = false;
+    get self() {
+        return this.$store.getters.user;
+    }
     get occupations() {
         return this.$store.getters.occupations.data
             ? this.$store.getters.occupations.data.map(

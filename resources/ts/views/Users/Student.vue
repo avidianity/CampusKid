@@ -17,7 +17,7 @@
                     tag="button"
                     title="Add Student"
                 >
-                    <i class="fas fa-user-tie"></i>
+                    <i class="fas fa-user-graduate"></i>
                 </router-link>
             </template>
             <template v-slot:headers>
@@ -50,7 +50,9 @@
                     <td>
                         {{ student.classrooms.length }}
                     </td>
-                    <td class="text-right">
+                    <td :class="{
+                        'text-right': self.isAdministrator()
+                    }">
                         <modal
                             :id="index"
                             :classes="[
@@ -104,7 +106,7 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" v-if="self.isAdministrator()">
                         <modal
                             :id="`edit${index}`"
                             :classes="[
@@ -282,7 +284,7 @@
                             </template>
                         </modal>
                     </td>
-                    <td class="text-left">
+                    <td class="text-left" v-if="self.isAdministrator()">
                         <a href="" class="btn btn-danger btn-sm btn-flat">
                             <i class="fas fa-user-times"></i>
                             Delete
@@ -331,6 +333,9 @@ export default class StudentComponent extends Vue {
     pagination = {};
     loaded = false;
     error = false;
+    get self() {
+        return this.$store.getters.user;
+    }
     get departments() {
         return this.$store.getters.departments.data
             ? this.$store.getters.departments.data.map(

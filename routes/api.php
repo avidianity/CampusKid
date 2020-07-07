@@ -10,6 +10,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/user', 'SelfController');
     Route::get('/auth/logout', 'Auth\LoginController@logout');
     Route::apiResource('/auth/tokens', 'Auth\TokenController');
+    Route::get('/download/{file}', 'FileController@download');
 
     Route::apiResources([
         'detail' => 'DetailController',
@@ -166,11 +167,13 @@ Route::apiResource('departments', 'DepartmentController')->only([
     'show',
 ]);
 
-Route::group(['middleware' => ['auth:sanctum', 'only.admin']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'forbid.student']], function () {
     Route::get('/avidian', 'AnalyticsController@index');
 
     Route::get('/avidian/registers', 'AnalyticsController@registeredUsers');
-    Route::get('/avidian/administrators', 'AnalyticsController@administrators');
+    Route::middleware('only.admin')->get(
+        '/avidian/administrators', 'AnalyticsController@administrators'
+    );
     Route::get('/avidian/faculties', 'AnalyticsController@faculties');
     Route::get('/avidian/students', 'AnalyticsController@students');
     Route::get('/avidian/classrooms', 'AnalyticsController@classrooms');

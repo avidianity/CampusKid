@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\File;
 
 class FileController extends Controller
@@ -14,7 +15,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        //
+        return response('', 405);
     }
 
     /**
@@ -25,7 +26,7 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response('', 405);
     }
 
     /**
@@ -48,7 +49,7 @@ class FileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response('', 405);
     }
 
     /**
@@ -59,6 +60,14 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        return File::find($id);
+        return response('', 405);
+    }
+
+    public function download(Request $request, File $file)
+    {
+        if(!$request->user()->canDownloadFile($file->id)) {
+            return response(['errors' => ['Forbidden.']], 403);
+        }
+        return Storage::download('files/'.$file->name, $file->real_name);
     }
 }

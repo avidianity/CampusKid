@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ValidateTaskSubmission;
 use App\TaskSubmission;
 
 class TaskSubmissionController extends Controller
@@ -26,9 +27,10 @@ class TaskSubmissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ValidateTaskSubmission $request)
     {
-        $task_id = $request->input('task_id');
+        $data = $request->validated();
+        $task_id = $data['task_id'];
         if (!$request->user()->canSubmitToTask($task_id)) {
             return response(
                 ['errors' => ['You do not belong to this task\'s classroom.']],

@@ -2,6 +2,13 @@
 
 [CampusKid Demo Site](https://campuskid.herokuapp.com)
 
+#### Development Status: On hold
+
+Currently, my computer does not have the processing power to continue developing the front-end
+any further. Compile time takes too long and thus I put this on hold until I can get a
+proper computer.
+(July 10, 2020 - 2:00 AM)
+
 ## About CampusKid
 
 CampusKid is a web application designed to make teachers and students

@@ -21,7 +21,7 @@
             >
                 <div class="modal-content">
                     <div class="modal-header" v-if="title.length > 0">
-                        <h4 class="modal-title" v-html="title">
+                        <h4 class="modal-title">
                             {{ title }}
                         </h4>
                         <button

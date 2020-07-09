@@ -140,7 +140,7 @@
                                 'btn-flat',
                             ]"
                             :size="'large'"
-                            :title="`Edit <b>${user.username}</b>`"
+                            :title="`Edit ${user.username}`"
                         >
                             <template v-slot:name>
                                 <i class="fas fa-user-edit"></i>

@@ -1,142 +1,150 @@
 <template>
     <div class="container pt-3">
         <form class="row">
-            <div class="col-sm-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-                <label for="email" class="mt-0">Email:</label>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    class="form-control form-control-sm"
-                    v-model="email"
-                    id="email"
-                />
-                <small
-                    class="form-text text-muted"
-                    :class="messages.email.class"
-                >
-                    <div
-                        v-for="(message, index) in messages.email.messages"
-                        :key="index"
-                    >
-                        {{ message }}
+            <div class="col-sm-12 col-md-6 offset-md-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <label for="email">Email:</label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            class="form-control form-control-sm"
+                            v-model="email"
+                            id="email"
+                        />
+                        <small
+                            class="form-text text-muted"
+                            :class="messages.email.class"
+                        >
+                            <div
+                                v-for="(message, index) in messages.email.messages"
+                                :key="index"
+                            >
+                                {{ message }}
+                            </div>
+                        </small>
+                        <label for="username">Username:</label>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                            v-model="username"
+                            class="form-control form-control-sm"
+                            id="username"
+                        />
+                        <small
+                            class="form-text text-muted"
+                            :class="messages.username.class"
+                        >
+                            <div
+                                v-for="(message, index) in messages.username.messages"
+                                :key="index"
+                            >
+                                {{ message }}
+                            </div>
+                        </small>
+                        <label for="password">Password:</label>
+                        <input
+                            :type="passwordType"
+                            name="password"
+                            placeholder="Password"
+                            v-model="password"
+                            class="form-control form-control-sm"
+                            id="password"
+                        />
+                        <div class="form-check ml-1 mt-1">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                v-model="toggledPassword"
+                            />
+                            <small class="form-check-label">
+                                Show Password
+                            </small>
+                        </div>
+                        <small
+                            class="form-text text-muted"
+                            :class="messages.password.class"
+                        >
+                            <div
+                                v-for="(message, index) in messages.password.messages"
+                                :key="index"
+                            >
+                                {{ message }}
+                            </div>
+                        </small>
                     </div>
-                </small>
-                <label for="username">Username:</label>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    v-model="username"
-                    class="form-control form-control-sm"
-                    id="username"
-                />
-                <small
-                    class="form-text text-muted"
-                    :class="messages.username.class"
-                >
-                    <div
-                        v-for="(message, index) in messages.username.messages"
-                        :key="index"
-                    >
-                        {{ message }}
+                    <div class="col-sm-12 col-md-6">
+                        <label for="occupation" v-if="role === 2">Occupation:</label>
+                        <select
+                            name="occupation"
+                            id="occupation_id"
+                            class="form-control form-control-sm"
+                            v-model="occupation_id"
+                            v-if="role === 2"
+                        >
+                            <option
+                                :value="occupation.id"
+                                v-for="(occupation, index) in occupations"
+                                :key="index"
+                            >
+                                {{ occupation.name }}
+                            </option>
+                        </select>
+                        <small
+                            class="form-text text-muted"
+                            :class="messages.occupation_id.class"
+                        >
+                            <div
+                                v-for="(message, index) in messages.occupation_id
+                                    .messages"
+                                :key="index"
+                            >
+                                {{ message }}
+                            </div>
+                        </small>
+                        <label for="department">Department</label>
+                        <select
+                            name="department_id"
+                            id="department"
+                            class="form-control form-control-sm"
+                            v-model="department_id"
+                        >
+                            <option
+                                :value="department.id"
+                                v-for="(department, index) in departments"
+                                :key="index"
+                            >
+                                {{ department.name }}
+                            </option>
+                        </select>
+                        <small
+                            class="form-text text-muted"
+                            :class="messages.department_id.class"
+                        >
+                            <div
+                                v-for="(message, index) in messages.department_id
+                                    .messages"
+                                :key="index"
+                            >
+                                {{ message }}
+                            </div>
+                        </small>
                     </div>
-                </small>
-                <label for="occupation" v-if="role === 2">Occupation:</label>
-                <select
-                    name="occupation"
-                    id="occupation_id"
-                    class="form-control form-control-sm"
-                    v-model="occupation_id"
-                    v-if="role === 2"
-                >
-                    <option
-                        :value="occupation.id"
-                        v-for="(occupation, index) in occupations"
-                        :key="index"
-                    >
-                        {{ occupation.name }}
-                    </option>
-                </select>
-                <small
-                    class="form-text text-muted"
-                    :class="messages.occupation_id.class"
-                >
-                    <div
-                        v-for="(message, index) in messages.occupation_id
-                            .messages"
-                        :key="index"
-                    >
-                        {{ message }}
+                    <div class="col-12">
+                        <button
+                            type="submit"
+                            class="btn btn-emperor btn-sm mt-3 px-3"
+                            :class="{ disabled: processing }"
+                            :disabled="processing"
+                            @click.prevent.stop="validate()"
+                        >
+                            <i class="fas fa-spinner fa-spin" v-if="processing"></i>
+                            Next
+                        </button>
                     </div>
-                </small>
-                <label for="department">Department</label>
-                <select
-                    name="department_id"
-                    id="department"
-                    class="form-control form-control-sm"
-                    v-model="department_id"
-                >
-                    <option
-                        :value="department.id"
-                        v-for="(department, index) in departments"
-                        :key="index"
-                    >
-                        {{ department.name }}
-                    </option>
-                </select>
-                <small
-                    class="form-text text-muted"
-                    :class="messages.department_id.class"
-                >
-                    <div
-                        v-for="(message, index) in messages.department_id
-                            .messages"
-                        :key="index"
-                    >
-                        {{ message }}
-                    </div>
-                </small>
-                <label for="password">Password:</label>
-                <input
-                    :type="passwordType"
-                    name="password"
-                    placeholder="Password"
-                    v-model="password"
-                    class="form-control form-control-sm"
-                    id="password"
-                />
-                <div class="form-check ml-1 mt-1">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="toggledPassword"
-                    />
-                    <small class="form-check-label">
-                        Show Password
-                    </small>
                 </div>
-                <small
-                    class="form-text text-muted"
-                    :class="messages.password.class"
-                >
-                    <div
-                        v-for="(message, index) in messages.password.messages"
-                        :key="index"
-                    >
-                        {{ message }}
-                    </div>
-                </small>
-                <button
-                    type="submit"
-                    class="btn btn-emperor btn-sm mt-3 px-3"
-                    :class="{ disabled: processing }"
-                    :disabled="processing"
-                    @click.prevent.stop="validate()"
-                >
-                    <i class="fas fa-spinner fa-spin" v-if="processing"></i>
-                    Next
-                </button>
             </div>
         </form>
     </div>

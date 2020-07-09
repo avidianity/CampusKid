@@ -51,7 +51,7 @@
                                 'btn-flat'
                             ]"
                             :size="'medium'"
-                            :title="`Edit <b>${department.abbreviation}</b>`"
+                            :title="`Edit ${department.abbreviation}`"
                         >
                             <template v-slot:name>
                                 <i class="fas fa-edit"></i>

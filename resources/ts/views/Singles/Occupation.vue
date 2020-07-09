@@ -49,7 +49,7 @@
                                 'btn-flat'
                             ]"
                             :size="'medium'"
-                            :title="`Edit <b>${occupation.name}</b>`"
+                            :title="`Edit ${occupation.name}`"
                         >
                             <template v-slot:name>
                                 <i class="fas fa-edit"></i>

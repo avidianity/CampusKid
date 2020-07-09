@@ -219,7 +219,7 @@ export default class SignUp extends Vue {
     background: url("../assets/bg-home.png") center center;
     background-size: cover;
     background-repeat: no-repeat;
-    padding: 10px;
+    padding: 0;
     height: 100vh;
     display: flex;
 }
@@ -303,12 +303,6 @@ export default class SignUp extends Vue {
 .img-float {
     max-height: 100px;
     max-width: 100px;
-}
-
-@media (min-width: 576px) {
-    #root {
-        padding: 25px;
-    }
 }
 
 @media (min-width: 768px) {

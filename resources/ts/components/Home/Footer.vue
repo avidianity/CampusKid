@@ -98,7 +98,7 @@
                             </li>
                             <li class="footer-item">
                                 <a
-                                    href="https://github.com/mekoidigret/CampusKid"
+                                    href="https://github.com/avidianity/CampusKid"
                                     class="footer-link social-media-link bg-white rounded-circle"
                                 >
                                     <i class="fab fa-github text-dark"></i>

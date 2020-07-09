@@ -16,5 +16,8 @@
     <body>
         @yield('content')
         <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
+        <script defer>
+        	alert(`NOTE: This is only a live preview. \nAdmin Credentials: \nuser: admin, pass: admin \nFaculty Credentials: \nuser: faculty \npass: faculty`);
+        </script>
     </body>
 </html>
